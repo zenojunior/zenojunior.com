@@ -1,0 +1,64 @@
+{
+  "name": "zenojunior.com",
+  "private": true,
+  "description": "Open source project for my personal website",
+  "version": "0.1.0",
+  "author": "Zeno Junior <zeno.sbardelotto@universo.univates.br>",
+  "dependencies": {
+    "babel-plugin-styled-components": "^1.10.6",
+    "gatsby": "^2.18.12",
+    "gatsby-image": "^2.2.34",
+    "gatsby-plugin-google-fonts": "^1.0.1",
+    "gatsby-plugin-manifest": "^2.2.31",
+    "gatsby-plugin-offline": "^3.0.27",
+    "gatsby-plugin-react-helmet": "^3.1.16",
+    "gatsby-plugin-sharp": "^2.3.5",
+    "gatsby-plugin-styled-components": "^3.1.17",
+    "gatsby-source-filesystem": "^2.1.40",
+    "gatsby-transformer-sharp": "^2.3.7",
+    "prop-types": "^15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-helmet": "^5.2.1",
+    "react-tag-cloud": "^1.3.2",
+    "react-to-print": "^2.5.1",
+    "styled-components": "^5.0.0",
+    "styled-media-query": "^2.1.2",
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-brands-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.8",
+    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
+    "prettier": "^1.19.1",
+    "react-moment": "^0.9.7",
+    "react-tagcloud": "^2.0.0"
+  },
+  "keywords": [
+    "gatsby",
+    "react",
+    "personal website",
+    "site dev",
+    "portfolio"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "deploy": "npm run build && node ./scripts/deploy-github",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zenojunior/zenojunior.com"
+  },
+  "bugs": {
+    "url": "https://github.com/zenojunior/zenojunior.com/issues"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.2.0"
+  }
+}

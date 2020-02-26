@@ -1,0 +1,39 @@
+.link {
+  border-radius: 20px;
+  padding: 10px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-family: Roboto;
+  color: #8c8c8c;
+  display: flex;
+}
+
+.link:active,
+.link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: inherit;
+}
+
+@media (min-width: 768px) {
+  .link {
+    flex-direction: column;
+  }
+  .link span {
+    margin-right: unset;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .link {
+    color: #9da5b4;
+  }
+  .link[aria-current] {
+    color: #cad2e1!important;
+  }
+  .link:active, .link:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #9da5b4;
+  }
+}
