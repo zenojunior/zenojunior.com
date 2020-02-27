@@ -1,11 +1,20 @@
 language: node_js
+node_js: stable
+
 before_script:
   - npm install -g gatsby-cli
-node_js:
-  - "10"
+
+cache:
+  directories:
+    - node_modules
+
+before_deploy:
+  - "npm run build"
+
 deploy:
-  provider: script
-  script: yarn install && yarn run deploy
+  provider: pages
   skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: public
   on:
     branch: master
