@@ -8,4 +8,4 @@ deploy:
   script: yarn install && yarn run deploy
   skip_cleanup: true
   on:
-    branch: gh-pages
+    branch: master
