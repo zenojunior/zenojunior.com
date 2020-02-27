@@ -13,7 +13,7 @@ const Copyright = () => (
   <Container>
     <Text>
       <Left>
-      © {new Date().getFullYear()}, <MaterialIcon icon="code" /> by Zeno <span style={{display: 'none'}}>v2</span>
+      © {new Date().getFullYear()}, <MaterialIcon icon="code" /> by Zeno
       </Left>
       <Right>
         The code is open source and available at <LinkGithub />.
