@@ -48,8 +48,7 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "deploy": "gatsby build && gh-pages -d public -r https://$GH_TOKEN@github.com/zenojunior/zenojunior.com.git",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "deploy": "gatsby build && gh-pages -d public -r https://$GH_TOKEN@github.com/zenojunior/zenojunior.com.git"
   },
   "repository": {
     "type": "git",
