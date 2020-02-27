@@ -8,8 +8,8 @@ import Icon from '../typography/icon'
 
 const Nav = props => (
   <Pages>
-    <Page to="/" icon="person" name="Myself"></Page>
-    <Page to="/interest" icon="track_changes" name="Interest"></Page>
+    <Page to="/" icon="person" name="About me"></Page>
+    <Page to="/interests" icon="track_changes" name="Interests"></Page>
     <Page to="/resume" icon="insert_drive_file" name="Resume"></Page>
     <Page to="/contact" icon="mail_outline" name="Contact"></Page>
   </Pages>

@@ -34,7 +34,7 @@ const data = {
         start: "2018-09-01",
         end: "2019-09-10"
       },
-      description: "I built PWAs using the Laravel Framework (PHP). I developed Chatbot for Discord using Nodejs (Javascript on the server side). I was responsible for creating the mobile app front-end using Flutter (Dart)."
+      description: "I built PWAs using the Laravel Framework (PHP). I developed a Chatbot for Discord using Nodejs (Javascript on the server side). I was responsible for creating the mobile app front-end using Flutter (Dart)."
     },
     {
       title: "Junior Front-end developer",
@@ -92,7 +92,7 @@ const ResumePage = () => {
               </Header>
               <section>
                 <Subtitle>About me</Subtitle>
-                <p>I have more than <ExperienceYears /> of experience with web development. I am dedicating to being a senior front-end engineer. My greatest strength is the desire to change and enjoy making things happen.</p>
+                <p>I have more than <ExperienceYears /> of experience with web development. I am dedicating myself to become a senior front-end engineer. My greatest strength is the desire to change and enjoy making things happen.</p>
               </section>
               <Experiences>
                 <Subtitle>Experiences</Subtitle>
