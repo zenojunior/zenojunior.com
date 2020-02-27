@@ -622,14 +622,10 @@ pre tt:after {
 }
 
 
-html, body, #___gatsby {
+html, body, #___gatsby, #___gatsby > div {
   height: 100%;
 }
 
 body {
   margin: 0px;
-}
-
-div[role="group"][tabindex] {
-  height: 100%;
 }
