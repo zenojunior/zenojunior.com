@@ -18,6 +18,4 @@ deploy:
   local_dir: public
   on:
     branch: master
-
-after_deploy:
-  - echo zenojunior.com > CNAME
+  fqdn: zenojunior.com
