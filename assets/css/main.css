@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Taviraj:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #0e141b;
+    min-height: 100%;
+  }
+
+  body.menu-opened {
+    overflow-y: hidden;
+  }
+
+  #__nuxt {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+  }
+
+  footer {
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+
+  html {
+    height: 100%;
+    font-family: 'Open Sans', system-ui, sans-serif;
+  }
+
+  h2 {
+    @apply text-h2 font-taviraj mb-1;
+  }
+
+  h1 {
+    @apply text-h1 font-taviraj mb-2;
+  }
+
+  p {
+    @apply text-base mb-5;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  article a {
+    @apply border-b-picton-blue-700 border-solid border-b-4 text-picton-blue-400 px-1;
+  }
+
+  article a:hover {
+    @apply bg-picton-blue-700 text-white;
+  }
+
+  * {
+    color: #fff;
+  }
+
+  .paper * {
+    color: #000;
+  }
+}
