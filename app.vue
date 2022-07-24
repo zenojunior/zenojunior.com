@@ -13,9 +13,9 @@
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ],
     meta: [
-      { name: 'heme-color', content: '#1870ae' },
+      { name: 'theme-color', content: '#1870ae' },
       { name: 'og:title', content: `${route.meta.title} - Zeno Junior` },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1, shrink-to-fit=no' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }
     ]
   })
 </script>
