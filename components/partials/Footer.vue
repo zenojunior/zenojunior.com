@@ -16,7 +16,7 @@ const socials = [
 </script>
 
 <template>
-  <footer>
+  <footer class="print:hidden">
     <div class="md:container mx-6 md:mx-auto grid grid-cols-4">
       <div class="col-span-1 hidden md:flex"></div>
       <div>

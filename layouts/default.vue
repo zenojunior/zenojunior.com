@@ -31,7 +31,7 @@ const menu = [
 
 <template>
   <div class="wrapper flex flex-col justify-between">
-    <header>
+    <header class="print:hidden">
       <div class="flex container md:mx-auto justify-between items-center">
         <PartialsLogo />
         <nav class="flex gap-10">

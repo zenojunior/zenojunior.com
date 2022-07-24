@@ -1,7 +1,24 @@
+<script setup>
+const { options } = defineProps(['options'])
+const paper = ref(null)
+const transform = ref(null)
+
+const { isFullscreen, exit, toggle } = useFullscreen(transform)
+
+watch(() => options.fullscreen.enable, () => toggle())
+onClickOutside(paper, (event) => exit())
+</script>
+
 <template>
-  <section id="print" class="flex justify-center mb-20">
-    <div class="transform preserve-3d justify-center flex lg:inline-block items-center">
-      <div class="paper" :style="`background: url(a4-texture.png) #fff;`">
+  <section id="print" class="flex justify-center">
+    <div ref="transform" :class="['transform', {'flex justify-center': isFullscreen}]">
+      <div
+        ref="paper"
+        class="paper"
+        :style="{
+          background: `url('a4-texture.png') #fff`,
+        }"
+      >
         <slot />
       </div>
     </div>
@@ -16,6 +33,30 @@
     background: #283441;
     color: #fff;
   }
+}
+
+@media (max-width: 768px) {
+  .transform {
+    transform: scale(0.5);
+    height: 700px;
+    margin: -150px -20rem;
+    overflow: hidden;
+  }
+  .paper {
+    align-self: flex-start;
+  }
+}
+
+@media print {
+  #__nuxt { visibility: hidden; }
+  #print, #print > * { visibility: visible; }
+  .transform {
+    transform: none;
+    height: auto;
+    margin: 0;
+  }
+  @page { margin: 0; }
+  body { margin: 0; }
 }
 </style>
 

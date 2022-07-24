@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const yearsWorked = ref(useYearsWorked())
 const { share, isSupported: canShare } = useShare()
+const optionsA4 = reactive({ fullscreen: { enable: false } })
 
+const handleFullscreen = () => optionsA4.fullscreen.enable = !optionsA4.fullscreen.enable;
 const handlePrint = () => window.print()
 const handleShare = () => {
  share({
@@ -16,12 +18,13 @@ const handleShare = () => {
     <Head>
       <Title>Download my resume 📃 - Zeno Junior</Title>
     </Head>
-    <h1 class="text-center mb-5">My resume</h1>
-    <div class="flex justify-center mb-10 gap-3">
+    <h1 class="text-center mb-5 print:hidden">My resume</h1>
+    <div class="flex justify-center mb-10 gap-3 print:hidden">
       <Button @click="handlePrint">Save</Button>
+      <Button @click="handleFullscreen">Fullscreen</Button>
       <Button v-if="canShare" @click="handleShare">Share</Button>
     </div>
-    <ResumeA4>
+    <ResumeA4 :options="optionsA4">
       <section>
         <h1>Zeno Junior</h1>
         <h2>Front-end engineer enthusiastic about scalable products and users experiences</h2>
