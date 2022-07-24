@@ -17,8 +17,8 @@ const socials = [
 
 <template>
   <footer>
-    <div class="md:container md:mx-auto grid grid-cols-4">
-      <div></div>
+    <div class="md:container mx-6 md:mx-auto grid grid-cols-4">
+      <div class="col-span-1 hidden md:flex"></div>
       <div>
         <h3>Made with</h3>
         <p class="flex gap-2 mt-4">
@@ -27,7 +27,7 @@ const socials = [
           <mdicon name="language-javascript" />
         </p>
       </div>
-      <div>
+      <div class="col-span-2 mx-auto md:col-span-1 md:mx-0">
         <h3>Links</h3>
         <ul>
           <NuxtLink to="/resume">Resume</NuxtLink>

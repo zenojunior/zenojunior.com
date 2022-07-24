@@ -11,6 +11,7 @@ import {
   mdiGithub,
   mdiLinkedin,
   mdiSoundcloud,
+  mdiPrinter,
 } from '@mdi/js'
 
 // https://github.com/therufa/mdi-vue
@@ -27,6 +28,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       mdiGithub,
       mdiLinkedin,
       mdiSoundcloud,
+      mdiPrinter,
     },
   })
 })

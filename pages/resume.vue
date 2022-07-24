@@ -1,5 +1,14 @@
 <script setup lang="ts">
 const yearsWorked = ref(useYearsWorked())
+const { share, isSupported: canShare } = useShare()
+
+const handlePrint = () => window.print()
+const handleShare = () => {
+ share({
+    title: 'Zeno Junior\'s Resume',
+    url: location.href,
+  })
+}
 </script>
 
 <template>
@@ -7,7 +16,11 @@ const yearsWorked = ref(useYearsWorked())
     <Head>
       <Title>Download my resume 📃 - Zeno Junior</Title>
     </Head>
-    <h1 class="text-center mb-10">My resume</h1>
+    <h1 class="text-center mb-5">My resume</h1>
+    <div class="flex justify-center mb-10 gap-3">
+      <Button @click="handlePrint">Save</Button>
+      <Button v-if="canShare" @click="handleShare">Share</Button>
+    </div>
     <ResumeA4>
       <section>
         <h1>Zeno Junior</h1>
