@@ -1,19 +1,18 @@
 <script setup>
 const { options } = defineProps(['options'])
 const paper = ref(null)
-const transform = ref(null)
+const a4 = ref(null)
 
-const { isFullscreen, exit, toggle } = useFullscreen(transform)
+const { isFullscreen, exit, toggle } = useFullscreen(a4)
 
 watch(() => options.fullscreen.enable, () => toggle())
 onClickOutside(paper, (event) => exit())
 </script>
 
 <template>
-  <section id="print" class="flex justify-center">
-    <div ref="transform" :class="['transform', {'flex justify-center': isFullscreen}]">
+  <section id="print" ref="a4" class="flex justify-center">
+    <div ref="paper" :class="['transform', { isFullscreen }]">
       <div
-        ref="paper"
         class="paper"
         :style="{
           background: `url('a4-texture.png') #fff`,
@@ -35,26 +34,23 @@ onClickOutside(paper, (event) => exit())
   }
 }
 
-@media (max-width: 768px) {
-  .transform {
-    transform: scale(0.5);
-    height: 700px;
-    margin: -150px -20rem;
-    overflow: hidden;
-  }
-  .paper {
-    align-self: flex-start;
+@media not print {
+  @media screen and (max-width: 768px) {
+    .transform {
+      transform: scale(0.5);
+      margin: -150px -20rem;
+      overflow: hidden;
+      &:not(.isFullscreen) {
+        height: 700px;
+      }
+    }
+    .paper {
+      align-self: flex-start;
+    }
   }
 }
 
 @media print {
-  #__nuxt { visibility: hidden; }
-  #print, #print > * { visibility: visible; }
-  .transform {
-    transform: none;
-    height: auto;
-    margin: 0;
-  }
   @page { margin: 0; }
   body { margin: 0; }
 }
