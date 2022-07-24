@@ -1,25 +1,52 @@
+<script setup>
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const [isMenuOpen, toggleMenu] = useToggle(false)
+const mdAndSmaller = breakpoints.smaller('md')
+
+const menu = [
+  {
+    to: '/',
+    icon: 'human-greeting-variant',
+    text: 'home'
+  },
+  {
+    to: '/resume',
+    icon: 'file-account',
+    text: 'resume'
+  },
+  {
+    to: '/notes',
+    icon: 'notebook',
+    text: 'notes'
+  },
+  {
+    to: '/about',
+    icon: 'tooltip-account',
+    text: 'about'
+  }
+]
+</script>
+
 <template>
   <div class="wrapper flex flex-col justify-between">
     <header>
       <div class="flex container md:mx-auto justify-between items-center">
         <PartialsLogo />
-        <nav class="hidden md:flex gap-10">
-          <NuxtLink to="/">
-            <mdicon name="human-greeting-variant" />
-            home
-          </NuxtLink>
-          <NuxtLink to="/resume">
-            <mdicon name="file-account" />
-            resume
-          </NuxtLink>
-          <NuxtLink to="/notes">
-            <mdicon name="notebook" />
-            notes
-          </NuxtLink>
-          <NuxtLink to="/about">
-            <mdicon name="tooltip-account" />
-            about
-          </NuxtLink>
+        <nav class="flex gap-10">
+          <button class="flex md:hidden" @click="toggleMenu(true)"><mdicon name="menu" /></button>
+          <MobileNav :visible="isMenuOpen && mdAndSmaller" @close="toggleMenu(false)">
+            <NuxtLink
+              v-for="link in menu"
+              @click="toggleMenu(false)"
+              :to="link.to"
+              :key="link.text"
+            >
+              <mdicon :name="link.icon" />
+              {{ link.text }}
+            </NuxtLink>
+          </MobileNav>
         </nav>
       </div>
     </header>

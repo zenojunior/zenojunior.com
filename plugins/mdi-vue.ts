@@ -11,7 +11,9 @@ import {
   mdiGithub,
   mdiLinkedin,
   mdiSoundcloud,
+  mdiClose,
   mdiPrinter,
+  mdiMenu,
 } from '@mdi/js'
 
 // https://github.com/therufa/mdi-vue
@@ -28,7 +30,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       mdiGithub,
       mdiLinkedin,
       mdiSoundcloud,
+      mdiClose,
       mdiPrinter,
+      mdiMenu,
     },
   })
 })
