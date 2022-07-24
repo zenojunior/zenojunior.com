@@ -59,7 +59,7 @@ const menu = [
 
 <style lang="postcss">
   header {
-    @apply flex justify-between py-16 px-12;
+    @apply flex justify-between px-2 py-16 md:px-12;
   }
   nav > a {
     @apply flex flex-col items-center gap-1 pb-1 opacity-75;

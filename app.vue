@@ -7,14 +7,15 @@
 
 <script setup>
   const route = useRoute()
+  const title = ref('Zeno Junior')
   useHead({
-    title: 'Zeno Junior',
+    title,
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ],
     meta: [
       { name: 'theme-color', content: '#1870ae' },
-      { name: 'og:title', content: `${route.meta.title} - Zeno Junior` },
+      { name: 'og:title', content: !route.meta.title ? title : `${route.meta.title} - ${title.value}` },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }
     ]
   })

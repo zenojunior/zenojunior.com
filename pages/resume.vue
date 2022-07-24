@@ -3,6 +3,8 @@ const yearsWorked = ref(useYearsWorked())
 const { share, isSupported: canShare } = useShare()
 const optionsA4 = reactive({ fullscreen: { enable: false } })
 
+definePageMeta({ title: 'View my resume 📃' })
+
 const handleFullscreen = () => optionsA4.fullscreen.enable = !optionsA4.fullscreen.enable;
 const handlePrint = () => window.print()
 const handleShare = () => {
@@ -58,7 +60,6 @@ const handleShare = () => {
             title="Software Engineering"
             :company="{ name: 'Universidade do Vale do Taquari - Univates', slug: 'univates' }"
             :period="{ start: '2014-06-01', end: '2023-06-02', hours: 3360 }"
-            :progress="73.21"
           />
         </article>
       </section>

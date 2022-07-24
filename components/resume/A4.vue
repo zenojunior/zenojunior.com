@@ -10,7 +10,7 @@ onClickOutside(paper, (event) => exit())
 </script>
 
 <template>
-  <section id="print" ref="a4" class="flex justify-center">
+  <section id="print" ref="a4" class="flex justify-center md:mb-20">
     <div ref="paper" :class="['transform', { isFullscreen }]">
       <div
         class="paper"

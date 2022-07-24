@@ -1,8 +1,6 @@
 <script setup>
 const yearsOfWork = useYearsWorked()
-definePageMeta({
-  title: 'Sobre mim'
-})
+definePageMeta({ title: 'Read about me' })
 </script>
 
 <template>
@@ -37,7 +35,7 @@ definePageMeta({
         </p>
         <p>But currently I've been studying a lot because these are my last two years at <a href="https://www.univates.br/en/">Univates</a> (university).</p>
         <p>
-          Listen a good sound while I code is awesome. There are my favorite bands:
+          Listening a good sound while I code is awesome. There are my favorite bands:
           <a href="https://music.youtube.com/channel/UCXv6UMItAxIebYSLqsfcXnQ" target="_blank">DROELOE</a> (to code),
           <a href="https://music.youtube.com/channel/UCOlopik2E2HUHaWlktS0QmA" target="_blank">Tom Walker</a> (to relax).
         </p>

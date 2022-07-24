@@ -9,21 +9,32 @@ onClickOutside(nav, () => emit('close'))
 <template>
   <nav :class="props.visible ? 'modal' : 'hidden md:flex gap-10'">
     <slot v-if="!props.visible" />
-    <div v-else ref="nav" class="bg-picton-blue-800 rounded-xl m-12 py-12 flex flex-col">
-      <button
-        @click="$emit('close')"
-        class="close self-end w-12 h-12 flex justify-center items-center bg-gray-800 p-2 rounded-xl absolute top-4 right-4"
-      >
-        <mdicon name="close" />
-      </button>
-      <div class="mobile-nav self-center">
-        <slot />
+    <Transition name="fade" mode="out-in" appear>
+      <div v-if="props.visible" ref="nav" class="bg-picton-blue-800 rounded-xl m-12 py-6 flex flex-col">
+        <button
+          @click="$emit('close')"
+          class="close self-end w-12 h-12 flex justify-center items-center bg-gray-800 p-2 rounded-xl absolute top-4 right-4"
+        >
+          <mdicon name="close" />
+        </button>
+        <div class="mobile-nav">
+          <slot />
+        </div>
       </div>
-    </div>
+    </Transition>
   </nav>
 </template>
 
 <style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .modal {
   position: fixed;
   z-index: 10;
@@ -38,12 +49,12 @@ onClickOutside(nav, () => emit('close'))
 
 <style lang="postcss" scoped>
 .mobile-nav {
-  @apply gap-4 flex flex-col;
+  @apply gap-4 flex flex-col pl-8 pr-4;
 }
 .mobile-nav:deep(svg) {
-  @apply mr-2 relative top-1;
+  @apply mr-3 relative top-1 h-7 w-7;
 }
 .mobile-nav:deep(a) {
-  @apply flex text-xl;
+  @apply flex text-2xl;
 }
 </style>

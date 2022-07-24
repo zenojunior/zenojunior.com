@@ -22,11 +22,6 @@
           </span>
         </small>
       </p>
-      <div v-if="progress" class="progress">
-        <div class="progress-bar" :style="`width: ${progress}%`">
-          {{ Math.round(progress) }}% 
-        </div>
-      </div>
     </div>
   </header>
   <p class="description">{{ description }}</p>
@@ -46,10 +41,6 @@ export default {
     period: {
       start: String,
       end: String,
-    },
-    progress: {
-      type: Number,
-      default: 0,
     },
     hiddenTime: {
       type: Boolean,
@@ -85,14 +76,6 @@ header figure img {
 header p > small {
   font-size: 80%;
   @apply font-light font-montserrat leading-5 text-gray-400;
-}
-
-.progress {
-  @apply w-full bg-gray-200 rounded-full;
-}
-.progress-bar {
-  font-size: 9px;
-  @apply bg-picton-blue-700 grayscale print:grayscale-0 py-1 font-medium text-gray-100 text-center leading-none rounded-l-lg;
 }
 
 .description {

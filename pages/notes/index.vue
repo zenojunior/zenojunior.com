@@ -1,5 +1,6 @@
 <script setup>
 import { format } from 'date-fns'
+definePageMeta({ title: 'Software notes and tips' })
 </script>
 
 <template>
