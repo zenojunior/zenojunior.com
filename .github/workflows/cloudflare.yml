@@ -3,12 +3,12 @@ name: cloudflare
 on:
   push:
     branches:
-      - nuxt3
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy
+    name: Deploy to Cloudflare
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
