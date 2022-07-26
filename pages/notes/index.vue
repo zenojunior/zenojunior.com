@@ -1,12 +1,13 @@
 <script setup>
 import { format } from 'date-fns'
+const title = useTitle()
 definePageMeta({ title: 'Software notes and tips' })
 </script>
 
 <template>
   <div>
     <Head>
-      <Title>Saving some notes - Zeno Junior</Title>
+      <Title>Saving some notes - {{ title }}</Title>
     </Head>
     <h1 class="text-center mb-12">Notes</h1>
     <div class="md:container min-h-[calc(100vh-20rem)] mx-6 md:mx-auto flex flex-col items-stretch justify-center">

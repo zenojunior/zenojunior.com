@@ -1,4 +1,5 @@
 <script setup>
+const title = useTitle()
 const yearsOfWork = useYearsWorked()
 definePageMeta({ title: 'Read about me' })
 </script>
@@ -6,7 +7,7 @@ definePageMeta({ title: 'Read about me' })
 <template>
   <div>
     <Head>
-      <Title>About me - Zeno Junior</Title>
+      <Title>About me - {{ title }}</Title>
     </Head>
     <h1 class="text-center">About me</h1>
     <div class="flex flex-col lg:flex-row">

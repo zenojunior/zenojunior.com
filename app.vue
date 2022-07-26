@@ -7,7 +7,7 @@
 
 <script setup>
   const route = useRoute()
-  const title = ref('Zeno Junior')
+  const title = useTitle()
   useHead({
     title,
     link: [

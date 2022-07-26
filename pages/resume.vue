@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const title = useTitle()
 const yearsWorked = ref(useYearsWorked())
 const { share, isSupported: canShare } = useShare()
 const optionsA4 = reactive({ fullscreen: { enable: false } })
@@ -9,7 +10,7 @@ const handleFullscreen = () => optionsA4.fullscreen.enable = !optionsA4.fullscre
 const handlePrint = () => window.print()
 const handleShare = () => {
  share({
-    title: 'Zeno Junior\'s Resume',
+    title: `${title}\'s Resume`,
     url: location.href,
   })
 }
@@ -18,7 +19,7 @@ const handleShare = () => {
 <template>
   <div>
     <Head>
-      <Title>Download my resume 📃 - Zeno Junior</Title>
+      <Title>Download my resume 📃 - {{ title }}</Title>
     </Head>
     <h1 class="text-center mb-5 print:hidden">My resume</h1>
     <div class="flex justify-center mb-10 gap-3 print:hidden">
@@ -29,7 +30,7 @@ const handleShare = () => {
     <ResumeA4 :options="optionsA4">
       <div class="page">
         <section>
-          <h1>Zeno Junior</h1>
+          <h1>{{ title }}</h1>
           <h2>Front-end engineer enthusiastic about scalable products and users experiences</h2>
           <hr>
           <article data-title="About me">

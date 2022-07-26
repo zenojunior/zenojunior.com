@@ -1,4 +1,5 @@
 <script setup>
+const title = useTitle()
 const route = useRoute()
 </script>
 
@@ -11,7 +12,7 @@ const route = useRoute()
     ]"
   >
     <img src="~/assets/zeno.webp" class="w-12 h-12 rounded-full select-none" alt="Foto de Zeno">
-    <span class="text-base font-bold">Zeno Junior</span>
+    <span class="text-base font-bold">{{ title }}</span>
   </nuxt-link>
 </template>
 

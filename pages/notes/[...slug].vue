@@ -2,6 +2,9 @@
   <div class="md:container min-h-[calc(100vh-20rem)] md:mx-auto flex flex-col items-stretch justify-center">
     <article class="self-center max-w-[calc(100%-4rem)] md:max-w-3xl mb-10 md:px-0">
       <ContentDoc>
+        <template #doc>
+          <ContentRenderer />
+        </template>
         <template #not-found>
           <h2 class="text-gray-500">I haven't written this yet... 😕</h2>
         </template>
