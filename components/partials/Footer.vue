@@ -1,18 +1,18 @@
 <script setup>
 const socials = [
   {
-    icon: 'github',
-    url: 'https://github.com/zenojunior'
+    icon: "github",
+    url: "https://github.com/zenojunior",
   },
   {
-    icon: 'linkedin',
-    url: 'https://www.linkedin.com/in/zenojunior/'
+    icon: "linkedin",
+    url: "https://www.linkedin.com/in/zenojunior/",
   },
   {
-    icon: 'soundcloud',
-    url: 'https://soundcloud.com/zenojunior/likes'
-  }
-]
+    icon: "soundcloud",
+    url: "https://soundcloud.com/zenojunior/likes",
+  },
+];
 </script>
 
 <template>
@@ -38,7 +38,7 @@ const socials = [
       <div>
         <h3>Socials</h3>
         <nav class="flex gap-2 mt-4">
-          <a
+          <NuxtLink
             v-for="(social, index) in socials"
             :key="index"
             :href="social.url"
@@ -46,7 +46,7 @@ const socials = [
             target="_blank"
           >
             <mdicon :name="social.icon" />
-          </a>
+          </NuxtLink>
         </nav>
       </div>
     </div>

@@ -3,8 +3,9 @@ type = "javascript"
 workers_dev = true
 main = ".output/server/index.mjs"
 compatibility_date = "2022-04-07"
+account_id = "03942a53eb3055f755f48ddc4535ce32"
 
-route = "2022.zenojunior.com"
+route = "zenojunior.com"
 
 [site]
 bucket = ".output/public"

@@ -1,7 +1,7 @@
 <script setup>
-import { format } from 'date-fns'
-const title = useTitle()
-definePageMeta({ title: 'Software notes and tips' })
+import { format } from "date-fns";
+const title = useTitle();
+definePageMeta({ title: "Software notes and tips" });
 </script>
 
 <template>
@@ -10,14 +10,39 @@ definePageMeta({ title: 'Software notes and tips' })
       <Title>Saving some notes - {{ title }}</Title>
     </Head>
     <h1 class="text-center mb-12">Notes</h1>
-    <div class="md:container min-h-[calc(100vh-20rem)] mx-6 md:mx-auto flex flex-col items-stretch justify-center">
+    <div
+      class="
+        md:container
+        min-h-[calc(100vh-20rem)]
+        mx-6
+        md:mx-auto
+        flex flex-col
+        items-stretch
+        justify-center
+      "
+    >
       <div class="self-center max-w-3xl mb-10">
         <ContentList path="/notes" v-slot="{ list }">
           <div class="mb-28" v-for="note in list" :key="note._path">
-            <a :href="note._path" class="opacity-80 hover:opacity-100 text-left block">
-              <h2 class="text-picton-blue-300 hover:text-picton-blue-400">{{ note.title }}</h2>
-            </a>
-            <ul class="horizontal-info flex gap-4 items-center mt-3 text-gray-400 text-xl mb-6">
+            <NuxtLink
+              :to="note._path"
+              class="opacity-80 hover:opacity-100 text-left block"
+            >
+              <h2 class="text-picton-blue-300 hover:text-picton-blue-400">
+                {{ note.title }}
+              </h2>
+            </NuxtLink>
+            <ul
+              class="
+                horizontal-info
+                flex
+                gap-4
+                items-center
+                mt-3
+                text-gray-400 text-xl
+                mb-6
+              "
+            >
               <li>
                 {{ note.category }}
               </li>

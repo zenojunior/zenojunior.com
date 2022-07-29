@@ -1,40 +1,62 @@
 <script setup>
-const { options } = defineProps(['options'])
-const a4 = ref(null)
-const print = ref(null)
+const { options } = defineProps(["options"]);
+const a4 = ref(null);
+const print = ref(null);
 
 // Fullscreen
-const { isFullscreen, exit, toggle } = useFullscreen(print)
-watch(() => options.fullscreen.enable, () => toggle())
-onClickOutside(a4, (event) => exit())
+const { isFullscreen, exit, toggle } = useFullscreen(print);
+watch(
+  () => options.fullscreen.enable,
+  () => toggle()
+);
+onClickOutside(a4, (event) => exit());
 
 // Hack when only one page to print. Won't show the second empty page
 onMounted(() => {
-  const { load, unload } = useStyleTag('body, html { overflow: hidden }', { media: 'print' })
-  const pages = a4.value.getElementsByClassName('page').length;
-  (pages === 1) ? load() : unload();
-})
+  const { load, unload } = useStyleTag("body, html { overflow: hidden }", {
+    media: "print",
+  });
+  const pages = a4.value.getElementsByClassName("page").length;
+  pages === 1 ? load() : unload();
+});
 </script>
 
 <template>
-  <section id="print" ref="print" class="flex justify-center md:mb-20">
-    <div ref="a4" :class="['transform', { isFullscreen }]">
+  <section
+    id="print"
+    ref="print"
+    :class="['flex justify-center', { isFullscreen }]"
+  >
+    <div ref="a4" class="transform">
       <slot />
     </div>
   </section>
 </template>
 
 <style lang="scss" print>
-  .page { page-break-after: always; }
-  @page { size: A4; margin: 0; }
-  body, html { height: 100%; margin: 0 !important; }
+.page {
+  page-break-after: always;
+}
+@page {
+  size: A4;
+  margin: 0;
+}
+body,
+html {
+  height: 100%;
+  margin: 0 !important;
+}
 </style>
 
 <style lang="scss">
+#print.isFullscreen {
+  overflow-y: scroll;
+  cursor: zoom-out;
+}
 .page {
-  width: 21cm!important;
-  height: 29.7cm!important;
-  background: url('a4-texture.png') #fff;
+  width: 21cm !important;
+  height: 29.7cm !important;
+  background: url("~/assets/a4-texture.png") #fff;
   *::selection {
     background: #283441;
     color: #fff;
@@ -43,11 +65,13 @@ onMounted(() => {
 
 @media not print {
   @media screen and (max-width: 768px) {
+    #print:not(.isFullscreen) .transform {
+      height: 700px;
+    }
     .transform {
       transform: scale(0.5);
       margin: -150px -20rem;
       overflow: hidden;
-      &:not(.isFullscreen) { height: 700px; }
     }
     .page {
       align-self: flex-start;
@@ -69,7 +93,7 @@ onMounted(() => {
 }
 #print:deep(.page h1) {
   color: #666666;
-  @apply font-semibold mb-3 font-roboto text-5xl leading-6 mb-6;
+  @apply font-semibold font-roboto text-5xl leading-6 mb-6;
 }
 #print:deep(.page hr) {
   @apply my-5 border-t-gray-300;
@@ -84,11 +108,14 @@ onMounted(() => {
   @apply font-bold font-sans text-gray-600 text-tiny leading-6;
 }
 
-#print:deep(.page ol)::before, #print:deep(.page article)::before {
+#print:deep(.page ol)::before,
+#print:deep(.page article)::before {
   content: attr(data-title);
   @apply block uppercase cursor-text font-roboto font-light text-tiny mb-1 text-gray-900 print:text-picton-blue-700;
 }
-#print:deep(.page ol > li), #print:deep(.page p), #print:deep(.page span) {
+#print:deep(.page ol > li),
+#print:deep(.page p),
+#print:deep(.page span) {
   @apply text-tiny font-roboto text-gray-500 text-justify leading-4;
 }
 

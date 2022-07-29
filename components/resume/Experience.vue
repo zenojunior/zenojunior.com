@@ -1,34 +1,41 @@
 <template>
-  <header class="grid grid-cols-10 gap-2 p-0">
-    <figure class="col-span-3">
-      <img :src="`/companies/${company.slug}.png`" alt="">
-    </figure>
-    <div class="col-span-7">
-      <h4>{{ title }}</h4>
-      <p class="mb-1">
-        <span>{{ company.name }}</span>
-        <small v-if="period" class="block">
-          <span v-if="period.start">
-            {{ formatPeriod(period.start) }}
-            <span v-if="period.end"> - </span>
-          </span>
-          <span v-if="period.start">
-            {{ formatPeriod(period.end) || '- moment' }}
-            <span v-if="period.hours"> - </span>
-          </span>
-          <span v-if="period.hours" v-html="`(${period.hours} hours)`" />
-          <span v-if="!period.hours && period.start" class="ml-1">
-            ({{ duration(new Date(period.start), period.end ? new Date(period.end) : undefined) }})
-          </span>
-        </small>
-      </p>
-    </div>
-  </header>
-  <p class="description">{{ description }}</p>
+  <div>
+    <header class="grid grid-cols-10 gap-2 p-0">
+      <figure class="col-span-3">
+        <img :src="`/companies/${company.slug}.png`" alt="" />
+      </figure>
+      <div class="col-span-7">
+        <h4>{{ title }}</h4>
+        <p class="mb-1">
+          <span>{{ company.name }}</span>
+          <small v-if="period" class="block">
+            <span v-if="period.start">
+              {{ formatPeriod(period.start) }}
+              <span v-if="period.end"> - </span>
+            </span>
+            <span v-if="period.start">
+              {{ formatPeriod(period.end) || "- moment" }}
+              <span v-if="period.hours"> - </span>
+            </span>
+            <span v-if="period.hours" v-html="`(${period.hours} hours)`" />
+            <span v-if="!period.hours && period.start" class="ml-1">
+              ({{
+                duration(
+                  new Date(period.start),
+                  period.end ? new Date(period.end) : undefined
+                )
+              }})
+            </span>
+          </small>
+        </p>
+      </div>
+    </header>
+    <p class="description">{{ description }}</p>
+  </div>
 </template>
 
 <script>
-import { intervalToDuration, formatDuration, format } from 'date-fns'
+import { intervalToDuration, formatDuration, format } from "date-fns";
 export default {
   props: {
     title: String,
@@ -45,19 +52,19 @@ export default {
     hiddenTime: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   methods: {
     duration(start, end = new Date()) {
       const duration = intervalToDuration({ start, end });
-      return formatDuration(duration, { format: ['years', 'months', 'weeks'] });
+      return formatDuration(duration, { format: ["years", "months", "weeks"] });
     },
     formatPeriod(period) {
-      if (!period?.length) return '';
+      if (!period?.length) return "";
       return format(new Date(period), "MMM yyyy");
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="postcss" scoped>

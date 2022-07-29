@@ -1,10 +1,20 @@
 <script setup>
-const title = useTitle()
-definePageMeta({ title: '404' })
+const title = useTitle();
+definePageMeta({ title: "404" });
 </script>
 
 <template>
-  <div class="md:container min-h-[calc(100vh-20rem)] mx-6 md:mx-auto flex flex-col items-stretch justify-center">
+  <div
+    class="
+      md:container
+      min-h-[calc(100vh-20rem)]
+      mx-6
+      md:mx-auto
+      flex flex-col
+      items-stretch
+      justify-center
+    "
+  >
     <Head>
       <Title>Page not found - {{ title }}</Title>
     </Head>
@@ -13,13 +23,3 @@ definePageMeta({ title: '404' })
     </div>
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
-</style>

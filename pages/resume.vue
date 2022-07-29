@@ -1,19 +1,20 @@
-<script setup lang="ts">
-const title = useTitle()
-const yearsWorked = ref(useYearsWorked())
-const { share, isSupported: canShare } = useShare()
-const optionsA4 = reactive({ fullscreen: { enable: false } })
+<script setup>
+const title = useTitle();
+const yearsWorked = ref(useYearsWorked());
+const { share, isSupported: canShare } = useShare();
+const optionsA4 = reactive({ fullscreen: { enable: false } });
 
-definePageMeta({ title: 'View my resume 📃' })
+definePageMeta({ title: "View my resume 📃" });
 
-const handleFullscreen = () => optionsA4.fullscreen.enable = !optionsA4.fullscreen.enable;
-const handlePrint = () => window.print()
+const handleFullscreen = () =>
+  (optionsA4.fullscreen.enable = !optionsA4.fullscreen.enable);
+const handlePrint = () => window.print();
 const handleShare = () => {
- share({
-    title: `${title}\'s Resume`,
+  share({
+    title: `${title.value}\'s Resume`,
     url: location.href,
-  })
-}
+  });
+};
 </script>
 
 <template>
@@ -25,16 +26,24 @@ const handleShare = () => {
     <div class="flex justify-center mb-10 gap-3 print:hidden">
       <Button @click="handlePrint">Save</Button>
       <Button @click="handleFullscreen">Fullscreen</Button>
-      <Button v-if="canShare" @click="handleShare">Share</Button>
+      <Button v-show="canShare" @click="handleShare">Share</Button>
     </div>
     <ResumeA4 :options="optionsA4">
       <div class="page">
         <section>
           <h1>{{ title }}</h1>
-          <h2>Front-end engineer enthusiastic about scalable products and users experiences</h2>
-          <hr>
+          <h2>
+            Front-end engineer enthusiastic about scalable products and users
+            experiences
+          </h2>
+          <hr />
           <article data-title="About me">
-            <p>I have {{ yearsWorked }} years of experience with web and mobile development. I'm dedicating myself to become a specialist front-end engineer. My greatest strength is the desire to change and enjoy making things happen.</p>
+            <p>
+              I have {{ yearsWorked }} years of experience with web and mobile
+              development. I'm dedicating myself to become a specialist
+              front-end engineer. My greatest strength is the desire to change
+              and enjoy making things happen.
+            </p>
           </article>
           <article data-title="Experiences" class="mt-6">
             <ResumeExperience
@@ -60,7 +69,10 @@ const handleShare = () => {
           <article data-title="Formation">
             <ResumeExperience
               title="Software Engineering"
-              :company="{ name: 'Universidade do Vale do Taquari - Univates', slug: 'univates' }"
+              :company="{
+                name: 'Universidade do Vale do Taquari - Univates',
+                slug: 'univates',
+              }"
               :period="{ start: '2014-06-01', end: '2023-06-02', hours: 3360 }"
             />
           </article>
