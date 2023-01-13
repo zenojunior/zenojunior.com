@@ -18,7 +18,7 @@
           </span>
           <span v-if="period.hours" v-html="`(${period.hours} hours)`" />
           <span v-if="!period.hours && period.start" class="ml-1">
-            ({{ duration(new Date(period.start), period.end ? new Date(period.end) : undefined) }})
+            ({{ duration(new Date(period.start), period.end ? new Date(period.end) : undefined) || '1 month' }})
           </span>
         </small>
       </p>

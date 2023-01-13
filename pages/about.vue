@@ -27,7 +27,7 @@ definePageMeta({ title: 'Read about me' })
       <article class="xl:px-64 mb-20">
         <h2>Work</h2>
         <p>
-          Currently I Work at <a href="https://www.linkedin.com/company/cuponomia/">Cuponomia</a>, a startup which helps shoppers save money and receive cashback for their purchases.
+          Currently I Work at <a href="https://www.linkedin.com/company/swordhealth">SWORD Health</a> which the mission is freeing the world from pain.
         </p>
         <h2>Offline</h2>
         <p>

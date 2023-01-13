@@ -37,10 +37,16 @@ const handleShare = () => {
           </article>
           <article data-title="Experiences" class="mt-6">
             <ResumeExperience
+              title="Front-end engineer"
+              :company="{ name: 'SWORD Health', slug: 'sword-health' }"
+              :period="{ start: '2023-01-03' }"
+              remoteWork
+            />
+            <ResumeExperience
               title="Front-end developer"
               description="I built the extension for the Chrome Web Store, SPA as the main architecture, using Vue 2 Framework (Javascript). I did help to build the Cuponomia's App using React Native (Javascript for mobile apps) and currently I'm on the app squad."
               :company="{ name: 'Cuponomia', slug: 'cuponomia' }"
-              :period="{ start: '2019-09-10' }"
+              :period="{ start: '2019-09-10', end: '2022-09-10' }"
               remoteWork
             />
             <ResumeExperience
