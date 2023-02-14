@@ -70,7 +70,6 @@ module.exports = {
     fontFamily: {
       sans: ['sans-serif'],
       montserrat: ['Montserrat', 'sans-serif'],
-      freckle: ['Freckle Face', 'cursive'],
       taviraj: ['Taviraj', 'serif'],
       roboto: ['Roboto', 'sans-serif'],
     }

@@ -1,15 +1,14 @@
-import { defineNuxtConfig } from 'nuxt'
-
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-  preset: 'cloudflare',
+  typescript: {
+    shim: false
+  },
+  // preset: 'cloudflare',
   components: true,
-  buildModules: [
+  modules: [
+    '@nuxt/content',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
-  ],
-  modules: [
-    '@nuxt/content'
   ],
   content: {
     highlight: {
@@ -18,7 +17,7 @@ export default defineNuxtConfig({
     }
   },
   css: [
-    '@/assets/css/main.css',
+    '@/assets/css/main.postcss',
   ],
   postcss: {
     plugins: {
@@ -27,11 +26,6 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     }
-  },
-  autoImports: {
-    dirs: [
-      'composables/**'
-    ]
   },
   build: {
     transpile: ['mdi-vue'],

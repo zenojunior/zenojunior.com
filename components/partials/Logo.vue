@@ -10,7 +10,12 @@ const route = useRoute()
       route.path === '/' ? 'cursor-text' : 'hover:opacity-75'
     ]"
   >
-    <img src="~/assets/zeno.webp" class="w-12 h-12 rounded-full select-none" alt="Foto de Zeno">
+    <img
+      src="~/assets/zeno.webp"
+      class="w-12 h-12 rounded-full select-none"
+      alt="Foto de Zeno"
+      loading="lazy"
+    />
     <span class="text-base font-bold">Zeno Junior</span>
   </nuxt-link>
 </template>

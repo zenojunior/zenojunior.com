@@ -1,15 +1,12 @@
 name = "zenojunior"
-type = "javascript"
 workers_dev = true
 main = ".output/server/index.mjs"
 compatibility_date = "2022-04-07"
 
-route = "2022.zenojunior.com"
+route = "zenojunior.com"
 
 [site]
 bucket = ".output/public"
-entry-point = ".output"
 
 [build]
-command = ""
-upload.format = "service-worker"
+command = "NITRO_PRESET=cloudflare yarn nuxt build"
