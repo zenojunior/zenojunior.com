@@ -28,6 +28,6 @@
     "@vueuse/head": "^1.0.25",
     "date-fns": "^2.29.3",
     "mdi-vue": "^3.0.13",
-    "wrangler": "^2.9.1"
+    "wrangler": "^2.20.1"
   }
 }
