@@ -6,19 +6,18 @@
 </template>
 
 <script setup>
-  const route = useRoute()
-  const title = ref('Zeno Junior')
-  useHead({
-    title,
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
-    ],
-    meta: [
-      { name: 'theme-color', content: '#1870ae' },
-      { name: 'og:title', content: !route.meta.title ? title : `${route.meta.title} - ${title.value}` },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }
-    ]
-  })
+const config = useRuntimeConfig()
+
+useHead({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} - ${config.public.title}` : config.public.title;
+  },
+  link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }],
+  meta: [
+    { name: 'description', content: config.public.description },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' }
+  ]
+})
 </script>
 
 <style>
@@ -28,6 +27,7 @@
   z-index: 2;
   position: relative;
 }
+
 *::selection {
   background: #fff;
   color: #283441;

@@ -1,11 +1,12 @@
 <script setup>
-const { options } = defineProps(['options'])
+import { useFullscreen, onClickOutside, useStyleTag } from '@vueuse/core'
+
+const props = defineProps(['options'])
 const a4 = ref(null)
 const print = ref(null)
 
-// Fullscreen
 const { isFullscreen, exit, toggle } = useFullscreen(print)
-watch(() => options.fullscreen.enable, () => toggle())
+watch(() => props.options.fullscreen.enable, () => toggle())
 onClickOutside(a4, (event) => exit())
 
 // Hack when only one page to print. Won't show the second empty page
@@ -17,7 +18,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="print" ref="print" class="flex justify-center md:mb-20">
+  <section id="print" ref="print" class="flex justify-center md:mb-10">
     <div ref="a4" :class="['transform', { isFullscreen }]">
       <slot />
     </div>
@@ -34,7 +35,7 @@ onMounted(() => {
 .page {
   width: 21cm!important;
   height: 29.7cm!important;
-  background: url('a4-texture.png') #fff;
+  background: url('/a4-texture.png') #fff;
   *::selection {
     background: #283441;
     color: #fff;
@@ -69,7 +70,7 @@ onMounted(() => {
 }
 #print:deep(.page h1) {
   color: #666666;
-  @apply font-semibold mb-3 font-roboto text-5xl leading-6 mb-6;
+  @apply font-semibold font-roboto text-5xl leading-6 mb-6;
 }
 #print:deep(.page hr) {
   @apply my-5 border-t-gray-300;

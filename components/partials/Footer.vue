@@ -1,33 +1,14 @@
 <script setup>
-const socials = [
-  {
-    icon: 'github',
-    url: 'https://github.com/zenojunior'
-  },
-  {
-    icon: 'linkedin',
-    url: 'https://www.linkedin.com/in/zenojunior/'
-  },
-  {
-    icon: 'soundcloud',
-    url: 'https://soundcloud.com/zenojunior/likes'
-  }
-]
+const config = useRuntimeConfig()
+
+const { data: stars } = await useAsyncData('github-stars', () => $fetch('/api/github-stars'))
+
 </script>
 
 <template>
   <footer class="print:hidden">
-    <div class="md:container mx-6 md:mx-auto grid grid-cols-4">
-      <div class="col-span-1 hidden md:flex"></div>
-      <div>
-        <h3>Made with</h3>
-        <p class="flex gap-2 mt-4">
-          <mdicon name="vuejs" />
-          <mdicon name="nuxt" />
-          <mdicon name="language-javascript" />
-        </p>
-      </div>
-      <div class="col-span-2 mx-auto md:col-span-1 md:mx-0">
+    <div class="md:container mx-6 md:mx-auto flex flex-col md:flex-row justify-center gap-y-12 md:gap-x-36">
+      <div class="md:min-w-32">
         <h3>Links</h3>
         <ul>
           <NuxtLink to="/resume">Resume</NuxtLink>
@@ -35,19 +16,29 @@ const socials = [
           <NuxtLink to="/about">About</NuxtLink>
         </ul>
       </div>
-      <div>
+      <div class="md:min-w-32">
         <h3>Socials</h3>
         <nav class="flex gap-2 mt-4">
           <a
-            v-for="(social, index) in socials"
+            v-for="(social, index) in config.public.socials"
             :key="index"
             :href="social.url"
             class="hover:opacity-75"
             target="_blank"
           >
-            <mdicon :name="social.icon" />
+            <mdi-icon :icon="social.icon" size="1.8rem" />
           </a>
         </nav>
+      </div>
+      <div>
+        <a
+          :href="config.public.repositoryUrl"
+          target="_blank"
+          class="inline-flex mt-2 items-center gap-2 text-white px-3 py-1 rounded-xl bg-gray-800 hover:bg-picton-blue-900"
+        >
+          <mdi-icon icon="mdiGithub" size="1.5rem" />
+          <span>{{ stars }}</span>
+        </a>
       </div>
     </div>
   </footer>
@@ -55,7 +46,7 @@ const socials = [
 
 <style lang="postcss" scoped>
 footer {
-  @apply border-t-picton-blue-900 border-solid border-t-2 py-8 mt-10;
+  @apply border-t-picton-blue-900 border-solid border-t-2 py-14 mt-10;
 }
 h3 {
   @apply w-full font-bold;

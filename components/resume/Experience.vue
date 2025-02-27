@@ -9,55 +9,80 @@
         <span>{{ company.name }}</span>
         <small v-if="period" class="block">
           <span v-if="period.start">
-            {{ formatPeriod(period.start) }}
+            {{ $dayjs(period.start).format('MMM YYYY') }}
             <span v-if="period.end"> - </span>
           </span>
           <span v-if="period.start">
-            {{ formatPeriod(period.end) || '- moment' }}
+            {{ period.end ? $dayjs(period.end).format('MMM YYYY') : '- Present' }}
             <span v-if="period.hours"> - </span>
           </span>
           <span v-if="period.hours" v-html="`(${period.hours} hours)`" />
           <span v-if="!period.hours && period.start" class="ml-1">
-            ({{ duration(new Date(period.start), period.end ? new Date(period.end) : undefined) || '1 month' }})
+            ({{ calculateDuration }})
           </span>
         </small>
       </p>
     </div>
   </header>
-  <p class="description">{{ description }}</p>
+  <p v-if="description" class="description">{{ description }}</p>
+  <ol v-if="items" class="list-disc pl-5 !mt-1">
+    <li v-for="item of items" class="text-black">{{ item }}</li>
+  </ol>
 </template>
 
-<script>
-import { intervalToDuration, formatDuration, format } from 'date-fns'
-export default {
-  props: {
-    title: String,
-    description: String,
-    remoteWork: Boolean,
-    company: {
-      name: String,
-      slug: String,
-    },
-    period: {
-      start: String,
-      end: String,
-    },
-    hiddenTime: {
-      type: Boolean,
-      default: false,
-    }
+<script setup>
+import { computed } from 'vue'
+import { useDayjs } from '#dayjs'
+
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+const dayjs = useDayjs()
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
+
+const props = defineProps({
+  title: String,
+  description: String,
+  items: {
+    type: Array,
+    default: () => ([])
   },
-  methods: {
-    duration(start, end = new Date()) {
-      const duration = intervalToDuration({ start, end });
-      return formatDuration(duration, { format: ['years', 'months', 'weeks'] });
-    },
-    formatPeriod(period) {
-      if (!period?.length) return '';
-      return format(new Date(period), "MMM yyyy");
-    }
+  remoteWork: Boolean,
+  company: {
+    type: Object,
+    required: true
+  },
+  period: {
+    type: Object,
+    default: () => ({})
+  },
+  hiddenTime: {
+    type: Boolean,
+    default: false
   }
-}
+})
+
+const calculateDuration = computed(() => {
+  if (!props.period.start) return '1 month'
+  
+  const start = dayjs(props.period.start)
+  const end = props.period.end ? dayjs(props.period.end) : dayjs()
+  const diff = end.diff(start)
+  const durationObj = dayjs.duration(diff)
+  
+  const years = Math.floor(durationObj.asYears())
+  const months = Math.floor(durationObj.asMonths() % 12)
+  const weeks = Math.floor((durationObj.asDays() % 30) / 7)
+  
+  const parts = []
+  if (years) parts.push(`${years} year${years > 1 ? 's' : ''}`)
+  if (months) parts.push(`${months} month${months > 1 ? 's' : ''}`)
+  if (weeks && !years) parts.push(`${weeks} week${weeks > 1 ? 's' : ''}`)
+  
+  return parts.join(' ')
+})
+
 </script>
 
 <style lang="postcss" scoped>

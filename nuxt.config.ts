@@ -1,24 +1,44 @@
+import config from './config.ts'
+
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-  typescript: {
-    shim: false
-  },
-  // preset: 'cloudflare',
+  compatibilityDate: '2025-02-25',
+  runtimeConfig: { public: config },
   components: true,
+  typescript: { shim: false },
+  
+  css: [
+    '@/assets/css/main.postcss',
+  ],
+
   modules: [
     '@nuxt/content',
     '@nuxtjs/tailwindcss',
     '@vueuse/nuxt',
+    'dayjs-nuxt',
+    'nuxt-mdi',
   ],
+
   content: {
-    highlight: {
-      // See the available themes on https://github.com/shikijs/shiki/blob/main/docs/themes.md#all-theme
-      theme: 'dracula'
+    build: {
+      markdown: {
+        highlight: {
+          theme: 'poimandres',
+        }
+      },
+    },
+    renderer: {
+      anchorLinks: { h2: false, h3: false, h4: false }
     }
   },
-  css: [
-    '@/assets/css/main.postcss',
-  ],
+
+  dayjs: {
+    locales: ['en', 'pt-br'],
+    plugins: ['relativeTime', 'advancedFormat', 'localizedFormat', 'utc', 'timezone'],
+    defaultLocale: 'en',
+    defaultTimezone: 'America/Sao_Paulo',
+  },
+
   postcss: {
     plugins: {
       'postcss-import': {},
@@ -27,7 +47,15 @@ export default defineNuxtConfig({
       autoprefixer: {},
     }
   },
-  build: {
-    transpile: ['mdi-vue'],
+
+  mdi: {
+    defaultSize: '1.2em'
   },
+
+  vite: {
+    optimizeDeps: {
+      include: ['dayjs']
+    },
+  },
+  
 })

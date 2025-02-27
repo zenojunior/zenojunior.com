@@ -1,5 +1,5 @@
 <script setup>
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+import { breakpointsTailwind, useBreakpoints, useToggle } from '@vueuse/core'
 
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const [isMenuOpen, toggleMenu] = useToggle(false)
@@ -8,22 +8,22 @@ const mdAndSmaller = breakpoints.smaller('md')
 const menu = [
   {
     to: '/',
-    icon: 'human-greeting-variant',
+    icon: 'mdiHumanGreetingVariant',
     text: 'home'
   },
   {
     to: '/resume',
-    icon: 'file-account',
+    icon: 'mdiFileAccount',
     text: 'resume'
   },
   {
     to: '/notes',
-    icon: 'notebook',
+    icon: 'mdiNotebook',
     text: 'notes'
   },
   {
     to: '/about',
-    icon: 'tooltip-account',
+    icon: 'mdiTooltipAccount',
     text: 'about'
   }
 ]
@@ -35,7 +35,7 @@ const menu = [
       <div class="flex container md:mx-auto justify-between items-center">
         <PartialsLogo />
         <nav class="flex gap-10">
-          <button class="flex md:hidden" @click="toggleMenu(true)"><mdicon name="menu" /></button>
+          <button class="flex md:hidden" @click="toggleMenu(true)"><mdi-icon icon="mdiMenu" size="1.6rem" /></button>
           <MobileNav :visible="isMenuOpen && mdAndSmaller" @close="toggleMenu(false)">
             <NuxtLink
               v-for="link in menu"
@@ -43,7 +43,7 @@ const menu = [
               :to="link.to"
               :key="link.text"
             >
-              <mdicon :name="link.icon" />
+              <mdi-icon :icon="link.icon" size="1.6rem" />
               {{ link.text }}
             </NuxtLink>
           </MobileNav>
@@ -65,7 +65,7 @@ const menu = [
     @apply flex flex-col items-center gap-1 pb-1 opacity-75;
 
     &.router-link-active {
-      @apply border-b-4 mb-4 cursor-text opacity-100;
+      @apply border-b-4 mb-4 cursor-default opacity-100;
     }
 
     &:hover:not(.router-link-active) {

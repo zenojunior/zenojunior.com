@@ -1,13 +1,34 @@
-# Nuxt 3 Minimal Starter
+<h1 align="center">
+  zenojunior.com
+</h1>
+<p align="center">
+  This is the open-source version of my website <a href="https://zenojunior.com" target="_blank">zenojunior.com</a>.
+</p>
+<div align="center">
 
-We recommend to look at the [documentation](https://v3.nuxtjs.org).
+[![](/assets/cover.png)](/assets/cover.png)
+
+</div>
+
+## Features
+
+- CV based on a [resume.yaml](/content/resume.yaml)
+- Notes to share ideas
+- About me page
+- Links to social networks
+
+## Technologies
+
+- [Vue 3](https://vuejs.org)
+- [Nuxt 3](https://nuxt.com)
+- [Tailwind CSS](https://tailwindcss.com)
 
 ## Setup
 
 Make sure to install the dependencies
 
 ```bash
-yarn install
+pnpm install
 ```
 
 ## Development
@@ -15,7 +36,7 @@ yarn install
 Start the development server on http://localhost:3000
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 ## Production
@@ -23,7 +44,14 @@ yarn dev
 Build the application for production:
 
 ```bash
-yarn build
+pnpm build
 ```
 
 Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment).
+
+## Deploy to Cloudflare
+
+Click the button below to deploy your own version of this project on Cloudflare.
+
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/zenojunior/zenojunior.com)

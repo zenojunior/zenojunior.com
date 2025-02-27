@@ -9,11 +9,13 @@
     "deploy": "wrangler publish"
   },
   "devDependencies": {
-    "@nuxt/content": "^2.4.3",
+    "@nuxt/content": "^3.2.2",
     "@nuxtjs/tailwindcss": "^6.4.0",
-    "@vueuse/nuxt": "^9.12.0",
+    "@vueuse/nuxt": "^12.7.0",
     "autoprefixer": "^10.4.13",
-    "nuxt": "^3.2.0",
+    "dayjs-nuxt": "2.1.11",
+    "nuxt": "^3.15.4",
+    "nuxt-mdi": "2.1.1",
     "postcss": "^8.4.21",
     "postcss-nested-ancestors": "^3.0.0",
     "postcss-nesting": "^11.2.0",
@@ -23,11 +25,9 @@
     "tailwindcss": "^3.2.6"
   },
   "dependencies": {
-    "@bytebase/vue-kbar": "^0.1.8",
-    "@mdi/js": "^7.1.96",
-    "@vueuse/head": "^1.0.25",
-    "date-fns": "^2.29.3",
-    "mdi-vue": "^3.0.13",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vueuse/core": "^12.7.0",
+    "dayjs": "^1.11.13",
     "wrangler": "^2.9.1"
   }
 }
