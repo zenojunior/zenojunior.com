@@ -1,6 +1,6 @@
 import colors from 'tailwindcss/colors'
 
-module.exports = {
+export default {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
     './content/**/*.{md,yml,json,json5,csv}'

@@ -1,11 +1,25 @@
+<script setup lang="ts">
+const slug = useRoute().params.slug
+const { data: note } = await useAsyncData(`note-${slug}`, () => {
+  return queryCollection('notes').path(`/notes/${slug}`).first()
+})
+</script>
+
 <template>
   <div class="md:container min-h-[calc(100vh-20rem)] md:mx-auto flex flex-col items-stretch justify-center">
     <article class="self-center max-w-[calc(100%-4rem)] md:max-w-3xl mb-10 md:px-0">
-      <ContentDoc>
-        <template #not-found>
-          <h2 class="text-gray-500">I haven't written this yet... 😕</h2>
-        </template>
-      </ContentDoc>
+      <template v-if="note">
+        <h1 v-if="note.title" class="leading-[4rem] text-[3.5rem] mb-10">{{ note.title }}</h1>
+        <ContentRenderer :value="note">
+        </ContentRenderer>
+      </template>
+      <template v-else>
+        <div class="empty-page">
+          <h1>Ops</h1>
+          <p>I haven't written this yet... 😕</p>
+          <NuxtLink to="/notes">See my notes</NuxtLink>
+        </div>
+      </template>
     </article>
   </div>
 </template>

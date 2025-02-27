@@ -1,0 +1,83 @@
+title: Zeno Junior
+subtitle: Front-end engineer | Enthusiastic about building scalable products and great user experiences
+about: I have %years% years of experience with web and mobile development. I'm dedicating myself to become a specialist front-end engineer. My greatest strength is the desire to change and enjoy making things happen.
+
+personal:
+  - name: Zeno Sbardellotto Junior
+  - location: Porto Alegre, Brazil
+  - email: cv@zenojunior.com
+
+skills:
+  - Entrepreneurship
+  - Problem-Solving
+  - Creative thinking
+  - Customer Focus
+  - Productivity using AI
+  - Scalable architectures
+
+motivators:
+  - Automate repetitive tasks
+  - People engaged in the team
+  - Developer Experience
+  - Remote work / Flexible hours
+
+languages:
+  - Portuguese
+  - English
+
+links:
+  - label: zenojunior.com
+    url: https://zenojunior.com
+  - label: linkedin.com/in/zenojunior
+    url: https://www.linkedin.com/in/zenojunior
+  - label: github.com/zenojunior
+    url: https://github.com/zenojunior
+
+experiences:
+  - title: Front-end Engineer
+    company:
+      name: SWORD Health
+      slug: sword-health
+    period:
+      start: 2023-01-03
+    remoteWork: true
+
+  - title: Front-end Developer
+    company:
+      name: Cuponomia
+      slug: cuponomia
+    period:
+      start: 2019-09-10
+      end: 2022-09-10
+    remoteWork: true
+    items:
+      - Developed the Chrome Web Store extension using Vuejs, creating a single-page application architecture
+      - Contributed to Cuponomia's mobile app development using React Native, focusing on performance and user experience improvements
+
+  - title: Full-stack Developer
+    company:
+      name: Itcode Soluções Web
+      slug: itcode
+    period:
+      start: 2018-09-01
+      end: 2019-09-10
+    description: I built PWAs using the Laravel Framework (PHP). I developed a Chatbot for Discord using Nodejs (Javascript on the server side). I was responsible for creating the mobile app front-end using Flutter (Dart).
+
+  - title: Junior Front-end Developer
+    company:
+      name: Visãoi Sistemas Web
+      slug: visaoi
+    period:
+      start: 2014-06-01
+      end: 2018-09-01
+    description: I worked on the recreation of the product interfaces, using Jquery and Bootstrap. I improved my knowledge in Mobile First, Accessibility and W3C Standards for web development. I was responsible for the implementation and training of services in government institutions. Here I developed advanced skills with CSS3 and HTML5.
+
+formation:
+  - title: Software Engineering
+    company:
+      name: Universidade do Vale do Taquari - Univates
+      slug: univates
+    period:
+      start: 2014-06-01
+      end: 2023-06-02
+      hours: 3360

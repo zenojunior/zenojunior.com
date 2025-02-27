@@ -19,21 +19,3 @@ const props = defineProps(['class'])
   }
 }
 </style>
-
-<!-- <style scoped lang="scss">
-  .btn {
-    padding: 10px 15px;
-    border-radius: 10px;
-    background: #313b47;
-    font-size: 1.2rem;
-
-    &:hover {
-      background: #475769;
-    }
-
-    span {
-      position: relative;
-      bottom: -12px;
-    }
-  }
-</style> -->
