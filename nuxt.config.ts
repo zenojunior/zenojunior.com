@@ -48,6 +48,10 @@ export default defineNuxtConfig({
     }
   },
 
+  features: {
+    inlineStyles: false
+  },
+
   mdi: {
     defaultSize: '1.2em'
   },
