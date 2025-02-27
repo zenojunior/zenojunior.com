@@ -48,10 +48,3 @@ pnpm build
 ```
 
 Checkout the [deployment documentation](https://v3.nuxtjs.org/docs/deployment).
-
-## Deploy to Cloudflare
-
-Click the button below to deploy your own version of this project on Cloudflare.
-
-
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/zenojunior/zenojunior.com)
