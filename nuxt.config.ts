@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   runtimeConfig: { public: config },
   components: true,
   typescript: { shim: false },
+  devtools: { enabled: false },
   
   css: [
     '@/assets/css/main.postcss',
@@ -46,6 +47,10 @@ export default defineNuxtConfig({
       tailwindcss: {},
       autoprefixer: {},
     }
+  },
+
+  tailwindcss: {
+    viewer: false,
   },
 
   features: {
