@@ -1,0 +1,95 @@
+---
+import { Github, Linkedin, Mail, MapPin } from 'lucide-astro'
+import BaseHead from '../components/BaseHead.astro'
+import Header from '../components/Header.astro'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+
+const skills = [
+  'Front-end architecture with Vue, React & TypeScript',
+  'Design systems & UI engineering with TailwindCSS',
+  'Developer experience and code quality at scale',
+  'AI-assisted engineering and tooling',
+  'Node.js and full-stack product work',
+]
+
+const interests = [
+  'Developer Experience',
+  'AI Tooling',
+  'Automations',
+  'Open Source',
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main class="px-8 pt-28 pb-16 flex justify-center max-md:px-4 max-md:pt-24 max-md:pb-10">
+      <div class="w-full max-w-xl">
+        <!-- Hero -->
+        <header class="flex flex-col items-center text-center">
+          <img
+            src="/avatar.jpg"
+            alt="Zeno Junior"
+            class="w-28 h-28 rounded-full border-2 border-accent/40 shadow-lg shadow-accent/10 grayscale hover:grayscale-0 transition-all duration-500"
+          />
+          <h1 class="text-4xl font-bold text-text mt-6 tracking-tight">Zeno Junior</h1>
+          <p class="text-text-secondary mt-2 text-lg">Front-end Engineer &amp; Developer Experience Enthusiast</p>
+
+          <div class="flex items-center gap-2.5 mt-5 text-text-muted">
+            <MapPin size={15} />
+            <span class="text-sm">RS, Brazil</span>
+          </div>
+
+          <div class="flex items-center gap-3 mt-6">
+            <a href="https://github.com/zenojunior" target="_blank" rel="noopener" aria-label="GitHub" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+              <Github size={18} />
+            </a>
+            <a href="https://www.linkedin.com/in/zenojunior" target="_blank" rel="noopener" aria-label="LinkedIn" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+              <Linkedin size={18} />
+            </a>
+            <a href="mailto:cv@zenojunior.com" aria-label="Email" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+              <Mail size={18} />
+            </a>
+          </div>
+        </header>
+
+        <!-- About -->
+        <section class="mt-16">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">About</h2>
+          <p class="text-text-secondary leading-relaxed">
+            Frontend engineer with 12+ years of experience. Focused on developer experience,
+            code quality at scale, and shipping faster with AI tooling. I care about building
+            scalable products and the kind of polished user experiences that feel effortless.
+          </p>
+        </section>
+
+        <!-- Skills -->
+        <section class="mt-12">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">Skills</h2>
+          <ul class="flex flex-col gap-2.5">
+            {skills.map(skill => (
+              <li class="flex gap-3 text-text-secondary">
+                <span class="text-accent select-none mt-0.5">&rsaquo;</span>
+                <span>{skill}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- Interests -->
+        <section class="mt-12">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">Interests</h2>
+          <div class="flex flex-wrap gap-2">
+            {interests.map(interest => (
+              <span class="font-mono text-xs px-2.5 py-1 bg-tag-bg text-tag-text rounded">{interest}</span>
+            ))}
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

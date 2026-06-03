@@ -1,0 +1,27 @@
+flowchart TB
+  classDef plain fill:transparent,stroke:none,color:#f2f2f7
+
+  U["<img src='/icons/mermaid/user.svg' style='height:48px;width:auto;display:block;margin:0 auto'/>Pessoa"]
+  ORG["<img src='/icons/mermaid/orgs.svg' style='height:48px;width:auto;display:block;margin:0 auto'/>ONGs e Abrigos"]
+  M["<img src='/icons/mermaid/monday.svg' style='height:48px;width:auto;display:block;margin:0 auto'/>Monday.com"]
+  N["<img src='/icons/mermaid/n8n.svg' style='height:42px;width:auto;display:block;margin:0 auto'/>n8n"]
+  O["<img src='/icons/mermaid/openai.svg' style='height:48px;width:auto;display:block;margin:0 auto'/>OpenAI"]
+  S["<img src='/icons/mermaid/strapi.svg' style='height:48px;width:auto;display:block;margin:0 auto'/>Strapi"]
+  CF["<img src='/icons/mermaid/cloudflare.svg' style='height:36px;width:auto;display:block;margin:0 auto'/>Cloudflare"]
+  P["<img src='/icons/mermaid/petsrs.svg' style='height:48px;width:auto;display:block;margin:0 auto'/>petsrs.com.br"]
+
+  class U,ORG,M,N,O,S,CF,P plain
+
+  U -->|Cadastro| M
+  ORG -->|Cadastro| M
+  M -->|Aprovação| N
+  N <-->|Análise da foto| O
+  N -->|Persiste| S
+  S --> CF
+  subgraph delivery [" "]
+    direction LR
+    CF -.-> P
+  end
+  P -.-> U
+
+  style delivery fill:transparent,stroke:none

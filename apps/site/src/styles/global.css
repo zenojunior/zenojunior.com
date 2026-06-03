@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+
+@theme {
+  /* ── Colors ── */
+  --color-bg: #0a0a0f;
+  --color-bg-secondary: #13131c;
+  --color-bg-card: #1b1b27;
+
+  --color-text: #f2f2f7;
+  --color-text-secondary: #aab0c0;
+  --color-text-muted: #828999;
+
+  --color-accent: #a78bfa;
+  --color-accent-hover: #c4b5fd;
+
+  --color-border: #26262f;
+
+  --color-tag-bg: #1e1b2e;
+  --color-tag-text: #c4b5fd;
+
+  /* ── Sizing ── */
+  --width-sidebar: 240px;
+  --width-notes-panel: 300px;
+  --width-content: 720px;
+}
+
+@theme inline {
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* ── Base ── */
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  @apply text-text font-sans antialiased;
+  font-size: 18px;
+  line-height: 1.7;
+  min-height: 100vh;
+  background-color: var(--color-bg);
+  /* Subtle dot grid drawn purely in CSS, no external assets. */
+  background-image: radial-gradient(
+    rgba(167, 139, 250, 0.07) 1px,
+    transparent 1px
+  );
+  background-size: 22px 22px;
+  background-attachment: fixed;
+}
+
+/* Soft accent glow anchored to the top of the viewport. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    60% 50% at 50% -10%,
+    rgba(167, 139, 250, 0.12),
+    transparent 70%
+  );
+}
+
+/* ── Prose (markdown content) ── */
+.prose {
+  @apply text-text-secondary leading-relaxed;
+
+  p {
+    @apply mb-6;
+  }
+  h2 {
+    @apply text-text font-bold text-xl mt-8 mb-3;
+  }
+  h3 {
+    @apply text-text font-bold text-lg mt-6 mb-2;
+  }
+  ul,
+  ol {
+    @apply mb-6 pl-6 text-text-secondary;
+  }
+  li {
+    @apply mb-2;
+  }
+  a {
+    @apply text-accent underline underline-offset-4;
+  }
+  a:hover {
+    @apply text-accent-hover;
+  }
+  blockquote {
+    @apply border-l-[3px] border-accent pl-4 text-text-muted my-6;
+  }
+  img {
+    @apply max-w-full rounded-lg my-6;
+  }
+  code {
+    @apply bg-bg-secondary border border-border rounded px-1.5 py-0.5 text-sm;
+  }
+  pre {
+    @apply bg-bg-secondary! border border-border rounded-lg p-5 overflow-x-auto;
+  }
+  pre > code {
+    @apply bg-transparent border-none rounded-none p-0;
+  }
+  hr {
+    @apply border-border my-8;
+  }
+}
+
+/* ── Sidebar background ── */
+.sidebar-bg {
+  background-color: var(--color-bg-secondary);
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+}

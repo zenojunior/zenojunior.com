@@ -1,0 +1,105 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { getCollection, render } from 'astro:content'
+import { ArrowLeft, ArrowRight } from 'lucide-astro'
+import BaseHead from '../../components/BaseHead.astro'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import FormattedDate from '../../components/FormattedDate.astro'
+import Header from '../../components/Header.astro'
+import { FEATURES, SITE_TITLE } from '../../consts'
+
+export async function getStaticPaths() {
+  if (!FEATURES.notes)
+    return []
+
+  const notes = (await getCollection('notes')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+  )
+
+  return notes.map((note, i) => ({
+    params: { slug: note.id },
+    props: {
+      note,
+      prev: notes[i + 1] ?? null,
+      next: notes[i - 1] ?? null,
+    },
+  }))
+}
+
+interface Props {
+  note: CollectionEntry<'notes'>
+  prev: CollectionEntry<'notes'> | null
+  next: CollectionEntry<'notes'> | null
+}
+
+const { note, prev, next } = Astro.props
+const { Content } = await render(note)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${note.data.title} - ${SITE_TITLE}`} description={note.data.description} />
+  </head>
+  <body>
+    <Header />
+    <main class="px-8 pt-28 pb-12 max-md:px-4 max-md:pt-24 max-md:pb-6 flex justify-center">
+      <article class="w-full max-w-(--width-content)">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Notes', href: '/notes' },
+            { label: note.data.title },
+          ]}
+        />
+
+        <!-- Hero -->
+        <header class="mb-10">
+          <div class="flex items-center gap-3 font-mono text-xs text-text-muted mb-3">
+            <FormattedDate date={note.data.pubDate} />
+            {note.data.updatedDate && (
+              <span class="italic">updated <FormattedDate date={note.data.updatedDate} /></span>
+            )}
+          </div>
+          <h1 class="text-4xl font-bold text-text tracking-tight mb-4 max-md:text-3xl">{note.data.title}</h1>
+          <p class="text-lg text-text-secondary leading-relaxed">{note.data.description}</p>
+
+          {note.data.tags.length > 0 && (
+            <div class="flex flex-wrap gap-2 mt-6">
+              {note.data.tags.map(tag => (
+                <span class="font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded">#{tag}</span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        <hr class="border-border mb-10" />
+
+        <!-- Content -->
+        <div class="prose">
+          <Content />
+        </div>
+
+        <!-- Prev / Next navigation -->
+        <nav class="mt-16 pt-8 border-t border-border grid grid-cols-2 gap-4">
+          {prev
+            ? (
+                <a href={`/notes/${prev.id}/`} class="group flex flex-col gap-1 rounded-xl border border-border/50 bg-bg-secondary/60 p-4 hover:border-accent/50 hover:bg-bg-secondary/80 transition-all">
+                  <span class="flex items-center gap-1.5 font-mono text-xs text-text-muted"><ArrowLeft size={13} /> Older</span>
+                  <span class="text-sm font-semibold text-text group-hover:text-accent transition-colors">{prev.data.title}</span>
+                </a>
+              )
+            : <div />}
+          {next
+            ? (
+                <a href={`/notes/${next.id}/`} class="group flex flex-col gap-1 items-end text-right rounded-xl border border-border/50 bg-bg-secondary/60 p-4 hover:border-accent/50 hover:bg-bg-secondary/80 transition-all">
+                  <span class="flex items-center gap-1.5 font-mono text-xs text-text-muted">Newer <ArrowRight size={13} /></span>
+                  <span class="text-sm font-semibold text-text group-hover:text-accent transition-colors">{next.data.title}</span>
+                </a>
+              )
+            : <div />}
+        </nav>
+      </article>
+    </main>
+  </body>
+</html>

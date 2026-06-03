@@ -1,0 +1,71 @@
+---
+import { resumeData } from '@zenojunior/cv'
+import CVPage from '@zenojunior/cv/CVPage.astro'
+import BaseHead from '../components/BaseHead.astro'
+import Header from '../components/Header.astro'
+import { SITE_TITLE } from '../consts'
+import '@zenojunior/cv/styles'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Resume - ${SITE_TITLE}`} description="Download my resume." />
+  </head>
+  <body>
+    <Header />
+    <main class="pt-28 pb-12 px-8 max-md:px-4 max-md:pt-24 max-md:pb-6 flex justify-center">
+      <div class="w-full">
+        <div class="flex items-center justify-between mb-8 max-w-(--width-content) mx-auto">
+          <h1 class="text-2xl font-bold text-text">Resume</h1>
+          <button onclick="window.print()" class="text-sm px-4 py-2 bg-bg-secondary border border-border rounded-md text-text hover:border-accent transition-colors cursor-pointer print:hidden">
+            Print / Download
+          </button>
+        </div>
+        <div class="cv-wrapper flex justify-center">
+          <CVPage data={resumeData} />
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+	.cv-wrapper {
+		overflow-x: auto;
+	}
+</style>
+
+<style is:global>
+	@media print {
+		main > div > div:first-child {
+			display: none !important;
+		}
+		body,
+		main {
+			margin: 0 !important;
+			padding: 0 !important;
+			background: #fff !important;
+		}
+		.cv-wrapper {
+			display: block !important;
+			overflow: visible !important;
+			padding: 0 !important;
+		}
+		.cv-page {
+			width: 210mm !important;
+			min-height: 0 !important;
+			height: auto !important;
+			margin: 0 !important;
+			padding: 8mm 12mm !important;
+			box-shadow: none !important;
+			transform: none !important;
+			page-break-after: avoid;
+			page-break-inside: avoid;
+		}
+		@page {
+			size: A4;
+			margin: 0;
+		}
+	}
+</style>

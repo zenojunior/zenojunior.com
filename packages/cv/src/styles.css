@@ -1,0 +1,240 @@
+/* ── A4 Page ── */
+.cv-page {
+  --cv-accent: #1e40af;
+
+  width: 21cm;
+  min-height: 29.7cm;
+  background: #fff;
+  padding: 3rem 3.5rem;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color: #333;
+  font-size: 11px;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+/* ── Header ── */
+.cv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.cv-name {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--cv-accent);
+  line-height: 1;
+  margin: 0 0 0.3rem;
+}
+
+.cv-subtitle {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+  margin: 0 0 0.4rem;
+  line-height: 1.3;
+}
+
+.cv-personal-inline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.cv-personal-inline li + li::before {
+  content: "•";
+  margin-right: 0.3rem;
+}
+
+.cv-personal {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.cv-personal li {
+  font-size: 0.7rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.cv-personal a {
+  color: #666;
+  text-decoration: none;
+}
+
+.cv-personal a:hover {
+  text-decoration: underline;
+}
+
+.cv-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 0.6rem 0;
+}
+
+/* ── Sections ── */
+.cv-section {
+  margin-bottom: 0.85rem;
+}
+
+.cv-section-title {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--cv-accent);
+  margin: 0 0 0.4rem;
+  letter-spacing: 0.03em;
+}
+
+.cv-about {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: justify;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ── Skills ── */
+.cv-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cv-skill-group {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+}
+
+.cv-skill-label {
+  font-weight: 600;
+  color: #444;
+  white-space: nowrap;
+  min-width: 11rem;
+  text-align: right;
+}
+
+.cv-skill-items {
+  color: #666;
+}
+
+/* ── Experience ── */
+.cv-experience {
+  margin-bottom: 0.5rem;
+}
+
+.cv-experience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.cv-experience-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cv-experience-company {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+}
+
+.cv-experience-period {
+  text-align: right;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.cv-experience-duration {
+  display: block;
+  font-size: 0.65rem;
+  color: #999;
+}
+
+.cv-experience-description {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0.3rem 0 0;
+  text-align: justify;
+}
+
+.cv-experience-items {
+  margin: 0.25rem 0 0;
+  padding-left: 1.5rem;
+  list-style: disc;
+}
+
+.cv-experience-items li {
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: 0.15rem;
+  line-height: 1.2;
+}
+
+/* ── Footer ── */
+.cv-footer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  margin-top: 0.4rem;
+}
+
+.cv-footer .cv-section-title {
+  margin: 0;
+}
+
+.cv-footer-text {
+  font-size: 0.7rem;
+  color: #666;
+}
+
+/* ── Print ── */
+@media print {
+  .cv-page {
+    margin: 0;
+    box-shadow: none;
+  }
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+/* ── Screen: shadow for visual effect ── */
+@media screen {
+  .cv-page {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+  }
+}
+
+/* ── Responsive scale on small screens ── */
+@media screen and (max-width: 900px) {
+  .cv-wrapper {
+    overflow-x: auto;
+    padding: 1rem;
+  }
+
+  .cv-page {
+    transform: scale(0.55);
+    transform-origin: top left;
+  }
+}
