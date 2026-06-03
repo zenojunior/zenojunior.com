@@ -35,6 +35,12 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Text selection — accent highlight across the whole site. */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
 body {
   @apply text-text font-sans antialiased;
   font-size: 18px;

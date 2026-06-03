@@ -1,0 +1,88 @@
+---
+// Cursor-reactive dot grid for the hero. Dots swell, brighten, and drift away
+// from the pointer, echoing the static dot grid used across the rest of the site.
+---
+
+<canvas class="hero-fx pointer-events-none absolute inset-0 z-0 h-full w-full" data-hero-fx></canvas>
+
+<script>
+const canvas = document.querySelector<HTMLCanvasElement>('[data-hero-fx]')
+const host = canvas?.parentElement
+
+if (canvas && host) {
+  const ctx = canvas.getContext('2d')!
+  const ACCENT = '167, 139, 250'
+  const GAP = 26
+  const RADIUS = 150
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  let W = 0
+  let H = 0
+  let dots: { x: number, y: number }[] = []
+  const mouse = { x: -1e4, y: -1e4, active: false }
+
+  function buildDots() {
+    dots = []
+    for (let y = GAP / 2; y < H; y += GAP) {
+      for (let x = GAP / 2; x < W; x += GAP) dots.push({ x, y })
+    }
+  }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    W = host!.clientWidth
+    H = host!.clientHeight
+    canvas!.width = W * dpr
+    canvas!.height = H * dpr
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    buildDots()
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H)
+    for (const d of dots) {
+      const dx = d.x - mouse.x
+      const dy = d.y - mouse.y
+      const dist = Math.hypot(dx, dy)
+      const f = mouse.active ? Math.max(0, 1 - dist / RADIUS) : 0
+      const push = f * 9
+      const nx = d.x + (dist ? dx / dist : 0) * push
+      const ny = d.y + (dist ? dy / dist : 0) * push
+      ctx.beginPath()
+      ctx.arc(nx, ny, 1 + f * 2.4, 0, Math.PI * 2)
+      ctx.fillStyle = `rgba(${ACCENT}, ${0.1 + f * 0.6})`
+      ctx.fill()
+    }
+  }
+
+  let raf = 0
+  function frame() {
+    draw()
+    raf = requestAnimationFrame(frame)
+  }
+
+  host.addEventListener('pointermove', (e) => {
+    const r = canvas.getBoundingClientRect()
+    mouse.x = e.clientX - r.left
+    mouse.y = e.clientY - r.top
+    mouse.active = true
+  })
+  host.addEventListener('pointerleave', () => {
+    mouse.active = false
+  })
+
+  window.addEventListener('resize', resize)
+  document.addEventListener('visibilitychange', () => {
+    if (reduce)
+      return
+    if (document.hidden)
+      cancelAnimationFrame(raf)
+    else raf = requestAnimationFrame(frame)
+  })
+
+  resize()
+  if (reduce)
+    draw()
+  else raf = requestAnimationFrame(frame)
+}
+</script>

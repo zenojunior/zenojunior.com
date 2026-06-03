@@ -1,0 +1,71 @@
+---
+import type { ImageMetadata } from 'astro'
+
+// Cycles through the avatar variants in src/avatars (1.webp, 2.webp, …) with a
+// crossfade. Add or remove files there — they're auto-detected and sorted
+// numerically. Falls back to /avatar.jpg when the folder is empty.
+interface Props {
+  class?: string
+}
+
+const { class: className = '' } = Astro.props
+
+const modules = import.meta.glob<{ default: ImageMetadata }>('../avatars/*.{webp,png,jpg,jpeg}', { eager: true })
+const images = Object.entries(modules)
+  .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+  .map(([, m]) => m.default.src)
+const frames = images.length ? images : ['/avatar.jpg']
+---
+
+<div
+  class:list={['avatar-carousel relative overflow-hidden rounded-full shadow-[0_8px_40px_-8px] shadow-accent/30 transition-all duration-500', className]}
+  data-avatar-carousel
+>
+  {frames.map((src, i) => (
+    <img
+      src={src}
+      alt="Zeno Junior"
+      data-active={i === 0 ? 'true' : 'false'}
+      class="avatar-frame absolute inset-0 h-full w-full object-cover"
+    />
+  ))}
+</div>
+
+<style>
+	.avatar-frame {
+		opacity: 0;
+		transform: scale(1.06);
+		transition: opacity 0.5s ease, transform 0.5s ease;
+	}
+	.avatar-frame[data-active='true'] {
+		opacity: 1;
+		transform: scale(1);
+	}
+</style>
+
+<script>
+const root = document.querySelector<HTMLElement>('[data-avatar-carousel]')
+const frames = root ? [...root.querySelectorAll<HTMLImageElement>('.avatar-frame')] : []
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+const INTERVAL = 1000
+
+if (frames.length > 1 && !reduce) {
+  let i = 0
+  let timer = 0
+  const tick = () => {
+    frames[i].dataset.active = 'false'
+    i = (i + 1) % frames.length
+    frames[i].dataset.active = 'true'
+  }
+  const start = () => {
+    clearInterval(timer)
+    timer = window.setInterval(tick, INTERVAL)
+  }
+  start()
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden)
+      clearInterval(timer)
+    else start()
+  })
+}
+</script>

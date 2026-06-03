@@ -1,8 +1,8 @@
 ---
 import { resumeData } from '@zenojunior/cv'
 import CVPage from '@zenojunior/cv/CVPage.astro'
+import { ArrowLeft, Download } from 'lucide-astro'
 import BaseHead from '../components/BaseHead.astro'
-import Header from '../components/Header.astro'
 import { SITE_TITLE } from '../consts'
 import '@zenojunior/cv/styles'
 ---
@@ -12,19 +12,31 @@ import '@zenojunior/cv/styles'
   <head>
     <BaseHead title={`Resume - ${SITE_TITLE}`} description="Download my resume." />
   </head>
-  <body>
-    <Header />
-    <main class="pt-28 pb-12 px-8 max-md:px-4 max-md:pt-24 max-md:pb-6 flex justify-center">
-      <div class="w-full">
-        <div class="flex items-center justify-between mb-8 max-w-(--width-content) mx-auto">
-          <h1 class="text-2xl font-bold text-text">Resume</h1>
-          <button onclick="window.print()" class="text-sm px-4 py-2 bg-bg-secondary border border-border rounded-md text-text hover:border-accent transition-colors cursor-pointer print:hidden">
-            Print / Download
-          </button>
-        </div>
-        <div class="cv-wrapper flex justify-center">
-          <CVPage data={resumeData} />
-        </div>
+  <body class="resume-viewer">
+    <!-- Viewer toolbar -->
+    <div class="toolbar fixed top-0 inset-x-0 z-50 flex items-center justify-between gap-4 px-4 h-14 border-b border-border bg-bg-secondary/80 backdrop-blur-md print:hidden">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 text-sm px-3 py-1.5 rounded-md text-text-secondary hover:text-text hover:bg-bg-card/60 transition-colors"
+      >
+        <ArrowLeft size={16} />
+        <span>Back</span>
+      </a>
+
+      <span class="font-mono text-xs uppercase tracking-wider text-text-muted">Resume Viewer</span>
+
+      <button
+        onclick="window.print()"
+        class="inline-flex items-center gap-2 text-sm px-4 py-1.5 bg-accent text-bg font-medium rounded-md hover:bg-accent-hover transition-colors cursor-pointer"
+      >
+        <Download size={16} />
+        <span>Download</span>
+      </button>
+    </div>
+
+    <main class="pt-14 min-h-screen flex justify-center">
+      <div class="cv-wrapper w-full flex justify-center px-4 py-8 max-md:px-2 max-md:py-4">
+        <CVPage data={resumeData} />
       </div>
     </main>
   </body>
@@ -38,7 +50,7 @@ import '@zenojunior/cv/styles'
 
 <style is:global>
 	@media print {
-		main > div > div:first-child {
+		.toolbar {
 			display: none !important;
 		}
 		body,
@@ -46,6 +58,10 @@ import '@zenojunior/cv/styles'
 			margin: 0 !important;
 			padding: 0 !important;
 			background: #fff !important;
+		}
+		main {
+			min-height: 0 !important;
+			padding-top: 0 !important;
 		}
 		.cv-wrapper {
 			display: block !important;

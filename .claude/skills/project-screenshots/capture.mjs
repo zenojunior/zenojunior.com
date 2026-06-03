@@ -24,7 +24,9 @@ const VIEWPORT = { width: 1280, height: 800 }
 const DEVICE_SCALE_FACTOR = 2
 const OUT_WIDTH = 1024
 const WEBP_QUALITY = 80
-const SETTLE_MS = 2000
+const SETTLE_MS = 4000
+// Max time to wait for in-DOM images + web fonts before settling.
+const IMAGE_WAIT_MS = 8000
 
 const filters = process.argv.slice(2).map(s => s.toLowerCase())
 
@@ -75,6 +77,36 @@ for (const { slug, url } of targets) {
     console.log(`→ ${slug}: ${url}`)
     // 'load' (not 'networkidle') — sites with persistent sockets never idle.
     await page.goto(url, { waitUntil: 'load', timeout: 45000 })
+
+    // Wait for the images currently in the DOM to finish loading (or fail), so
+    // we don't snapshot half-rendered/lazy-loaded media. Capped so a single
+    // stuck asset can't hang the run.
+    await page
+      .evaluate(async (maxWait) => {
+        const settled = (async () => {
+          const imgs = Array.from(document.images)
+          await Promise.all(
+            imgs.map(img =>
+              img.complete
+                ? Promise.resolve()
+                : new Promise((resolve) => {
+                    img.addEventListener('load', resolve, { once: true })
+                    img.addEventListener('error', resolve, { once: true })
+                  }),
+            ),
+          )
+          // Also wait for web fonts so text isn't captured mid-swap.
+          if (document.fonts?.ready)
+            await document.fonts.ready
+        })()
+        // Cap the wait so one stuck asset can't hang the whole capture.
+        await Promise.race([
+          settled,
+          new Promise(resolve => setTimeout(resolve, maxWait)),
+        ])
+      }, IMAGE_WAIT_MS)
+      .catch(() => {})
+
     await page.waitForTimeout(SETTLE_MS)
 
     const png = await page.screenshot({ type: 'png' }) // viewport only = top of page

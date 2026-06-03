@@ -5,10 +5,9 @@ import { FEATURES } from '../consts'
 const pathname = Astro.url.pathname
 
 const links = [
-  { href: '/', label: 'Home' },
+  { href: '/', label: 'Zeno' },
   ...(FEATURES.notes ? [{ href: '/notes', label: 'Notes' }] : []),
   { href: '/projects', label: 'Projects' },
-  { href: '/resume', label: 'Resume' },
 ]
 
 function isActive(href: string) {
