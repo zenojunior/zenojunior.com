@@ -102,12 +102,6 @@ body::before {
   img {
     @apply max-w-full rounded-lg my-6;
   }
-  .gallery {
-    @apply grid grid-cols-2 gap-3 my-6;
-  }
-  .gallery img {
-    @apply my-0 w-full h-full object-cover aspect-square;
-  }
   code {
     @apply bg-bg-secondary border border-border rounded px-1.5 py-0.5 text-sm;
   }

@@ -1,0 +1,386 @@
+---
+import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, X } from 'lucide-astro'
+
+interface GalleryImage {
+  src: string
+  alt?: string
+}
+
+interface Props {
+  /** Image paths, or `{ src, alt }` objects. */
+  images: (string | GalleryImage)[]
+  /** Thumbnail columns (default 2). */
+  columns?: number
+}
+
+const { images, columns = 2 } = Astro.props
+
+const items: GalleryImage[] = images.map(img =>
+  typeof img === 'string' ? { src: img, alt: '' } : img,
+)
+
+// Safe JSON for the inline data tag (escape `<` so a path can't break out of the script).
+const dataJson = JSON.stringify(items).replace(/</g, '\\u003c')
+---
+
+<div class="lb-gallery" style={`--lb-cols:${columns}`}>
+  <div class="lb-grid">
+    {items.map((img, i) => (
+      <button type="button" class="lb-thumb" data-index={i} aria-label={`Open image ${i + 1} of ${items.length}`}>
+        <img src={img.src} alt={img.alt} loading="lazy" />
+      </button>
+    ))}
+  </div>
+
+  <div class="lb-modal" role="dialog" aria-modal="true" aria-label="Image viewer" hidden>
+    <div class="lb-backdrop" data-close></div>
+
+    <div class="lb-stage">
+      <img class="lb-image" src="" alt="" draggable="false" />
+    </div>
+
+    <button type="button" class="lb-btn lb-close" data-close aria-label="Close"><X size={18} /></button>
+
+    {items.length > 1 && (
+      <>
+        <button type="button" class="lb-btn lb-nav lb-prev" aria-label="Previous image"><ChevronLeft size={22} /></button>
+        <button type="button" class="lb-btn lb-nav lb-next" aria-label="Next image"><ChevronRight size={22} /></button>
+        <div class="lb-counter"></div>
+      </>
+    )}
+
+    <div class="lb-controls">
+      <button type="button" class="lb-btn lb-zoom-out" aria-label="Zoom out"><Minus size={16} /></button>
+      <button type="button" class="lb-btn lb-zoom-reset" aria-label="Reset zoom"><Maximize2 size={15} /></button>
+      <button type="button" class="lb-btn lb-zoom-in" aria-label="Zoom in"><Plus size={16} /></button>
+    </div>
+  </div>
+
+  <script type="application/json" class="lb-data" set:html={dataJson}></script>
+</div>
+
+<style>
+  .lb-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--lb-cols, 2), minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  .lb-thumb {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    cursor: zoom-in;
+    background: var(--color-bg-card);
+    aspect-ratio: 1 / 1;
+  }
+  .lb-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: 0;
+    border-radius: 0;
+    transition: transform 0.4s ease;
+  }
+  .lb-thumb:hover img {
+    transform: scale(1.05);
+  }
+
+  /* ── Modal / lightbox ── */
+  .lb-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lb-modal[hidden] {
+    display: none;
+  }
+  .lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.85);
+    backdrop-filter: blur(4px);
+  }
+  .lb-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+    cursor: grab;
+  }
+  .lb-stage:active {
+    cursor: grabbing;
+  }
+  .lb-image {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 0.5rem;
+    user-select: none;
+    transform-origin: center center;
+    will-change: transform;
+    margin: 0;
+  }
+
+  .lb-btn {
+    position: absolute;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    background: rgb(27 27 39 / 0.8);
+    backdrop-filter: blur(4px);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+  }
+  .lb-btn:hover {
+    color: var(--color-text);
+    border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+    background: rgb(19 19 28 / 0.9);
+  }
+  .lb-close {
+    top: 1rem;
+    right: 1rem;
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+  .lb-nav {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .lb-prev {
+    left: 1rem;
+  }
+  .lb-next {
+    right: 1rem;
+  }
+  .lb-controls {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.625rem;
+    background: rgb(27 27 39 / 0.8);
+    backdrop-filter: blur(4px);
+  }
+  .lb-controls .lb-btn {
+    position: static;
+    width: 1.875rem;
+    height: 1.875rem;
+    border: 0;
+    background: transparent;
+    backdrop-filter: none;
+  }
+  .lb-controls .lb-btn:hover {
+    background: var(--color-bg-secondary);
+  }
+  .lb-counter {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.5rem;
+    background: rgb(27 27 39 / 0.8);
+    backdrop-filter: blur(4px);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .lb-nav {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+    .lb-prev {
+      left: 0.5rem;
+    }
+    .lb-next {
+      right: 0.5rem;
+    }
+  }
+</style>
+
+<script>
+  const MIN_SCALE = 1
+  const MAX_SCALE = 6
+
+  function clamp(n: number, lo: number, hi: number) {
+    return Math.min(Math.max(n, lo), hi)
+  }
+
+  function setupGallery(root: HTMLElement) {
+    const dataEl = root.querySelector<HTMLElement>('.lb-data')
+    const modal = root.querySelector<HTMLElement>('.lb-modal')
+    const stage = root.querySelector<HTMLElement>('.lb-stage')
+    const image = root.querySelector<HTMLImageElement>('.lb-image')
+    const counter = root.querySelector<HTMLElement>('.lb-counter')
+    if (!dataEl || !modal || !stage || !image)
+      return
+
+    const items = JSON.parse(dataEl.textContent || '[]') as { src: string, alt?: string }[]
+    if (!items.length)
+      return
+
+    const view = { index: 0, scale: 1, tx: 0, ty: 0 }
+
+    function applyTransform() {
+      image!.style.transform = `translate(${view.tx}px, ${view.ty}px) scale(${view.scale})`
+    }
+
+    function resetView() {
+      view.scale = 1
+      view.tx = 0
+      view.ty = 0
+      applyTransform()
+    }
+
+    function render() {
+      const item = items[view.index]
+      image!.src = item.src
+      image!.alt = item.alt ?? ''
+      if (counter)
+        counter.textContent = `${view.index + 1} / ${items.length}`
+      resetView()
+    }
+
+    function open(index: number) {
+      view.index = index
+      modal!.hidden = false
+      document.body.style.overflow = 'hidden'
+      render()
+    }
+
+    function close() {
+      modal!.hidden = true
+      document.body.style.overflow = ''
+    }
+
+    function go(delta: number) {
+      view.index = (view.index + delta + items.length) % items.length
+      render()
+    }
+
+    function zoomAt(cx: number, cy: number, factor: number) {
+      const next = clamp(view.scale * factor, MIN_SCALE, MAX_SCALE)
+      const k = next / view.scale
+      // Keep the point under the cursor stable while scaling.
+      const rect = stage!.getBoundingClientRect()
+      const ox = cx - rect.left - rect.width / 2
+      const oy = cy - rect.top - rect.height / 2
+      view.tx = ox - (ox - view.tx) * k
+      view.ty = oy - (oy - view.ty) * k
+      view.scale = next
+      if (view.scale === MIN_SCALE) {
+        view.tx = 0
+        view.ty = 0
+      }
+      applyTransform()
+    }
+
+    function zoomFromButton(factor: number) {
+      const rect = stage!.getBoundingClientRect()
+      zoomAt(rect.left + rect.width / 2, rect.top + rect.height / 2, factor)
+    }
+
+    // Thumbnails
+    root.querySelectorAll<HTMLButtonElement>('.lb-thumb').forEach((thumb) => {
+      thumb.addEventListener('click', () => open(Number(thumb.dataset.index)))
+    })
+
+    // Close / navigate / zoom buttons
+    modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', close))
+    root.querySelector('.lb-prev')?.addEventListener('click', () => go(-1))
+    root.querySelector('.lb-next')?.addEventListener('click', () => go(1))
+    root.querySelector('.lb-zoom-in')?.addEventListener('click', () => zoomFromButton(1.4))
+    root.querySelector('.lb-zoom-out')?.addEventListener('click', () => zoomFromButton(1 / 1.4))
+    root.querySelector('.lb-zoom-reset')?.addEventListener('click', resetView)
+
+    // Wheel zoom
+    stage.addEventListener('wheel', (e) => {
+      e.preventDefault()
+      zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15)
+    }, { passive: false })
+
+    // Double-click toggles zoom
+    stage.addEventListener('dblclick', (e) => {
+      if (view.scale > MIN_SCALE)
+        resetView()
+      else
+        zoomAt(e.clientX, e.clientY, 2.2)
+    })
+
+    // Pan by dragging (only meaningful when zoomed in)
+    let dragging = false
+    let lastX = 0
+    let lastY = 0
+    stage.addEventListener('pointerdown', (e) => {
+      if (view.scale <= MIN_SCALE)
+        return
+      dragging = true
+      lastX = e.clientX
+      lastY = e.clientY
+      stage.setPointerCapture(e.pointerId)
+    })
+    stage.addEventListener('pointermove', (e) => {
+      if (!dragging)
+        return
+      view.tx += e.clientX - lastX
+      view.ty += e.clientY - lastY
+      lastX = e.clientX
+      lastY = e.clientY
+      applyTransform()
+    })
+    const endDrag = (e: PointerEvent) => {
+      dragging = false
+      if (stage.hasPointerCapture(e.pointerId))
+        stage.releasePointerCapture(e.pointerId)
+    }
+    stage.addEventListener('pointerup', endDrag)
+    stage.addEventListener('pointercancel', endDrag)
+
+    // Keyboard, active only while this modal is open
+    document.addEventListener('keydown', (e) => {
+      if (modal.hidden)
+        return
+      switch (e.key) {
+        case 'Escape':
+          close()
+          break
+        case 'ArrowLeft':
+          go(-1)
+          break
+        case 'ArrowRight':
+          go(1)
+          break
+        case '+':
+        case '=':
+          zoomFromButton(1.4)
+          break
+        case '-':
+          zoomFromButton(1 / 1.4)
+          break
+      }
+    })
+  }
+
+  document.querySelectorAll<HTMLElement>('.lb-gallery').forEach(setupGallery)
+</script>
