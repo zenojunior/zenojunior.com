@@ -280,6 +280,37 @@ const dataJson = JSON.stringify(items).replace(/</g, '\\u003c')
       render()
     }
 
+    // Animated navigation: slide the current image off-screen in the swipe
+    // direction, then bring the next one in from the opposite edge.
+    const SWIPE_DURATION = 240
+
+    function commitSwipe(dir: number) {
+      const w = stage!.clientWidth || window.innerWidth
+      image!.style.transition = `transform ${SWIPE_DURATION}ms ease`
+      view.tx = -dir * w
+      view.ty = 0
+      applyTransform()
+      window.setTimeout(() => {
+        view.index = (view.index + dir + items.length) % items.length
+        const item = items[view.index]
+        image!.src = item.src
+        image!.alt = item.alt ?? ''
+        if (counter)
+          counter.textContent = `${view.index + 1} / ${items.length}`
+        view.scale = 1
+        view.ty = 0
+        // Drop the incoming image just off the opposite edge, no transition...
+        image!.style.transition = 'none'
+        view.tx = dir * w
+        applyTransform()
+        // ...then animate it into place on the next frame.
+        void image!.offsetWidth
+        image!.style.transition = `transform ${SWIPE_DURATION}ms ease`
+        view.tx = 0
+        applyTransform()
+      }, SWIPE_DURATION)
+    }
+
     function zoomAt(cx: number, cy: number, factor: number) {
       const next = clamp(view.scale * factor, MIN_SCALE, MAX_SCALE)
       const k = next / view.scale
@@ -343,7 +374,6 @@ const dataJson = JSON.stringify(items).replace(/</g, '\\u003c')
     // Drag: pan when zoomed in, swipe between images at natural size,
     // and a tap landing outside the image closes the viewer.
     const DRAG_THRESHOLD = 8
-    const SWIPE_THRESHOLD = 60
     let dragging = false
     let downX = 0
     let downY = 0
@@ -398,8 +428,10 @@ const dataJson = JSON.stringify(items).replace(/</g, '\\u003c')
         return // finished a pan
 
       // Settle a horizontal swipe at natural size.
-      if (items.length > 1 && Math.abs(view.tx) > SWIPE_THRESHOLD) {
-        go(view.tx < 0 ? 1 : -1)
+      const w = stage.clientWidth || window.innerWidth
+      const threshold = Math.max(90, w * 0.2)
+      if (items.length > 1 && Math.abs(view.tx) > threshold) {
+        commitSwipe(view.tx < 0 ? 1 : -1)
       }
       else {
         image!.style.transition = 'transform 0.22s ease'
