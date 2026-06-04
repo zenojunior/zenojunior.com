@@ -255,6 +255,7 @@ const dataJson = JSON.stringify(items).replace(/</g, '\\u003c')
 
     function render() {
       const item = items[view.index]
+      image!.style.transition = 'none'
       image!.src = item.src
       image!.alt = item.alt ?? ''
       if (counter)
@@ -310,49 +311,102 @@ const dataJson = JSON.stringify(items).replace(/</g, '\\u003c')
     modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', close))
     root.querySelector('.lb-prev')?.addEventListener('click', () => go(-1))
     root.querySelector('.lb-next')?.addEventListener('click', () => go(1))
-    root.querySelector('.lb-zoom-in')?.addEventListener('click', () => zoomFromButton(1.4))
-    root.querySelector('.lb-zoom-out')?.addEventListener('click', () => zoomFromButton(1 / 1.4))
-    root.querySelector('.lb-zoom-reset')?.addEventListener('click', resetView)
+    root.querySelector('.lb-zoom-in')?.addEventListener('click', () => {
+      image!.style.transition = 'transform 0.2s ease'
+      zoomFromButton(1.4)
+    })
+    root.querySelector('.lb-zoom-out')?.addEventListener('click', () => {
+      image!.style.transition = 'transform 0.2s ease'
+      zoomFromButton(1 / 1.4)
+    })
+    root.querySelector('.lb-zoom-reset')?.addEventListener('click', () => {
+      image!.style.transition = 'transform 0.2s ease'
+      resetView()
+    })
 
     // Wheel zoom
     stage.addEventListener('wheel', (e) => {
       e.preventDefault()
+      image!.style.transition = 'none'
       zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15)
     }, { passive: false })
 
     // Double-click toggles zoom
     stage.addEventListener('dblclick', (e) => {
+      image!.style.transition = 'transform 0.2s ease'
       if (view.scale > MIN_SCALE)
         resetView()
       else
         zoomAt(e.clientX, e.clientY, 2.2)
     })
 
-    // Pan by dragging (only meaningful when zoomed in)
+    // Drag: pan when zoomed in, swipe between images at natural size,
+    // and a tap landing outside the image closes the viewer.
+    const DRAG_THRESHOLD = 8
+    const SWIPE_THRESHOLD = 60
     let dragging = false
+    let downX = 0
+    let downY = 0
     let lastX = 0
     let lastY = 0
+    let moved = false
+    let downOnImage = false
+
     stage.addEventListener('pointerdown', (e) => {
-      if (view.scale <= MIN_SCALE)
-        return
       dragging = true
-      lastX = e.clientX
-      lastY = e.clientY
+      moved = false
+      downX = lastX = e.clientX
+      downY = lastY = e.clientY
+      downOnImage = e.target === image
+      image!.style.transition = 'none'
       stage.setPointerCapture(e.pointerId)
     })
     stage.addEventListener('pointermove', (e) => {
       if (!dragging)
         return
-      view.tx += e.clientX - lastX
-      view.ty += e.clientY - lastY
+      const dx = e.clientX - lastX
+      const dy = e.clientY - lastY
       lastX = e.clientX
       lastY = e.clientY
-      applyTransform()
+      if (Math.hypot(e.clientX - downX, e.clientY - downY) > DRAG_THRESHOLD)
+        moved = true
+      if (view.scale > MIN_SCALE) {
+        view.tx += dx
+        view.ty += dy
+        applyTransform()
+      }
+      else if (items.length > 1) {
+        // Follow the finger horizontally to preview the swipe.
+        view.tx = e.clientX - downX
+        applyTransform()
+      }
     })
     const endDrag = (e: PointerEvent) => {
+      if (!dragging)
+        return
       dragging = false
       if (stage.hasPointerCapture(e.pointerId))
         stage.releasePointerCapture(e.pointerId)
+
+      if (!moved) {
+        // A tap: close when it lands outside the image.
+        if (!downOnImage)
+          close()
+        return
+      }
+      if (view.scale > MIN_SCALE)
+        return // finished a pan
+
+      // Settle a horizontal swipe at natural size.
+      if (items.length > 1 && Math.abs(view.tx) > SWIPE_THRESHOLD) {
+        go(view.tx < 0 ? 1 : -1)
+      }
+      else {
+        image!.style.transition = 'transform 0.22s ease'
+        view.tx = 0
+        view.ty = 0
+        applyTransform()
+      }
     }
     stage.addEventListener('pointerup', endDrag)
     stage.addEventListener('pointercancel', endDrag)
