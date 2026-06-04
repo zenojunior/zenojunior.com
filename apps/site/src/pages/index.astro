@@ -1,0 +1,122 @@
+---
+import { getYearsOfExperience } from '@repo/cv'
+import { ChevronDown, FileText, Mail } from 'lucide-astro'
+import AvatarCarousel from '../components/AvatarCarousel.astro'
+import BaseHead from '../components/BaseHead.astro'
+import Header from '../components/Header.astro'
+import HeroParticles from '../components/HeroParticles.astro'
+import GithubIcon from '../components/icons/GithubIcon.astro'
+import LinkedinIcon from '../components/icons/LinkedinIcon.astro'
+import { config } from '../config'
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+
+const yearsOfExperience = getYearsOfExperience()
+
+const skills = [
+  'Front-end architecture with Vue, React & TypeScript',
+  'Design systems & UI engineering with TailwindCSS',
+  'Developer experience and code quality at scale',
+  'AI-assisted engineering and tooling',
+  'Node.js and full-stack product work',
+]
+
+const interests = [
+  'Esports projects',
+  'Entrepreneurship',
+  'AI automation',
+  'Developer Experience',
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+
+    <!-- Hero — full viewport -->
+    <header class="hero relative min-h-screen flex flex-col items-center justify-center text-center px-4 border-b border-border/60 overflow-hidden">
+      <HeroParticles />
+
+      <div class="relative z-10 flex flex-col items-center">
+        <h1 class="text-7xl max-md:text-5xl font-bold text-text tracking-tight">{config.name}</h1>
+        <p class="text-text-secondary mt-3 mb-8 text-2xl max-md:text-xl">{config.role}</p>
+        <AvatarCarousel class="w-64 h-64 max-md:w-48 max-md:h-48" />
+
+        <div class="flex items-center gap-3 mt-8">
+          <a href={config.social.github} target="_blank" rel="noopener" aria-label="GitHub" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+            <GithubIcon size={18} />
+          </a>
+          <a href={config.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+            <LinkedinIcon size={18} />
+          </a>
+          <a href={`mailto:${config.email}`} aria-label="Email" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+            <Mail size={18} />
+          </a>
+        </div>
+
+        <a
+          href="/cv"
+          class="group inline-flex items-center gap-2 mt-8 px-5 py-2.5 rounded-full bg-accent text-bg font-medium shadow-lg shadow-accent/20 hover:bg-accent-hover transition-colors"
+        >
+          <FileText size={18} />
+          <span>View CV</span>
+        </a>
+      </div>
+
+      <!-- Scroll cue -->
+      <a href="#about" aria-label="Scroll to content" class="absolute bottom-8 z-10 text-text-muted hover:text-accent transition-colors animate-bounce">
+        <ChevronDown size={26} />
+      </a>
+    </header>
+
+    <main class="px-8 pb-16 flex justify-center max-md:px-4 max-md:pb-10">
+      <div class="w-full max-w-xl">
+        <!-- About -->
+        <section id="about" class="scroll-mt-24 mt-20">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">About</h2>
+          <p class="text-text-secondary leading-relaxed">
+            Software engineer with a front-end focus and {yearsOfExperience}+ years of experience.
+            Focused on developer experience, code quality at scale, and shipping higher-quality work
+            with AI tooling. I care about building scalable products and the kind of polished user
+            experiences that feel effortless.
+          </p>
+        </section>
+
+        <!-- Skills -->
+        <section class="mt-12">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">Skills</h2>
+          <ul class="flex flex-col gap-2.5">
+            {skills.map(skill => (
+              <li class="flex gap-3 text-text-secondary">
+                <span class="text-accent select-none mt-0.5">&rsaquo;</span>
+                <span>{skill}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <!-- Interests -->
+        <section class="mt-12">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">Interests</h2>
+          <div class="flex flex-wrap gap-2">
+            {interests.map(interest => (
+              <span class="font-mono text-xs px-2.5 py-1 bg-tag-bg text-tag-text rounded">{interest}</span>
+            ))}
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
+
+<style>
+	/* Distinct band for the hero so it reads as a separate section. */
+	.hero {
+		background:
+			radial-gradient(70% 50% at 50% 35%, rgba(167, 139, 250, 0.08), transparent 70%),
+			linear-gradient(to bottom, rgba(27, 27, 39, 0.35), transparent);
+	}
+</style>

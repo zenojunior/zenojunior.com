@@ -1,0 +1,27 @@
+flowchart TB
+  classDef plain fill:transparent,stroke:none,color:#f2f2f7
+
+  U["<img src='/icons/mermaid/user.svg' style='height:48px;width:auto;display:block;margin:0 auto 6px'/>Person"]
+  ORG["<img src='/icons/mermaid/orgs.svg' style='height:48px;width:auto;display:block;margin:0 auto 6px'/>NGOs &amp; Shelters"]
+  M["<img src='/icons/mermaid/monday.svg' style='height:48px;width:auto;display:block;margin:0 auto 6px'/>Monday.com"]
+  N["<img src='/icons/mermaid/n8n.svg' style='height:42px;width:auto;display:block;margin:0 auto 6px'/>n8n"]
+  O["<img src='/icons/mermaid/openai.svg' style='height:48px;width:auto;display:block;margin:0 auto 6px'/>OpenAI"]
+  S["<img src='/icons/mermaid/strapi.svg' style='height:48px;width:auto;display:block;margin:0 auto 6px'/>Strapi"]
+  CF["<img src='/icons/mermaid/cloudflare.svg' style='height:36px;width:auto;display:block;margin:0 auto 6px'/>Cloudflare"]
+  P["<img src='/projects/icons/petsrs.webp' style='height:48px;width:48px;object-fit:contain;display:block;margin:0 auto 6px'/>petsrs.com.br"]
+
+  class U,ORG,M,N,O,S,CF,P plain
+
+  U -->|Registration| M
+  ORG -->|Registration| M
+  M -->|Approval| N
+  N <-->|Photo analysis| O
+  N -->|Persists| S
+  S --> CF
+  subgraph delivery [" "]
+    direction LR
+    CF -.-> P
+  end
+  P -.-> U
+
+  style delivery fill:transparent,stroke:none

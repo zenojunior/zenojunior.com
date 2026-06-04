@@ -1,0 +1,122 @@
+---
+import type { ResumeData } from '../types';
+import { careerStartYear } from '../experience';
+import CVExperience from './CVExperience.astro';
+import { formatPeriod } from './cv-utils';
+
+interface Props {
+  data: ResumeData;
+}
+
+const { data } = Astro.props;
+// Wrap the "N+" in a span carrying the career start year, so the client script
+// keeps it live in the browser. Year is sourced from config.yaml, never hardcoded.
+const about = data.about.replace(/(\d+)\+/, `<span data-cv-live-years="${careerStartYear}">$1+</span>`);
+---
+
+<div class="cv-page">
+  <header class="cv-header">
+    <div>
+      <h1 class="cv-name">{data.title}</h1>
+      {data.subtitle && <p class="cv-subtitle">{data.subtitle}</p>}
+      <ul class="cv-personal-inline">
+        {data.personal.map((p) => <li>{Object.values(p)[0]}</li>)}
+      </ul>
+    </div>
+    <ul class="cv-personal">
+      {data.links.map((link) => (
+        <li><a href={link.url} target="_blank">{link.label}</a></li>
+      ))}
+    </ul>
+  </header>
+
+  <hr class="cv-divider" />
+
+  <div class="cv-section">
+    <h3 class="cv-section-title">Summary</h3>
+    <p class="cv-about" set:html={about} />
+  </div>
+
+  <div class="cv-section">
+    <h3 class="cv-section-title">Experiences</h3>
+    {data.experiences.map((exp) => <CVExperience experience={exp} />)}
+  </div>
+
+  {data.notableProjects && data.notableProjects.length > 0 && (
+    <div class="cv-section">
+      <h3 class="cv-section-title">Volunteer Work</h3>
+      {data.notableProjects.map((proj) => (
+        <div class="cv-experience">
+          <div class="cv-experience-header">
+            <div>
+              <h4 class="cv-experience-title">
+                {proj.link ? (
+                  <a href={proj.link} target="_blank">{proj.title}</a>
+                ) : proj.title}
+              </h4>
+              {proj.stack && <p class="cv-experience-company">{proj.stack}</p>}
+            </div>
+            {proj.period && (
+              <div class="cv-experience-period">
+                <span>{formatPeriod(proj.period).range}</span>
+              </div>
+            )}
+          </div>
+          <p class="cv-experience-description">{proj.description}</p>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <div class="cv-section">
+    <h3 class="cv-section-title">Skills</h3>
+    <div class="cv-skills">
+      {data.skills.map((skill) => (
+        <div class="cv-skill-group">
+          <span class="cv-skill-label">{skill.group}</span>
+          <span class="cv-skill-items">{skill.items}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="cv-section">
+    <h3 class="cv-section-title">Formation</h3>
+    {data.formation.map((exp) => <CVExperience experience={exp} />)}
+  </div>
+
+  <div class="cv-footer">
+    <h3 class="cv-section-title">Languages</h3>
+    <span class="cv-footer-text">{data.languages.join(' • ')}</span>
+  </div>
+</div>
+
+<script>
+  function duration(startISO: string) {
+    const s = new Date(startISO), n = new Date();
+    const m = (n.getFullYear() - s.getFullYear()) * 12 + (n.getMonth() - s.getMonth());
+    const y = Math.floor(m / 12), r = m % 12, p: string[] = [];
+    if (y) p.push(`${y} year${y > 1 ? 's' : ''}`);
+    if (r) p.push(`${r} month${r > 1 ? 's' : ''}`);
+    return p.join(' ');
+  }
+
+  function fmt(d: string) {
+    return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-cv-live-range]').forEach((el) => {
+    const start = el.dataset.cvLiveRange!;
+    el.textContent = `${fmt(start)} - Present`;
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-cv-live-duration]').forEach((el) => {
+    const start = el.dataset.cvLiveDuration!;
+    el.textContent = duration(start);
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-cv-live-years]').forEach((el) => {
+    const y = el.dataset.cvLiveYears!;
+    el.textContent = `${new Date().getFullYear() - Number(y)}+`;
+  });
+</script>

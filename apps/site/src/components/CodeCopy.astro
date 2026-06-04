@@ -1,0 +1,91 @@
+---
+// Enhances every Shiki code block in `.prose` with a copy-to-clipboard button.
+// Include once on any page that renders markdown content; no per-block markup needed.
+---
+
+<script>
+  const COPY = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>'
+  const CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+
+  document.querySelectorAll<HTMLPreElement>('.prose pre').forEach((pre) => {
+    const code = pre.querySelector('code')
+    if (!code || pre.dataset.copyReady)
+      return
+    pre.dataset.copyReady = 'true'
+
+    // Wrap so the button anchors to a non-scrolling container (pre scrolls on overflow).
+    const wrapper = document.createElement('div')
+    wrapper.className = 'code-block'
+    pre.replaceWith(wrapper)
+    wrapper.appendChild(pre)
+
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'code-copy'
+    btn.setAttribute('aria-label', 'Copy code')
+    btn.innerHTML = COPY
+    wrapper.appendChild(btn)
+
+    let timer = 0
+    btn.addEventListener('click', async () => {
+      try {
+        // Join Shiki's per-line spans so newlines are preserved on copy.
+        const lines = [...code.querySelectorAll('.line')]
+        const text = lines.length
+          ? lines.map(l => l.textContent).join('\n')
+          : (code.textContent ?? '')
+        await navigator.clipboard.writeText(text)
+        btn.innerHTML = CHECK
+        btn.classList.add('is-copied')
+        clearTimeout(timer)
+        timer = window.setTimeout(() => {
+          btn.innerHTML = COPY
+          btn.classList.remove('is-copied')
+        }, 1600)
+      }
+      catch {
+        // Clipboard unavailable (e.g. insecure context); silently ignore.
+      }
+    })
+  })
+</script>
+
+<style is:global>
+  .code-block {
+    position: relative;
+  }
+  .code-copy {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.375rem;
+    border-radius: 0.375rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .code-block:hover .code-copy,
+  .code-copy:focus-visible {
+    opacity: 1;
+  }
+  .code-copy:hover {
+    color: var(--color-text);
+    border-color: var(--color-text-muted);
+  }
+  .code-copy.is-copied {
+    color: var(--color-accent);
+    opacity: 1;
+  }
+  /* Touch devices have no hover, so keep it visible. */
+  @media (hover: none) {
+    .code-copy {
+      opacity: 1;
+    }
+  }
+</style>

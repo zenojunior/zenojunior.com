@@ -1,0 +1,73 @@
+---
+import { config } from '../config'
+import { FEATURES } from '../consts'
+import GithubIcon from './icons/GithubIcon.astro'
+import LinkedinIcon from './icons/LinkedinIcon.astro'
+
+const pathname = Astro.url.pathname
+
+const links = [
+  { href: '/', label: config.shortName, avatar: true },
+  ...(FEATURES.notes ? [{ href: '/notes', label: 'Notes' }] : []),
+  { href: '/projects', label: 'Projects' },
+]
+
+function isActive(href: string) {
+  return href === '/' ? pathname === '/' : pathname.startsWith(href)
+}
+---
+
+<header class="fixed top-4 left-1/2 -translate-x-1/2 z-50">
+  <nav class="pill-nav relative flex items-center gap-0.5 rounded-full border border-border bg-bg-secondary/70 backdrop-blur-md p-1.5 shadow-lg shadow-black/20">
+    <!-- Sliding highlight (positioned via JS) -->
+    <span class="nav-highlight pointer-events-none absolute left-0 top-0 rounded-full bg-bg-card opacity-0 transition-all duration-300 ease-out"></span>
+
+    {links.map(link => (
+      <a
+        href={link.href}
+        class:list={['nav-item relative z-10 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors', link.avatar ? 'flex items-center gap-1.5 pl-1.5 pr-3.5' : 'px-3.5']}
+        aria-current={isActive(link.href) ? 'page' : undefined}
+      >
+        {link.avatar && (
+          <img src="/avatar-mark.png" alt="" width="24" height="24" class="h-6 w-6 rounded-full object-cover" />
+        )}
+        {link.label}
+      </a>
+    ))}
+
+    <span class="mx-1 h-5 w-px bg-border"></span>
+
+    <a href={config.social.github} target="_blank" rel="noopener" aria-label="GitHub" class="nav-item relative z-10 p-2 rounded-full text-text-secondary hover:text-text transition-colors">
+      <GithubIcon size={17} />
+    </a>
+    <a href={config.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn" class="nav-item relative z-10 p-2 rounded-full text-text-secondary hover:text-text transition-colors">
+      <LinkedinIcon size={17} />
+    </a>
+  </nav>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('.pill-nav')
+  if (nav) {
+    const highlight = nav.querySelector<HTMLElement>('.nav-highlight')!
+    const items = [...nav.querySelectorAll<HTMLElement>('.nav-item')]
+    const active = items.find(el => el.getAttribute('aria-current') === 'page') ?? null
+
+    function moveTo(el: HTMLElement | null) {
+      if (!el) {
+        highlight.style.opacity = '0'
+        return
+      }
+      highlight.style.opacity = '1'
+      highlight.style.width = `${el.offsetWidth}px`
+      highlight.style.height = `${el.offsetHeight}px`
+      highlight.style.transform = `translate(${el.offsetLeft}px, ${el.offsetTop}px)`
+    }
+
+    moveTo(active)
+    items.forEach(item => item.addEventListener('mouseenter', () => moveTo(item)))
+    nav.addEventListener('mouseleave', () => moveTo(active))
+    window.addEventListener('resize', () => moveTo(active))
+    document.fonts?.ready.then(() => moveTo(active))
+  }
+</script>

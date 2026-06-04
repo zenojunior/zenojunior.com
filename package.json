@@ -1,0 +1,25 @@
+{
+  "name": "zenojunior.com",
+  "private": true,
+  "packageManager": "pnpm@10.8.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "preview": "turbo preview"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0",
+    "sharp": "^0.34.5",
+    "turbo": "^2.5.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "@resvg/resvg-js"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+flowchart TB
+  classDef node fill:#1c1b22,stroke:#3a3550,color:#f2f2f7
+  classDef hub fill:#221f2e,stroke:#5b4b8a,color:#e9e4ff
+  classDef ext fill:#221f2e,stroke:#5b4b8a,color:#e9e4ff
+  classDef plain fill:transparent,stroke:none,color:#f2f2f7
+
+  CMS["<img src='/icons/mermaid/directus.svg' style='height:42px;width:auto;display:block;margin:0 auto;border-radius:8px'/>Directus<br/>CMS / content"]
+  SITE["Site<br/>deadlock.pro.br"]
+  N8N["<img src='/icons/mermaid/n8n.svg' style='height:42px;width:auto;display:block;margin:0 auto 6px'/>n8n"]
+  BOT["<img src='/icons/mermaid/discord.svg' style='height:34px;width:auto;display:block;margin:0 auto 6px'/>Discord Bot"]
+  DAPI["Deadlock API"]
+
+  SITE --> CMS
+  N8N <--> CMS
+  CMS -.->|webhooks| N8N
+  DAPI -->|events| N8N
+  N8N --> BOT
+  BOT -->|commands| N8N
+
+  class CMS hub
+  class SITE,BOT node
+  class DAPI ext
+  class N8N plain

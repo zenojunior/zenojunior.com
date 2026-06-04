@@ -1,0 +1,622 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { getCollection, render } from 'astro:content'
+import { ArrowLeft, ArrowRight, ExternalLink, Github, LoaderCircle, Maximize2, Minus, Plus, Workflow, X } from 'lucide-astro'
+import BaseHead from '../../components/BaseHead.astro'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import Header from '../../components/Header.astro'
+import { SITE_TITLE } from '../../consts'
+import { glossary } from '../../data/glossary'
+
+export async function getStaticPaths() {
+  const projects = (await getCollection('projects')).sort(
+    (a, b) => b.data.period.start.valueOf() - a.data.period.start.valueOf(),
+  )
+
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      prev: projects[i + 1] ?? null,
+      next: projects[i - 1] ?? null,
+    },
+  }))
+}
+
+interface Props {
+  project: CollectionEntry<'projects'>
+  prev: CollectionEntry<'projects'> | null
+  next: CollectionEntry<'projects'> | null
+}
+
+const { project, prev, next } = Astro.props
+const { Content } = await render(project)
+
+function formatMonth(d: Date) {
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+
+const { start, end } = project.data.period
+const period = end
+  ? `${formatMonth(start)} - ${formatMonth(end)}`
+  : `${formatMonth(start)} - Present`
+
+// Optional live-site preview screenshot, by convention at /public/projects/<slug>.<ext>
+const PREVIEW_EXTS = ['png', 'jpg', 'jpeg', 'webp']
+const previewExt = PREVIEW_EXTS.find(ext =>
+  existsSync(fileURLToPath(new URL(`../../../public/projects/${project.id}.${ext}`, import.meta.url))),
+)
+const previewSrc = previewExt ? `/projects/${project.id}.${previewExt}` : null
+
+// Optional Mermaid flowcharts, by convention at /src/diagrams/<slug>/*.mmd
+const allDiagrams = import.meta.glob('/src/diagrams/**/*.mmd', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+}) as Record<string, string>
+
+const MMD_RE = /\.mmd$/
+const diagramPrefix = `/src/diagrams/${project.id}/`
+const diagrams = Object.entries(allDiagrams)
+  .filter(([path]) => path.startsWith(diagramPrefix))
+  .map(([path, content]) => {
+    const name = path.slice(diagramPrefix.length).replace(MMD_RE, '')
+    return { name, label: name === 'default' ? 'Overview' : name, content }
+  })
+  .sort((a, b) => {
+    if (a.name === 'default')
+      return -1
+    if (b.name === 'default')
+      return 1
+    return a.name.localeCompare(b.name, undefined, { numeric: true })
+  })
+
+// Safe JSON for embedding in a <script> tag (escape `<` so `</script>` can't break out).
+const diagramsJson = JSON.stringify(diagrams.map(d => ({ label: d.label, content: d.content }))).replace(/</g, '\\u003c')
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`${project.data.title} - ${SITE_TITLE}`} description={project.data.description} />
+  </head>
+  <body>
+    <Header />
+    <main class="px-8 pt-28 pb-12 max-md:px-4 max-md:pt-24 max-md:pb-6 flex justify-center">
+      <article class="w-full max-w-5xl">
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Projects', href: '/projects' },
+            { label: project.data.title },
+          ]}
+        />
+
+        <!-- Header (title + period) -->
+        <header class="mb-10">
+          <p class="font-mono text-xs text-accent mb-3">{period}</p>
+          <h1 class="flex items-center gap-3 text-4xl font-bold text-text tracking-tight mb-4 max-md:text-3xl">
+            {project.data.icon && (
+              <img src={project.data.icon} alt="" aria-hidden="true" class="size-9 rounded-md shrink-0 max-md:size-7" />
+            )}
+            {project.data.title}
+          </h1>
+          <p class="text-lg text-text-secondary leading-relaxed">{project.data.description}</p>
+        </header>
+
+        {project.data.heroImage && (
+          <img
+            src={project.data.heroImage.src}
+            alt={project.data.title}
+            class="w-full rounded-xl border border-border mb-10"
+          />
+        )}
+
+        <div class="grid gap-10 lg:grid-cols-[1fr_260px] lg:gap-12 items-start">
+          <!-- Main content -->
+          <div class="order-2 lg:order-1 min-w-0">
+            <div class="prose">
+              <Content />
+            </div>
+
+            <!-- Prev / Next navigation -->
+            <nav class="mt-16 pt-8 border-t border-border grid grid-cols-2 gap-4">
+              {prev
+                ? (
+                    <a href={`/projects/${prev.id}/`} class="group flex flex-col gap-1 rounded-xl border border-border/50 bg-bg-secondary/60 p-4 hover:border-accent/50 hover:bg-bg-secondary/80 transition-all">
+                      <span class="flex items-center gap-1.5 font-mono text-xs text-text-muted"><ArrowLeft size={13} /> Older</span>
+                      <span class="text-sm font-semibold text-text group-hover:text-accent transition-colors">{prev.data.title}</span>
+                    </a>
+                  )
+                : <div />}
+              {next
+                ? (
+                    <a href={`/projects/${next.id}/`} class="group flex flex-col gap-1 items-end text-right rounded-xl border border-border/50 bg-bg-secondary/60 p-4 hover:border-accent/50 hover:bg-bg-secondary/80 transition-all">
+                      <span class="flex items-center gap-1.5 font-mono text-xs text-text-muted">Newer <ArrowRight size={13} /></span>
+                      <span class="text-sm font-semibold text-text group-hover:text-accent transition-colors">{next.data.title}</span>
+                    </a>
+                  )
+                : <div />}
+            </nav>
+          </div>
+
+          <!-- Sidebar (actions + tech) -->
+          {(project.data.url || project.data.repo || project.data.tags.length > 0 || diagrams.length > 0) && (
+            <aside class="order-1 lg:order-2 lg:sticky lg:top-24 flex flex-col gap-6">
+              {(project.data.url || project.data.repo) && (
+                <div class="flex flex-col gap-2">
+                  {project.data.url && (previewSrc
+                    ? (
+                        <a
+                          href={project.data.url}
+                          target="_blank"
+                          rel="noopener"
+                          class="group relative block w-full aspect-[16/10] rounded-lg overflow-hidden border border-border hover:border-accent/50 transition-colors"
+                        >
+                          <img
+                            src={previewSrc}
+                            alt={`${project.data.title} preview`}
+                            loading="lazy"
+                            class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div class="absolute inset-0 bg-gradient-to-t from-bg/95 via-bg/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <span class="absolute bottom-3 left-3 inline-flex items-center gap-1.5 text-sm font-medium text-text opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <ExternalLink size={15} />
+                            Visit site
+                          </span>
+                        </a>
+                      )
+                    : (
+                        <a
+                          href={project.data.url}
+                          target="_blank"
+                          rel="noopener"
+                          class="inline-flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium bg-accent text-bg hover:bg-accent-hover transition-colors"
+                        >
+                          <ExternalLink size={16} />
+                          Visit site
+                        </a>
+                      ))}
+                  {project.data.repo && (
+                    <a
+                      href={project.data.repo}
+                      target="_blank"
+                      rel="noopener"
+                      class="inline-flex items-center justify-center gap-2 w-full py-2 rounded-lg text-sm font-medium border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors"
+                    >
+                      <Github size={16} />
+                      View source
+                    </a>
+                  )}
+                </div>
+              )}
+
+              {diagrams.length > 0 && (
+                <div>
+                  <span class="font-mono text-xs uppercase tracking-wider text-text-muted block mb-3">Flowchart</span>
+                  <button
+                    type="button"
+                    id="flowchart-trigger"
+                    class="group relative block w-full rounded-lg border border-border overflow-hidden hover:border-accent/50 transition-colors cursor-pointer"
+                    aria-haspopup="dialog"
+                  >
+                    <div id="fc-preview" class="bg-bg-card/30 p-3 h-[200px] overflow-hidden flex items-center justify-center">
+                      <span id="fc-preview-loader" class="inline-flex items-center gap-2 font-mono text-xs text-text-muted">
+                        <LoaderCircle size={16} class="animate-spin" /> Loading…
+                      </span>
+                      <Workflow size={20} class="text-text-muted hidden" id="fc-preview-fallback" />
+                    </div>
+                    <div class="absolute inset-x-0 bottom-0 flex items-center gap-1.5 px-3 pt-8 pb-2 text-xs font-medium text-text bg-gradient-to-t from-bg/95 via-bg/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <Workflow size={14} />
+                      View flowchart
+                      {diagrams.length > 1 && <span class="text-text-muted">· {diagrams.length} versions</span>}
+                    </div>
+                  </button>
+                </div>
+              )}
+
+              {project.data.tags.length > 0 && (
+                <div>
+                  <span class="font-mono text-xs uppercase tracking-wider text-text-muted block mb-3">Tech</span>
+                  <div class="flex flex-wrap gap-2">
+                    {project.data.tags.map((tag) => {
+                      const term = tag.toLowerCase()
+                      return glossary[term]
+                        ? (
+                            <button
+                              type="button"
+                              class="tech-chip font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded cursor-help underline decoration-dotted decoration-tag-text/40 underline-offset-2 hover:bg-tag-text/15 transition-colors"
+                              data-term={term}
+                              aria-expanded="false"
+                              aria-describedby="tech-tooltip"
+                            >
+                              {tag}
+                            </button>
+                          )
+                        : <span class="font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded">{tag}</span>
+                    })}
+                  </div>
+                </div>
+              )}
+            </aside>
+          )}
+        </div>
+      </article>
+    </main>
+
+    <!-- Glossary tooltip (positioned by floating-ui) -->
+    <div id="tech-tooltip" role="tooltip" class="tech-tooltip fixed top-0 left-0 max-w-xs rounded-lg border border-border bg-bg-card p-3 shadow-xl shadow-black/40 z-50">
+      <p class="tip-term font-mono text-xs text-accent mb-1"></p>
+      <p class="tip-desc text-sm text-text-secondary leading-relaxed"></p>
+    </div>
+
+    <style>
+      .tech-tooltip {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.15s ease;
+      }
+      .tech-tooltip[data-show="true"] {
+        opacity: 1;
+        visibility: visible;
+      }
+    </style>
+
+    <script>
+      import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom'
+      import { glossary } from '../../data/glossary'
+
+      const tooltip = document.getElementById('tech-tooltip')
+      const chips = document.querySelectorAll<HTMLButtonElement>('.tech-chip')
+
+      if (tooltip && chips.length) {
+        const tipTerm = tooltip.querySelector<HTMLElement>('.tip-term')!
+        const tipDesc = tooltip.querySelector<HTMLElement>('.tip-desc')!
+        let activeChip: HTMLButtonElement | null = null
+        let cleanup: (() => void) | null = null
+
+        function close() {
+          tooltip!.dataset.show = 'false'
+          activeChip?.setAttribute('aria-expanded', 'false')
+          cleanup?.()
+          cleanup = null
+          activeChip = null
+        }
+
+        function open(chip: HTMLButtonElement) {
+          const entry = glossary[chip.dataset.term ?? '']
+          if (!entry)
+            return
+
+          tipTerm.textContent = chip.textContent?.trim() ?? ''
+          tipDesc.textContent = entry
+          tooltip!.dataset.show = 'true'
+          chip.setAttribute('aria-expanded', 'true')
+          activeChip = chip
+
+          cleanup?.()
+          cleanup = autoUpdate(chip, tooltip!, () => {
+            computePosition(chip, tooltip!, {
+              strategy: 'fixed',
+              placement: 'top',
+              middleware: [offset(8), flip({ padding: 12 }), shift({ padding: 12 })],
+            }).then(({ x, y }) => {
+              Object.assign(tooltip!.style, { left: `${x}px`, top: `${y}px` })
+            })
+          })
+        }
+
+        chips.forEach((chip) => {
+          chip.addEventListener('click', (e) => {
+            e.stopPropagation()
+            if (activeChip === chip)
+              close()
+            else
+              open(chip)
+          })
+        })
+
+        document.addEventListener('click', (e) => {
+          if (activeChip && !tooltip.contains(e.target as Node))
+            close()
+        })
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && activeChip)
+            close()
+        })
+      }
+    </script>
+
+    {diagrams.length > 0 && (
+      <>
+        <!-- Flowchart modal -->
+        <div id="flowchart-modal" class="flowchart-modal fixed inset-0 z-50 items-center justify-center p-4" role="dialog" aria-modal="true" aria-label={`${project.data.title} flowchart`} hidden>
+          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" data-close></div>
+          <div class="relative flex flex-col w-full max-w-4xl h-[85vh] rounded-xl border border-border bg-bg-secondary shadow-2xl shadow-black/50">
+            <header class="flex items-center justify-between gap-4 p-4 border-b border-border">
+              <h2 class="text-sm font-bold text-text">{project.data.title} <span class="text-text-muted font-normal">· Flowchart</span></h2>
+              <button type="button" class="text-text-muted hover:text-text transition-colors cursor-pointer" data-close aria-label="Close">
+                <X size={18} />
+              </button>
+            </header>
+
+            {diagrams.length > 1 && (
+              <div class="flex flex-wrap gap-1 p-3 border-b border-border" role="tablist">
+                {diagrams.map((d, i) => (
+                  <button type="button" class="fc-tab font-mono text-xs px-3 py-1.5 rounded-lg text-text-secondary hover:text-text hover:bg-bg-card/50 transition-colors cursor-pointer" data-index={i} role="tab">{d.label}</button>
+                ))}
+              </div>
+            )}
+
+            <div class="relative flex-1 min-h-[280px] overflow-hidden">
+              <div id="fc-diagram" class="absolute inset-0 touch-none select-none cursor-grab active:cursor-grabbing"></div>
+              <div class="absolute bottom-3 right-3 flex items-center gap-0.5 rounded-lg border border-border bg-bg-card/80 backdrop-blur-sm p-1 shadow-lg shadow-black/30">
+                <button type="button" id="fc-zoom-out" class="grid place-items-center size-7 rounded-md text-text-secondary hover:text-text hover:bg-bg-secondary/80 transition-colors cursor-pointer" aria-label="Zoom out"><Minus size={15} /></button>
+                <button type="button" id="fc-zoom-reset" class="grid place-items-center size-7 rounded-md text-text-secondary hover:text-text hover:bg-bg-secondary/80 transition-colors cursor-pointer" aria-label="Reset view"><Maximize2 size={14} /></button>
+                <button type="button" id="fc-zoom-in" class="grid place-items-center size-7 rounded-md text-text-secondary hover:text-text hover:bg-bg-secondary/80 transition-colors cursor-pointer" aria-label="Zoom in"><Plus size={15} /></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <script type="application/json" id="flowchart-data" set:html={diagramsJson}></script>
+
+        <style>
+          .flowchart-modal { display: none; }
+          .flowchart-modal:not([hidden]) { display: flex; }
+          #fc-diagram[data-loading="true"] { opacity: 0.4; }
+          /* The runtime-injected SVG is sized inline in placeSvg() — Astro's scoped
+             styles do not reach it. */
+          #fc-preview :global(svg) {
+            width: 100%;
+            height: auto;
+            max-height: 100%;
+            transition: transform 0.4s ease;
+          }
+          #flowchart-trigger:hover #fc-preview :global(svg) { transform: scale(1.05); }
+          .fc-tab[aria-selected="true"] {
+            background-color: var(--color-bg-card);
+            color: var(--color-text);
+          }
+        </style>
+
+        <script>
+          const trigger = document.getElementById('flowchart-trigger')
+          const modal = document.getElementById('flowchart-modal')
+          const dataEl = document.getElementById('flowchart-data')
+
+          if (trigger && modal && dataEl) {
+            const diagrams = JSON.parse(dataEl.textContent || '[]') as { label: string, content: string }[]
+            const diagramEl = modal.querySelector<HTMLElement>('#fc-diagram')!
+            const tabs = [...modal.querySelectorAll<HTMLButtonElement>('.fc-tab')]
+            const cache: Record<number, string> = {}
+            let mermaidApi: typeof import('mermaid').default | null = null
+            let renderSeq = 0
+
+            // Render into an off-screen sandbox so Mermaid's temporary, full-size
+            // measurement element never flashes on screen before the SVG is constrained.
+            let sandbox: HTMLElement | null = null
+            function getSandbox() {
+              if (!sandbox) {
+                sandbox = document.createElement('div')
+                sandbox.style.cssText = 'position:fixed;left:-10000px;top:0;width:1024px;pointer-events:none;'
+                sandbox.setAttribute('aria-hidden', 'true')
+                document.body.appendChild(sandbox)
+              }
+              return sandbox
+            }
+
+            async function ensureMermaid() {
+              // Wait for web fonts so Mermaid measures label widths with the real
+              // font — otherwise nodes are sized for the fallback and the last
+              // character gets clipped.
+              await document.fonts?.ready
+              if (!mermaidApi) {
+                const mod = await import('mermaid')
+                mermaidApi = mod.default
+                mermaidApi.initialize({
+                  startOnLoad: false,
+                  theme: 'base',
+                  flowchart: { useMaxWidth: false, htmlLabels: true },
+                  themeVariables: {
+                    background: 'transparent',
+                    primaryColor: '#1b1b27',
+                    primaryBorderColor: '#a78bfa',
+                    primaryTextColor: '#f2f2f7',
+                    secondaryColor: '#13131c',
+                    tertiaryColor: '#13131c',
+                    lineColor: '#828999',
+                    fontFamily: 'inherit',
+                  },
+                })
+              }
+              return mermaidApi
+            }
+
+            // Pan/zoom state for the diagram currently shown in the modal.
+            const view = { scale: 1, fit: 1, tx: 0, ty: 0, w: 0, h: 0, svg: null as SVGSVGElement | null }
+            const clamp = (n: number, lo: number, hi: number) => Math.min(Math.max(n, lo), hi)
+
+            function applyTransform() {
+              if (view.svg)
+                view.svg.style.transform = `translate(${view.tx}px, ${view.ty}px) scale(${view.scale})`
+            }
+
+            function fitToView() {
+              if (!view.svg || !view.w || !view.h)
+                return
+              const cw = diagramEl.clientWidth
+              const ch = diagramEl.clientHeight
+              view.fit = Math.min(cw / view.w, ch / view.h) * 0.92
+              view.scale = view.fit
+              view.tx = (cw - view.w * view.scale) / 2
+              view.ty = (ch - view.h * view.scale) / 2
+              applyTransform()
+            }
+
+            function zoomAt(cx: number, cy: number, factor: number) {
+              const next = clamp(view.scale * factor, view.fit * 0.5, view.fit * 8)
+              const k = next / view.scale
+              view.tx = cx - (cx - view.tx) * k
+              view.ty = cy - (cy - view.ty) * k
+              view.scale = next
+              applyTransform()
+            }
+
+            // Inject an SVG, give its labels breathing room, and set up pan/zoom.
+            // Mermaid measures HTML label widths before the web font is fully applied,
+            // so each foreignObject ends up ~a character too narrow and clips on the
+            // right. Widen every label box (and re-center it) to compensate.
+            function placeSvg(el: HTMLElement, svg: string) {
+              el.innerHTML = svg
+              const node = el.querySelector('svg')
+              if (!node) {
+                view.svg = null
+                return
+              }
+              const EXTRA = 16
+              node.querySelectorAll('foreignObject').forEach((fo) => {
+                const w = Number.parseFloat(fo.getAttribute('width') || '0')
+                const x = Number.parseFloat(fo.getAttribute('x') || '0')
+                fo.setAttribute('width', String(w + EXTRA))
+                fo.setAttribute('x', String(x - EXTRA / 2))
+                fo.style.overflow = 'visible'
+              })
+              view.svg = node
+              view.w = node.viewBox.baseVal.width || node.getBoundingClientRect().width
+              view.h = node.viewBox.baseVal.height || node.getBoundingClientRect().height
+              Object.assign(node.style, {
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: `${view.w}px`,
+                height: `${view.h}px`,
+                maxWidth: 'none',
+                maxHeight: 'none',
+                overflow: 'visible',
+                transformOrigin: '0 0',
+              })
+              fitToView()
+            }
+
+            async function show(index: number) {
+              tabs.forEach((t, i) => t.setAttribute('aria-selected', String(i === index)))
+              const seq = ++renderSeq
+
+              if (cache[index] !== undefined) {
+                placeSvg(diagramEl, cache[index])
+                return
+              }
+
+              diagramEl.dataset.loading = 'true'
+              try {
+                const mermaid = await ensureMermaid()
+                const { svg } = await mermaid.render(`fc-svg-${index}-${seq}`, diagrams[index].content, getSandbox())
+                if (seq !== renderSeq)
+                  return
+                cache[index] = svg
+                placeSvg(diagramEl, svg)
+              }
+              catch {
+                diagramEl.innerHTML = '<p class="text-sm text-text-muted">Could not render this diagram.</p>'
+              }
+              finally {
+                delete diagramEl.dataset.loading
+              }
+            }
+
+            function openModal() {
+              modal!.hidden = false
+              document.body.style.overflow = 'hidden'
+              show(0)
+            }
+
+            function closeModal() {
+              modal!.hidden = true
+              document.body.style.overflow = ''
+            }
+
+            trigger.addEventListener('click', openModal)
+            tabs.forEach((tab, i) => tab.addEventListener('click', () => show(i)))
+            modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal))
+            document.addEventListener('keydown', (e) => {
+              if (e.key === 'Escape' && !modal.hidden)
+                closeModal()
+            })
+
+            // Pan & zoom interactions on the diagram viewport.
+            let dragging = false
+            let lastX = 0
+            let lastY = 0
+            diagramEl.addEventListener('wheel', (e) => {
+              e.preventDefault()
+              const r = diagramEl.getBoundingClientRect()
+              zoomAt(e.clientX - r.left, e.clientY - r.top, e.deltaY < 0 ? 1.12 : 1 / 1.12)
+            }, { passive: false })
+            diagramEl.addEventListener('pointerdown', (e) => {
+              dragging = true
+              lastX = e.clientX
+              lastY = e.clientY
+              diagramEl.setPointerCapture(e.pointerId)
+            })
+            diagramEl.addEventListener('pointermove', (e) => {
+              if (!dragging)
+                return
+              view.tx += e.clientX - lastX
+              view.ty += e.clientY - lastY
+              lastX = e.clientX
+              lastY = e.clientY
+              applyTransform()
+            })
+            const endDrag = (e: PointerEvent) => {
+              dragging = false
+              if (diagramEl.hasPointerCapture(e.pointerId))
+                diagramEl.releasePointerCapture(e.pointerId)
+            }
+            diagramEl.addEventListener('pointerup', endDrag)
+            diagramEl.addEventListener('pointercancel', endDrag)
+            diagramEl.addEventListener('dblclick', () => fitToView())
+
+            function zoomFromButton(factor: number) {
+              const r = diagramEl.getBoundingClientRect()
+              zoomAt(r.width / 2, r.height / 2, factor)
+            }
+            document.getElementById('fc-zoom-in')?.addEventListener('click', () => zoomFromButton(1.25))
+            document.getElementById('fc-zoom-out')?.addEventListener('click', () => zoomFromButton(1 / 1.25))
+            document.getElementById('fc-zoom-reset')?.addEventListener('click', () => fitToView())
+            window.addEventListener('resize', () => {
+              if (!modal.hidden)
+                fitToView()
+            })
+
+            // Render the first diagram as a live preview inside the trigger card.
+            const previewEl = document.getElementById('fc-preview')
+            async function renderPreview() {
+              if (!previewEl)
+                return
+              try {
+                const mermaid = await ensureMermaid()
+                const { svg } = await mermaid.render('fc-preview-svg', diagrams[0].content, getSandbox())
+                // Replace the loader with the rendered SVG, sized to fill the card.
+                previewEl.innerHTML = svg
+                const node = previewEl.querySelector('svg')
+                if (node)
+                  Object.assign(node.style, { width: '100%', height: 'auto', maxHeight: '100%' })
+              }
+              catch {
+                // Drop the spinner and fall back to the static placeholder icon.
+                previewEl.querySelector('#fc-preview-loader')?.remove()
+                previewEl.querySelector('#fc-preview-fallback')?.classList.remove('hidden')
+              }
+            }
+            const idle = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 200))
+            idle(() => renderPreview())
+          }
+        </script>
+      </>
+    )}
+  </body>
+</html>

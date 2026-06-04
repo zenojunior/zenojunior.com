@@ -1,0 +1,154 @@
+---
+import { resumeData } from '@repo/cv'
+import CVPage from '@repo/cv/CVPage.astro'
+import { ArrowLeft, Download } from 'lucide-astro'
+import BaseHead from '../components/BaseHead.astro'
+import { SITE_TITLE } from '../consts'
+import '@repo/cv/styles'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`CV - ${SITE_TITLE}`} description="Download my CV." />
+  </head>
+  <body class="resume-viewer">
+    <main class="min-h-screen">
+      <div class="cv-wrapper w-fit mx-auto px-4 pt-6 pb-16 max-md:px-2">
+        <!-- Back sits above the paper, aligned to its left edge -->
+        <a
+          href="/"
+          class="inline-flex items-center gap-2 mb-4 text-sm text-text-secondary hover:text-text transition-colors print:hidden"
+        >
+          <ArrowLeft size={16} />
+          <span>Back</span>
+        </a>
+
+        <CVPage data={resumeData} />
+      </div>
+    </main>
+
+    <!-- Floating action menu, beside the paper -->
+    <nav
+      class="resume-dock fixed right-5 top-1/2 -translate-y-1/2 z-50 flex flex-col items-center gap-1.5 rounded-full border border-border bg-bg-secondary/70 backdrop-blur-md p-1.5 shadow-lg shadow-black/20 print:hidden"
+      aria-label="CV actions"
+    >
+      <button
+        onclick="window.print()"
+        class="inline-flex items-center justify-center p-2.5 rounded-full bg-accent text-bg hover:bg-accent-hover transition-colors cursor-pointer"
+        aria-label="Download CV"
+        title="Download"
+      >
+        <Download size={18} />
+      </button>
+    </nav>
+  </body>
+</html>
+
+<style>
+	/* 3D perspective context for the parallax tilt applied to the paper via JS. */
+	.cv-wrapper {
+		perspective: 1600px;
+	}
+</style>
+
+<script>
+  const wrapper = document.querySelector<HTMLElement>('.cv-wrapper')
+  const paper = wrapper?.querySelector<HTMLElement>('.cv-page')
+
+  if (paper) {
+    const el = paper
+
+    // ── Fit-to-width on narrow screens (mobile): scale the A4 paper down so it
+    // fits without horizontal scroll. zoom reflows the box, unlike transform.
+    const PAPER_W = 794 // 21cm in CSS px (96dpi)
+    function fitPaper() {
+      const avail = Math.min(window.innerWidth - 24, PAPER_W)
+      el.style.setProperty('zoom', avail < PAPER_W ? String(avail / PAPER_W) : '')
+    }
+    fitPaper()
+    window.addEventListener('resize', fitPaper)
+
+    // ── Parallax tilt: only on devices with a precise pointer (skip touch/mobile)
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (fine && !reduce) {
+      const MAX = 3.5 // max tilt in degrees, kept subtle
+      const EASE = 0.06 // lower = smoother / slower follow
+      let targetX = 0
+      let targetY = 0
+      let curX = 0
+      let curY = 0
+      let raf = 0
+
+      el.style.willChange = 'transform'
+
+      function loop() {
+        curX += (targetX - curX) * EASE
+        curY += (targetY - curY) * EASE
+        el.style.transform = `rotateX(${curY.toFixed(3)}deg) rotateY(${curX.toFixed(3)}deg)`
+        if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001)
+          raf = requestAnimationFrame(loop)
+        else
+          raf = 0
+      }
+
+      function kick() {
+        if (!raf)
+          raf = requestAnimationFrame(loop)
+      }
+
+      window.addEventListener('pointermove', (e) => {
+        const nx = (e.clientX / window.innerWidth) * 2 - 1
+        const ny = (e.clientY / window.innerHeight) * 2 - 1
+        targetX = nx * MAX // rotateY follows horizontal movement
+        targetY = -ny * MAX // rotateX follows vertical movement (inverted)
+        kick()
+      })
+
+      // Ease back to flat when the cursor leaves the window.
+      document.addEventListener('pointerleave', () => {
+        targetX = 0
+        targetY = 0
+        kick()
+      })
+    }
+  }
+</script>
+
+<style is:global>
+	@media print {
+		body,
+		main {
+			margin: 0 !important;
+			padding: 0 !important;
+			background: #fff !important;
+		}
+		main {
+			min-height: 0 !important;
+			padding-top: 0 !important;
+		}
+		.cv-wrapper {
+			display: block !important;
+			overflow: visible !important;
+			padding: 0 !important;
+		}
+		.cv-page {
+			width: 210mm !important;
+			min-height: 0 !important;
+			height: auto !important;
+			margin: 0 !important;
+			padding: 8mm 12mm !important;
+			box-shadow: none !important;
+			transform: none !important;
+			zoom: 1 !important;
+			page-break-after: avoid;
+			page-break-inside: avoid;
+		}
+		@page {
+			size: A4;
+			margin: 0;
+		}
+	}
+</style>

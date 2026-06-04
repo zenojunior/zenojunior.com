@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content'
+import { ArrowUpRight } from 'lucide-astro'
+import BaseHead from '../../components/BaseHead.astro'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import FormattedDate from '../../components/FormattedDate.astro'
+import Header from '../../components/Header.astro'
+import { FEATURES, SITE_TITLE } from '../../consts'
+
+if (!FEATURES.notes)
+  return Astro.redirect('/')
+
+const notes = (await getCollection('notes')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+)
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Notes - ${SITE_TITLE}`} description="Notes about web development, tools, and things I learn." />
+  </head>
+  <body>
+    <Header />
+    <main class="px-8 pt-28 pb-12 max-md:px-4 max-md:pt-24 max-md:pb-6 flex justify-center">
+      <div class="w-full max-w-(--width-content)">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Notes' }]} />
+        <h1 class="text-2xl font-bold text-text mb-2">Notes</h1>
+        <p class="text-text-secondary mb-8">Notes about web development, tools, and things I learn.</p>
+
+        <div class="flex flex-col gap-3">
+          {notes.map(note => (
+            <a
+              href={`/notes/${note.id}/`}
+              class="group block rounded-xl border border-border/50 bg-bg-secondary/60 backdrop-blur-sm hover:border-accent/50 hover:bg-bg-secondary/80 transition-all duration-300 p-5"
+            >
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="flex items-center gap-1.5 text-base font-bold text-text group-hover:text-accent transition-colors">
+                  {note.data.title}
+                  <ArrowUpRight size={16} class="text-text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all" />
+                </h3>
+                <span class="font-mono text-xs text-text-muted tracking-wide shrink-0 ml-4">
+                  <FormattedDate date={note.data.pubDate} />
+                </span>
+              </div>
+              <p class="text-sm text-text-secondary mb-0">{note.data.description}</p>
+              {note.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-2 mt-3">
+                  {note.data.tags.map(tag => (
+                    <span class="font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </a>
+          ))}
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

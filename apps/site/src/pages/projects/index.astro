@@ -1,0 +1,154 @@
+---
+import { getCollection } from 'astro:content'
+import { ArrowUpRight, Code2, Lock } from 'lucide-astro'
+import BaseHead from '../../components/BaseHead.astro'
+import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import Header from '../../components/Header.astro'
+import { SITE_TITLE } from '../../consts'
+
+const PROTOCOL_RE = /^https?:\/\//
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.period.start.valueOf() - a.data.period.start.valueOf(),
+)
+
+const byYear = new Map<number, typeof projects>()
+for (const project of projects) {
+  const year = project.data.period.start.getFullYear()
+  if (!byYear.has(year))
+    byYear.set(year, [])
+  byYear.get(year)!.push(project)
+}
+const sortedYears = [...byYear.keys()].sort((a, b) => b - a)
+
+function formatDate(d: Date) {
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Projects - ${SITE_TITLE}`} description="Timeline of projects and professional experiences." />
+    <!-- Flag JS early so reveal targets start hidden only when we can animate them. -->
+    <script is:inline>document.documentElement.classList.add('js')
+</script>
+  </head>
+  <body>
+    <Header />
+    <main class="px-8 pt-28 pb-12 max-md:px-4 max-md:pt-24 max-md:pb-6 flex justify-center">
+      <div class="w-full max-w-(--width-content)">
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Projects' }]} />
+        <h1 class="text-2xl font-bold text-text mb-8">Projects</h1>
+
+        {sortedYears.map(year => (
+          <div class="mb-8" data-year-group>
+            <div class="flex items-center gap-4 mb-4 reveal-year">
+              <div class="flex-1 h-px bg-border/50" />
+              <span class="font-mono text-xs font-medium text-accent bg-bg-card/60 border border-border/50 px-3 py-1 rounded-full">{year}</span>
+              <div class="flex-1 h-px bg-border/50" />
+            </div>
+
+            <div class="flex flex-col gap-3">
+              {byYear.get(year)!.map(project => (
+                <div
+                  class="reveal-card group relative rounded-xl border border-border/50 bg-bg-secondary/60 backdrop-blur-sm hover:border-accent/50 hover:bg-bg-secondary/80 transition-all duration-300 p-5"
+                >
+                  <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-base font-bold text-text group-hover:text-accent transition-colors">
+                      <a
+                        href={`/projects/${project.id}/`}
+                        class="inline-flex items-center gap-1.5 after:absolute after:inset-0 after:content-['']"
+                      >
+                        {project.data.icon && (
+                          <img src={project.data.icon} alt="" aria-hidden="true" loading="lazy" class="size-4 rounded-sm shrink-0" />
+                        )}
+                        {project.data.title}
+                        <ArrowUpRight size={16} class="text-text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all" />
+                      </a>
+                    </h3>
+                    <span class="font-mono text-xs text-text-muted tracking-wide shrink-0 ml-4">{formatDate(project.data.period.start)}</span>
+                  </div>
+                  {project.data.url && (
+                    <a
+                      href={project.data.url}
+                      target="_blank"
+                      rel="noopener"
+                      class="relative z-10 inline-block w-fit font-mono text-xs text-accent mb-2 hover:underline"
+                    >
+                      {project.data.url.replace(PROTOCOL_RE, '')}
+                    </a>
+                  )}
+                  <p class="text-sm text-text-secondary mb-0">{project.data.description}</p>
+                  {(() => {
+                    const isOpenSource = project.data.source
+                      ? project.data.source === 'open-source'
+                      : Boolean(project.data.repo)
+                    return (
+                      <div class="mt-3">
+                        {isOpenSource
+                          ? (
+                              <span class="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded">
+                                <Code2 size={13} />
+                                Open source
+                              </span>
+                            )
+                          : (
+                              <span class="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-0.5 bg-bg-card/60 border border-border/50 text-text-muted rounded">
+                                <Lock size={12} />
+                                Private
+                              </span>
+                            )}
+                      </div>
+                    )
+                  })()}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+
+    <style>
+      /* Start hidden only when JS is available, so no-JS users still see content. */
+      .js .reveal-year,
+      .js .reveal-card {
+        opacity: 0;
+      }
+    </style>
+
+    <script>
+      import { animate, inView, stagger } from 'motion'
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+      if (reduce) {
+        document.querySelectorAll<HTMLElement>('.reveal-year, .reveal-card').forEach((el) => {
+          el.style.opacity = '1'
+        })
+      }
+      else {
+        document.querySelectorAll<HTMLElement>('[data-year-group]').forEach((group) => {
+          inView(group, () => {
+            if (group.dataset.revealed)
+              return
+            group.dataset.revealed = '1'
+
+            const marker = group.querySelector<HTMLElement>('.reveal-year')
+            const cards = group.querySelectorAll<HTMLElement>('.reveal-card')
+
+            if (marker)
+              animate(marker, { opacity: [0, 1], y: [12, 0] }, { duration: 0.5, ease: 'easeOut' })
+
+            animate(
+              cards,
+              { opacity: [0, 1], y: [16, 0] },
+              { duration: 0.5, delay: stagger(0.08), ease: [0.22, 1, 0.36, 1] },
+            )
+          }, { amount: 0.2 })
+        })
+      }
+    </script>
+  </body>
+</html>

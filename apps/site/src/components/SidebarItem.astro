@@ -1,0 +1,26 @@
+---
+import { ExternalLink } from 'lucide-astro'
+
+interface Props {
+  href: string
+  active?: boolean
+  external?: boolean
+}
+
+const { href, active = false, external = false } = Astro.props
+---
+
+<a
+  href={href}
+  class:list={[
+    'flex items-center gap-2.5 text-sm px-3 py-2 rounded-lg transition-all duration-150',
+    active
+      ? 'text-text bg-bg-card'
+      : 'text-text-secondary hover:text-text hover:bg-bg-card/50',
+  ]}
+  {...external ? { target: '_blank', rel: 'noopener' } : {}}
+>
+  <slot name="icon" />
+  <span class="flex-1"><slot /></span>
+  {external && <ExternalLink size={14} class="text-text-muted" />}
+</a>
