@@ -12,10 +12,14 @@ COPY . .
 RUN pnpm install --frozen-lockfile
 RUN pnpm --filter @repo/site build
 
-# ── Runtime stage: serve the static output with nginx ──
-FROM nginx:alpine AS runtime
+# ── Runtime stage: serve the static output on port 3000 ──
+# No reverse proxy here; Dokploy's Caddy handles the edge (TLS, routing).
+FROM node:22-alpine AS runtime
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /app/apps/site/dist /usr/share/nginx/html
+WORKDIR /app
+RUN npm install -g serve@14
+COPY --from=build /app/apps/site/dist ./dist
 
-EXPOSE 80
+EXPOSE 3000
+# No -s flag: this is a multi-page static site, not an SPA.
+CMD ["serve", "dist", "-l", "3000"]
