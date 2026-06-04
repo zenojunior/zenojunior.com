@@ -18,7 +18,7 @@ social:
 # To enable: 1) turn on Discussions in the repo, 2) install the giscus GitHub App
 # (https://github.com/apps/giscus), 3) get the 4 IDs from https://giscus.app and paste below.
 comments:
-    repo: ""
+    repo: "zenojunior/zenojunior.com"
     repoId: ""
     category: "Announcements"
     categoryId: ""
