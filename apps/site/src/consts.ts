@@ -5,5 +5,5 @@ export const SITE_DESCRIPTION = config.description
 export const SITE_URL = config.url
 
 export const FEATURES = {
-  notes: import.meta.env.DEV,
+  notes: true,
 }
