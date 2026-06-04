@@ -4,6 +4,8 @@ import { getCollection, render } from 'astro:content'
 import { ArrowLeft, ArrowRight } from 'lucide-astro'
 import BaseHead from '../../components/BaseHead.astro'
 import Breadcrumbs from '../../components/Breadcrumbs.astro'
+import CodeCopy from '../../components/CodeCopy.astro'
+import Comments from '../../components/Comments.astro'
 import FormattedDate from '../../components/FormattedDate.astro'
 import Header from '../../components/Header.astro'
 import { FEATURES, SITE_TITLE } from '../../consts'
@@ -99,7 +101,11 @@ const { Content } = await render(note)
               )
             : <div />}
         </nav>
+
+        <Comments />
       </article>
     </main>
+
+    <CodeCopy />
   </body>
 </html>

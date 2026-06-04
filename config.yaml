@@ -13,3 +13,12 @@ email: cv@zenojunior.com
 social:
     github: https://github.com/zenojunior
     linkedin: https://www.linkedin.com/in/zenojunior
+
+# Comments on notes via Giscus (GitHub Discussions). Leave repo empty to disable.
+# To enable: 1) turn on Discussions in the repo, 2) install the giscus GitHub App
+# (https://github.com/apps/giscus), 3) get the 4 IDs from https://giscus.app and paste below.
+comments:
+    repo: ""
+    repoId: ""
+    category: "Announcements"
+    categoryId: ""

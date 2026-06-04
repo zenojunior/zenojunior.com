@@ -107,6 +107,27 @@ body::before {
   }
   pre {
     @apply bg-bg-secondary! border border-border rounded-lg p-5 overflow-x-auto;
+
+    /* Tighter than the prose body; the inherited 1.7 is too airy for code. */
+    line-height: 1.3;
+
+    /* Thin, themed scrollbar so code blocks don't show the chunky OS default. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-border);
+      border-radius: 9999px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: var(--color-text-muted);
+    }
   }
   pre > code {
     @apply bg-transparent border-none rounded-none p-0;

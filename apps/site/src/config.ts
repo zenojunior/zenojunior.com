@@ -13,6 +13,12 @@ export interface SiteConfig {
     github: string
     linkedin: string
   }
+  comments?: {
+    repo: string
+    repoId: string
+    category: string
+    categoryId: string
+  }
 }
 
 export const config = parse(raw) as SiteConfig

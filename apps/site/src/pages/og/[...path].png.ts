@@ -15,7 +15,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     { params: { path: 'index' }, props: { eyebrow: SITE, title: config.name, description: config.role } },
     { params: { path: 'notes' }, props: { eyebrow: `${SITE} / notes`, title: 'Notes', description: 'Notes about web development, tools, and things I learn.' } },
     { params: { path: 'projects' }, props: { eyebrow: `${SITE} / projects`, title: 'Projects', description: 'Timeline of projects and professional experiences.' } },
-    { params: { path: 'resume' }, props: { eyebrow: SITE, title: 'Resume', description: config.role } },
+    { params: { path: 'cv' }, props: { eyebrow: SITE, title: 'CV', description: config.role } },
     ...notes.map(note => ({
       params: { path: `notes/${note.id}` },
       props: { eyebrow: `${SITE} / notes`, title: note.data.title, description: note.data.description },

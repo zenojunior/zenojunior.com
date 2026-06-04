@@ -78,13 +78,6 @@ experiences:
           - "Built and maintained production features used daily by city hall employees and citizens across multiple cities."
 
 notableProjects:
-    - title: treinahub.com
-      period:
-          start: "2026-04-01"
-      description: "Solo developer on a SaaS for fitness trainers. OpenAI chat assistant with an embedded MCP tool server (12 tools), white-labeled student PWA, Stripe billing, and row-level database security."
-      stack: "Astro • Vue 3 • React 19 • Hono • Prisma • OpenAI • MCP • Stripe"
-      link: "https://treinahub.com"
-
     - title: petsrs.com.br
       period:
           start: "2023-09-01"
