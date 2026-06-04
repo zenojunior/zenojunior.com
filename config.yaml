@@ -1,0 +1,15 @@
+# Single source of truth for personal and site info.
+# Forking this project? Editing this file (plus the content in apps/site/src/content
+# and packages/cv/src/resume.yaml) covers almost everything you need to make it yours.
+
+name: Zeno Junior
+shortName: Zeno
+role: Gamer, Software Engineer & Entrepreneur
+description: Front-end engineer. Enthusiastic about building scalable products and great user experiences.
+# Year you started your professional career. Years of experience are derived from this.
+careerStartYear: 2014
+url: https://zenojunior.com
+email: cv@zenojunior.com
+social:
+    github: https://github.com/zenojunior
+    linkedin: https://www.linkedin.com/in/zenojunior

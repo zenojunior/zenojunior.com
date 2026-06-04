@@ -1,6 +1,8 @@
-export const SITE_TITLE = 'Zeno Junior'
-export const SITE_DESCRIPTION = 'Front-end engineer. Enthusiastic about building scalable products and great user experiences.'
-export const SITE_URL = 'https://zenojunior.com'
+import { config } from './config'
+
+export const SITE_TITLE = config.name
+export const SITE_DESCRIPTION = config.description
+export const SITE_URL = config.url
 
 export const FEATURES = {
   notes: import.meta.env.DEV,

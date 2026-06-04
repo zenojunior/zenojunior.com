@@ -1,5 +1,6 @@
 ---
 import type { ResumeData } from '../types';
+import { careerStartYear } from '../experience';
 import CVExperience from './CVExperience.astro';
 import { formatPeriod } from './cv-utils';
 
@@ -8,7 +9,9 @@ interface Props {
 }
 
 const { data } = Astro.props;
-const about = data.about.replace(/(\d+)\+/, '<span data-cv-live-years="2014">$1+</span>');
+// Wrap the "N+" in a span carrying the career start year, so the client script
+// keeps it live in the browser. Year is sourced from config.yaml, never hardcoded.
+const about = data.about.replace(/(\d+)\+/, `<span data-cv-live-years="${careerStartYear}">$1+</span>`);
 ---
 
 <div class="cv-page">

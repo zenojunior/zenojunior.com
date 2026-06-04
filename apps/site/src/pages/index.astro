@@ -1,10 +1,16 @@
 ---
-import { ChevronDown, FileText, Github, Linkedin, Mail } from 'lucide-astro'
+import { getYearsOfExperience } from '@repo/cv'
+import { ChevronDown, FileText, Mail } from 'lucide-astro'
 import AvatarCarousel from '../components/AvatarCarousel.astro'
 import BaseHead from '../components/BaseHead.astro'
 import Header from '../components/Header.astro'
 import HeroParticles from '../components/HeroParticles.astro'
+import GithubIcon from '../components/icons/GithubIcon.astro'
+import LinkedinIcon from '../components/icons/LinkedinIcon.astro'
+import { config } from '../config'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts'
+
+const yearsOfExperience = getYearsOfExperience()
 
 const skills = [
   'Front-end architecture with Vue, React & TypeScript',
@@ -35,18 +41,18 @@ const interests = [
       <HeroParticles />
 
       <div class="relative z-10 flex flex-col items-center">
-        <h1 class="text-7xl max-md:text-5xl font-bold text-text tracking-tight">Zeno Junior</h1>
-        <p class="text-text-secondary mt-3 mb-8 text-2xl max-md:text-xl">Technologist, Software Engineer &amp; Entrepreneur</p>
+        <h1 class="text-7xl max-md:text-5xl font-bold text-text tracking-tight">{config.name}</h1>
+        <p class="text-text-secondary mt-3 mb-8 text-2xl max-md:text-xl">{config.role}</p>
         <AvatarCarousel class="w-64 h-64 max-md:w-48 max-md:h-48" />
 
         <div class="flex items-center gap-3 mt-8">
-          <a href="https://github.com/zenojunior" target="_blank" rel="noopener" aria-label="GitHub" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
-            <Github size={18} />
+          <a href={config.social.github} target="_blank" rel="noopener" aria-label="GitHub" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+            <GithubIcon size={18} />
           </a>
-          <a href="https://www.linkedin.com/in/zenojunior" target="_blank" rel="noopener" aria-label="LinkedIn" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
-            <Linkedin size={18} />
+          <a href={config.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+            <LinkedinIcon size={18} />
           </a>
-          <a href="mailto:cv@zenojunior.com" aria-label="Email" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
+          <a href={`mailto:${config.email}`} aria-label="Email" class="p-2.5 rounded-lg border border-border text-text-secondary hover:text-text hover:border-accent/50 hover:bg-bg-card/50 transition-colors">
             <Mail size={18} />
           </a>
         </div>
@@ -72,7 +78,7 @@ const interests = [
         <section id="about" class="scroll-mt-24 mt-20">
           <h2 class="font-mono text-xs uppercase tracking-wider text-accent mb-4">About</h2>
           <p class="text-text-secondary leading-relaxed">
-            Frontend engineer with 12+ years of experience. Focused on developer experience,
+            Frontend engineer with {yearsOfExperience}+ years of experience. Focused on developer experience,
             code quality at scale, and shipping faster with AI tooling. I care about building
             scalable products and the kind of polished user experiences that feel effortless.
           </p>

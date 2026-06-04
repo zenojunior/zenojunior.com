@@ -1,5 +1,6 @@
 ---
 import type { ImageMetadata } from 'astro'
+import { config } from '../config'
 
 // Avatar variants from src/avatars (1.webp, 2.webp, …). Click the avatar to
 // advance to the next one with a crossfade. Add or remove files there — they're
@@ -28,7 +29,7 @@ const interactive = frames.length > 1
   {frames.map((src, i) => (
     <img
       src={src}
-      alt="Zeno Junior"
+      alt={config.name}
       data-active={i === 0 ? 'true' : 'false'}
       class="avatar-frame absolute inset-0 h-full w-full object-cover"
     />

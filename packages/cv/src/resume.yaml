@@ -1,4 +1,4 @@
-title: Zeno Junior
+# title, email and links come from the root config.yaml (single source of truth).
 
 subtitle: "Senior Frontend Engineer | Developer Experience & AI-Driven Development"
 
@@ -7,7 +7,6 @@ about: "Senior Frontend Engineer with {yearsOfExperience}+ years shipping Vue, R
 personal:
     - name: Zeno Sbardellotto Junior
     - location: Porto Alegre, RS - Brazil
-    - email: cv@zenojunior.com
 
 skills:
     - group: Languages & Core
@@ -26,14 +25,6 @@ skills:
 languages:
     - Portuguese (Native)
     - English (Professional Working)
-
-links:
-    - label: zenojunior.com
-      url: https://zenojunior.com
-    - label: linkedin.com/in/zenojunior
-      url: https://www.linkedin.com/in/zenojunior
-    - label: github.com/zenojunior
-      url: https://github.com/zenojunior
 
 experiences:
     - title: Frontend Engineer

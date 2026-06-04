@@ -61,13 +61,18 @@ if (canvas && host) {
     raf = requestAnimationFrame(frame)
   }
 
-  host.addEventListener('pointermove', (e) => {
+  // Track on the window (not the hero) so overlapping fixed elements like the
+  // navbar pill don't fire pointerleave and kill the effect. Activity is decided
+  // by whether the cursor sits within the hero's bounds.
+  window.addEventListener('pointermove', (e) => {
     const r = canvas.getBoundingClientRect()
-    mouse.x = e.clientX - r.left
-    mouse.y = e.clientY - r.top
-    mouse.active = true
+    const x = e.clientX - r.left
+    const y = e.clientY - r.top
+    mouse.x = x
+    mouse.y = y
+    mouse.active = x >= 0 && x <= W && y >= 0 && y <= H
   })
-  host.addEventListener('pointerleave', () => {
+  document.addEventListener('pointerleave', () => {
     mouse.active = false
   })
 

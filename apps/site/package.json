@@ -1,5 +1,5 @@
 {
-  "name": "@zenojunior/site",
+  "name": "@repo/site",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -15,18 +15,22 @@
     "@astrojs/rss": "^4.0.18",
     "@astrojs/sitemap": "^3.7.2",
     "@floating-ui/dom": "^1.7.6",
+    "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.2.2",
-    "@zenojunior/cv": "workspace:*",
+    "@repo/cv": "workspace:*",
     "astro": "^6.1.4",
     "lucide-astro": "^0.556.0",
     "mermaid": "^11.15.0",
     "motion": "^12.40.0",
+    "satori": "^0.26.0",
     "sharp": "^0.34.3",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.2",
+    "yaml": "^2.8.3"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^8.0.0",
     "eslint": "^10.2.0",
-    "eslint-plugin-astro": "^1.6.0"
+    "eslint-plugin-astro": "^1.6.0",
+    "png-to-ico": "^3.0.1"
   }
 }

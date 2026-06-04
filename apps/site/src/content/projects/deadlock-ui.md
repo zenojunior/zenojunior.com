@@ -15,18 +15,3 @@ It's a collection of Web Components built with StencilJS, with official bindings
 Provides item card components with tooltips and a full shop panel with category tabs and tier sections. Item data and images are fetched directly from the Deadlock API, requiring no local assets. Supports 15+ languages.
 
 Published as a monorepo with three packages: `@deadlock-api/ui-core`, `@deadlock-api/ui-react`, and `@deadlock-api/ui-vue`.
-
-## Live demo
-
-The cards below are the actual published components, loaded straight from the CDN, with no build step and no local assets:
-
-<script type="module" src="https://unpkg.com/@deadlock-api/ui-core/dist/main/main.esm.js"></script>
-
-<div class="not-prose" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin:1.5rem 0">
-  <dl-item-card class-name="upgrade_boundless_spirit"></dl-item-card>
-  <dl-item-card class-name="upgrade_veil_walker"></dl-item-card>
-  <dl-item-card class-name="upgrade_spirit_bubble"></dl-item-card>
-  <dl-item-card class-name="upgrade_magic_vulnerability"></dl-item-card>
-  <dl-item-card class-name="upgrade_spirit_burn"></dl-item-card>
-  <dl-item-card class-name="upgrade_chonky"></dl-item-card>
-</div>

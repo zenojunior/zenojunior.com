@@ -1,11 +1,13 @@
 ---
-import { Github, Linkedin } from 'lucide-astro'
+import { config } from '../config'
 import { FEATURES } from '../consts'
+import GithubIcon from './icons/GithubIcon.astro'
+import LinkedinIcon from './icons/LinkedinIcon.astro'
 
 const pathname = Astro.url.pathname
 
 const links = [
-  { href: '/', label: 'Zeno' },
+  { href: '/', label: config.shortName, avatar: true },
   ...(FEATURES.notes ? [{ href: '/notes', label: 'Notes' }] : []),
   { href: '/projects', label: 'Projects' },
 ]
@@ -23,20 +25,23 @@ function isActive(href: string) {
     {links.map(link => (
       <a
         href={link.href}
-        class="nav-item relative z-10 px-3.5 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors"
+        class:list={['nav-item relative z-10 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors', link.avatar ? 'flex items-center gap-1.5 pl-1.5 pr-3.5' : 'px-3.5']}
         aria-current={isActive(link.href) ? 'page' : undefined}
       >
+        {link.avatar && (
+          <img src="/avatar-mark.png" alt="" width="24" height="24" class="h-6 w-6 rounded-full object-cover" />
+        )}
         {link.label}
       </a>
     ))}
 
     <span class="mx-1 h-5 w-px bg-border"></span>
 
-    <a href="https://github.com/zenojunior" target="_blank" rel="noopener" aria-label="GitHub" class="nav-item relative z-10 p-2 rounded-full text-text-secondary hover:text-text transition-colors">
-      <Github size={17} />
+    <a href={config.social.github} target="_blank" rel="noopener" aria-label="GitHub" class="nav-item relative z-10 p-2 rounded-full text-text-secondary hover:text-text transition-colors">
+      <GithubIcon size={17} />
     </a>
-    <a href="https://www.linkedin.com/in/zenojunior" target="_blank" rel="noopener" aria-label="LinkedIn" class="nav-item relative z-10 p-2 rounded-full text-text-secondary hover:text-text transition-colors">
-      <Linkedin size={17} />
+    <a href={config.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn" class="nav-item relative z-10 p-2 rounded-full text-text-secondary hover:text-text transition-colors">
+      <LinkedinIcon size={17} />
     </a>
   </nav>
 </header>
