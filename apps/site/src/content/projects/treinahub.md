@@ -5,6 +5,7 @@ period:
   start: '2026-05-01'
 tags: ['typescript', 'hono', 'astro', 'vue', 'react', 'pwa', 'prisma', 'postgresql', 'saas']
 url: 'https://treinahub.com'
+icon: '/projects/icons/treinahub.svg'
 ---
 
 TreinaHub is a multi-tenant SaaS for fitness trainers to manage their clients and prescribe workout plans. A single platform serves three distinct frontends: a trainer dashboard, an admin panel, and an installable student PWA, all backed by a REST API with database-level row security so every trainer only ever touches their own data.

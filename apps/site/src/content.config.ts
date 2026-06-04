@@ -28,6 +28,9 @@ const projects = defineCollection({
       tags: z.array(z.string()).default([]),
       url: z.string().optional(),
       repo: z.string().optional(),
+      icon: z.string().optional(),
+      // Override the listing badge. Defaults to 'open-source' when `repo` is set.
+      source: z.enum(['open-source', 'private']).optional(),
       heroImage: z.optional(image()),
     }),
 })

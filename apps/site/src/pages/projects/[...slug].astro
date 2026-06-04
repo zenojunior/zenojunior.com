@@ -97,7 +97,12 @@ const diagramsJson = JSON.stringify(diagrams.map(d => ({ label: d.label, content
         <!-- Header (title + period) -->
         <header class="mb-10">
           <p class="font-mono text-xs text-accent mb-3">{period}</p>
-          <h1 class="text-4xl font-bold text-text tracking-tight mb-4 max-md:text-3xl">{project.data.title}</h1>
+          <h1 class="flex items-center gap-3 text-4xl font-bold text-text tracking-tight mb-4 max-md:text-3xl">
+            {project.data.icon && (
+              <img src={project.data.icon} alt="" aria-hidden="true" class="size-9 rounded-md shrink-0 max-md:size-7" />
+            )}
+            {project.data.title}
+          </h1>
           <p class="text-lg text-text-secondary leading-relaxed">{project.data.description}</p>
         </header>
 

@@ -4,7 +4,7 @@ description: 'A real-time pick/ban draft tool for the Deadlock competitive scene
 period:
   start: '2026-04-01'
 tags: ['next.js', 'react', 'socket.io', 'tailwindcss', 'typescript', 'open-source']
-url: 'https://draft.deadlock.pro.br/'
+url: 'https://draft.deadlock.pro.br'
 repo: 'https://github.com/deadlockprobr/draft'
 ---
 

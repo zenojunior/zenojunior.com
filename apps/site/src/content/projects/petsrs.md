@@ -6,6 +6,7 @@ period:
 tags: ['vue', 'typescript', 'open-source', 'civic-tech']
 url: 'https://petsrs.com.br'
 repo: 'https://github.com/petsrs/petsrs'
+icon: '/projects/icons/petsrs.webp'
 ---
 
 In September 2024, a cyclone devastated over 100 municipalities in Rio Grande do Sul, Brazil, displacing thousands of families. While other tech groups were building solutions for people, I noticed a gap: hundreds of lost pets, some found over 20km from home, with no centralized way to reconnect them with their owners.

@@ -1,9 +1,9 @@
 ---
 import type { ImageMetadata } from 'astro'
 
-// Cycles through the avatar variants in src/avatars (1.webp, 2.webp, …) with a
-// crossfade. Add or remove files there — they're auto-detected and sorted
-// numerically. Falls back to /avatar.jpg when the folder is empty.
+// Avatar variants from src/avatars (1.webp, 2.webp, …). Click the avatar to
+// advance to the next one with a crossfade. Add or remove files there — they're
+// auto-detected and sorted numerically. Falls back to /avatar.jpg when empty.
 interface Props {
   class?: string
 }
@@ -15,11 +15,15 @@ const images = Object.entries(modules)
   .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
   .map(([, m]) => m.default.src)
 const frames = images.length ? images : ['/avatar.jpg']
+const interactive = frames.length > 1
 ---
 
 <div
-  class:list={['avatar-carousel relative overflow-hidden rounded-full shadow-[0_8px_40px_-8px] shadow-accent/30 transition-all duration-500', className]}
+  class:list={['avatar-carousel relative overflow-hidden rounded-full shadow-[0_8px_40px_-8px] shadow-accent/30 transition-all duration-500', interactive && 'cursor-pointer', className]}
   data-avatar-carousel
+  role={interactive ? 'button' : undefined}
+  tabindex={interactive ? 0 : undefined}
+  aria-label={interactive ? 'Change avatar' : undefined}
 >
   {frames.map((src, i) => (
     <img
@@ -46,26 +50,20 @@ const frames = images.length ? images : ['/avatar.jpg']
 <script>
 const root = document.querySelector<HTMLElement>('[data-avatar-carousel]')
 const frames = root ? [...root.querySelectorAll<HTMLImageElement>('.avatar-frame')] : []
-const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
-const INTERVAL = 1000
 
-if (frames.length > 1 && !reduce) {
+if (root && frames.length > 1) {
   let i = 0
-  let timer = 0
-  const tick = () => {
+  const next = () => {
     frames[i].dataset.active = 'false'
     i = (i + 1) % frames.length
     frames[i].dataset.active = 'true'
   }
-  const start = () => {
-    clearInterval(timer)
-    timer = window.setInterval(tick, INTERVAL)
-  }
-  start()
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden)
-      clearInterval(timer)
-    else start()
+  root.addEventListener('click', next)
+  root.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      next()
+    }
   })
 }
 </script>

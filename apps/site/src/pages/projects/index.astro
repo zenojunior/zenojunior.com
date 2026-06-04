@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content'
-import { ArrowUpRight } from 'lucide-astro'
+import { ArrowUpRight, Code2, Lock } from 'lucide-astro'
 import BaseHead from '../../components/BaseHead.astro'
 import Breadcrumbs from '../../components/Breadcrumbs.astro'
 import Header from '../../components/Header.astro'
@@ -51,27 +51,58 @@ function formatDate(d: Date) {
 
             <div class="flex flex-col gap-3">
               {byYear.get(year)!.map(project => (
-                <a
-                  href={`/projects/${project.id}/`}
-                  class="reveal-card group block rounded-xl border border-border/50 bg-bg-secondary/60 backdrop-blur-sm hover:border-accent/50 hover:bg-bg-secondary/80 transition-all duration-300 p-5"
+                <div
+                  class="reveal-card group relative rounded-xl border border-border/50 bg-bg-secondary/60 backdrop-blur-sm hover:border-accent/50 hover:bg-bg-secondary/80 transition-all duration-300 p-5"
                 >
                   <div class="flex items-center justify-between mb-2">
-                    <h3 class="flex items-center gap-1.5 text-base font-bold text-text group-hover:text-accent transition-colors">
-                      {project.data.title}
-                      <ArrowUpRight size={16} class="text-text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all" />
+                    <h3 class="text-base font-bold text-text group-hover:text-accent transition-colors">
+                      <a
+                        href={`/projects/${project.id}/`}
+                        class="inline-flex items-center gap-1.5 after:absolute after:inset-0 after:content-['']"
+                      >
+                        {project.data.icon && (
+                          <img src={project.data.icon} alt="" aria-hidden="true" loading="lazy" class="size-4 rounded-sm shrink-0" />
+                        )}
+                        {project.data.title}
+                        <ArrowUpRight size={16} class="text-text-muted opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 group-hover:text-accent transition-all" />
+                      </a>
                     </h3>
                     <span class="font-mono text-xs text-text-muted tracking-wide shrink-0 ml-4">{formatDate(project.data.period.start)}</span>
                   </div>
-                  {project.data.url && <span class="font-mono text-xs text-accent block mb-2">{project.data.url.replace(PROTOCOL_RE, '')}</span>}
-                  <p class="text-sm text-text-secondary mb-0">{project.data.description}</p>
-                  {project.data.tags.length > 0 && (
-                    <div class="flex flex-wrap gap-2 mt-3">
-                      {project.data.tags.map(tag => (
-                        <span class="font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded">{tag}</span>
-                      ))}
-                    </div>
+                  {project.data.url && (
+                    <a
+                      href={project.data.url}
+                      target="_blank"
+                      rel="noopener"
+                      class="relative z-10 inline-block w-fit font-mono text-xs text-accent mb-2 hover:underline"
+                    >
+                      {project.data.url.replace(PROTOCOL_RE, '')}
+                    </a>
                   )}
-                </a>
+                  <p class="text-sm text-text-secondary mb-0">{project.data.description}</p>
+                  {(() => {
+                    const isOpenSource = project.data.source
+                      ? project.data.source === 'open-source'
+                      : Boolean(project.data.repo)
+                    return (
+                      <div class="mt-3">
+                        {isOpenSource
+                          ? (
+                              <span class="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-0.5 bg-tag-bg text-tag-text rounded">
+                                <Code2 size={13} />
+                                Open source
+                              </span>
+                            )
+                          : (
+                              <span class="inline-flex items-center gap-1.5 font-mono text-xs px-2.5 py-0.5 bg-bg-card/60 border border-border/50 text-text-muted rounded">
+                                <Lock size={12} />
+                                Private
+                              </span>
+                            )}
+                      </div>
+                    )
+                  })()}
+                </div>
               ))}
             </div>
           </div>
