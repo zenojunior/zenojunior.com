@@ -4,9 +4,8 @@ import BaseHead from '../../components/BaseHead.astro'
 import ChromeIcon from '../../components/icons/ChromeIcon.astro'
 import EdgeIcon from '../../components/icons/EdgeIcon.astro'
 import FirefoxIcon from '../../components/icons/FirefoxIcon.astro'
-import { SITE_TITLE } from '../../consts'
 
-const title = `Bookmark Flow - ${SITE_TITLE}`
+const title = 'Bookmark Flow - Visual bookmark manager'
 const description = 'A browser extension that turns your new tab into a visual board to organize bookmarks as draggable folder cards.'
 
 const features = [
@@ -63,7 +62,7 @@ const browsers = [
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} favicon="/bookmarkflow/icon.webp" />
   </head>
   <body class="bf">
     <!-- Product header (intentionally separate from the main site nav) -->
@@ -93,7 +92,7 @@ const browsers = [
       <div class="w-full max-w-5xl">
         <!-- Hero -->
         <section class="text-center flex flex-col items-center">
-          <img src="/bookmarkflow/icon.webp" alt="Bookmark Flow icon" width="80" height="80" class="size-20 rounded-2xl shadow-lg shadow-black/30 mb-6 max-md:size-16" />
+          <img src="/bookmarkflow/logo.webp" alt="Bookmark Flow icon" width="149" height="160" class="h-20 w-auto mb-6 max-md:h-16" />
 
           <p class="font-mono text-xs uppercase tracking-wider text-cyan-400 mb-4">Visual bookmark manager</p>
 

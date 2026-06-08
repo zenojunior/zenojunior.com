@@ -7,19 +7,31 @@ import '../styles/global.css'
 interface Props {
   title: string
   description: string
+  favicon?: string
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 const ogImage = new URL(ogImagePath(Astro.url.pathname), Astro.site)
-const { title, description } = Astro.props;
+const { title, description, favicon } = Astro.props;
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" href="/favicon.ico" sizes="any" />
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+{favicon
+  ? (
+      <Fragment>
+        <link rel="icon" href={favicon} />
+        <link rel="apple-touch-icon" href={favicon} />
+      </Fragment>
+    )
+  : (
+      <Fragment>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+      </Fragment>
+    )}
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
   rel="alternate"
