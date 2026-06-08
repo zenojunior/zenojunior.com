@@ -1,0 +1,277 @@
+---
+import { Command, FolderTree, Globe, Image, Languages, PanelRight, Search, ShieldCheck, Sparkles } from 'lucide-astro'
+import BaseHead from '../../components/BaseHead.astro'
+import ChromeIcon from '../../components/icons/ChromeIcon.astro'
+import EdgeIcon from '../../components/icons/EdgeIcon.astro'
+import FirefoxIcon from '../../components/icons/FirefoxIcon.astro'
+import { SITE_TITLE } from '../../consts'
+
+const title = `Bookmark Flow - ${SITE_TITLE}`
+const description = 'A browser extension that turns your new tab into a visual board to organize bookmarks as draggable folder cards.'
+
+const features = [
+  {
+    icon: FolderTree,
+    title: 'Draggable folder cards',
+    body: 'Your bookmark folders become cards on an infinite canvas. Drag, arrange, and connect them however your brain works.',
+  },
+  {
+    icon: Search,
+    title: 'Instant search',
+    body: 'Hit Ctrl/Cmd + K to fuzzy-search every bookmark and folder, then jump straight to the one you need.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Private by design',
+    body: 'No account, no server, no analytics. Everything stays on your device. Nothing is ever sent to me.',
+  },
+  {
+    icon: PanelRight,
+    title: 'Side panel',
+    body: 'Open the same board in the browser side panel to reach your bookmarks without leaving the page you are on.',
+  },
+  {
+    icon: Image,
+    title: 'Custom icons & notes',
+    body: 'Replace any icon, add hover tooltips, and rename items on the board without touching your real bookmarks.',
+  },
+  {
+    icon: Sparkles,
+    title: 'Themes & colors',
+    body: 'Light or dark mode and a set of accent colors, plus per-folder layouts: list, grid, or compact icons.',
+  },
+  {
+    icon: Languages,
+    title: 'Multilingual',
+    body: 'Fully translated interface in English, Portuguese (Brazil), and Spanish.',
+  },
+  {
+    icon: Globe,
+    title: 'Works with what you have',
+    body: 'Reads your existing browser bookmarks. No import, no migration, no extra setup to get started.',
+  },
+]
+
+// Web store links go here once published. While empty, each card shows "Soon".
+const browsers = [
+  { name: 'Chrome', icon: ChromeIcon, color: '#4285F4', href: '' },
+  { name: 'Edge', icon: EdgeIcon, color: '#33A8E0', href: '' },
+  { name: 'Firefox', icon: FirefoxIcon, color: '#FF7139', href: '' },
+]
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body class="bf">
+    <!-- Product header (intentionally separate from the main site nav) -->
+    <header class="fixed top-0 inset-x-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur-md">
+      <nav class="mx-auto max-w-6xl px-6 max-md:px-4 h-16 flex items-center justify-between">
+        <a href="#top" class="flex items-center gap-2.5 group">
+          <img src="/bookmarkflow/icon.webp" alt="" width="32" height="32" class="size-8 rounded-lg" />
+          <span class="font-bold text-text tracking-tight">
+            Bookmark <span class="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">Flow</span>
+          </span>
+        </a>
+        <div class="flex items-center gap-1.5 max-md:gap-1">
+          <a href="#features" class="px-3 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors max-md:hidden">Features</a>
+          <a href="/bookmarkflow/privacy" class="px-3 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors">Privacy</a>
+          <a
+            href="#install"
+            class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400 text-bg text-sm font-medium shadow-lg shadow-cyan-500/20 hover:opacity-90 transition-opacity"
+          >
+            <Globe size={15} />
+            Install
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top" class="px-6 pt-32 pb-20 max-md:px-4 max-md:pt-28 max-md:pb-12 flex justify-center">
+      <div class="w-full max-w-5xl">
+        <!-- Hero -->
+        <section class="text-center flex flex-col items-center">
+          <img src="/bookmarkflow/icon.webp" alt="Bookmark Flow icon" width="80" height="80" class="size-20 rounded-2xl shadow-lg shadow-black/30 mb-6 max-md:size-16" />
+
+          <p class="font-mono text-xs uppercase tracking-wider text-cyan-400 mb-4">Visual bookmark manager</p>
+
+          <h1 class="text-6xl max-md:text-4xl font-bold tracking-tight">
+            <span class="text-text">Bookmark</span>
+            <span class="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">Flow</span>
+          </h1>
+
+          <p class="mt-5 text-xl max-md:text-lg text-text-secondary max-w-2xl leading-relaxed">
+            Turn your new tab into a visual board that organizes your bookmarks as
+            draggable folder cards.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center gap-3 mt-9">
+            <a
+              href="#install"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400 text-bg font-medium shadow-lg shadow-cyan-500/20 hover:opacity-90 transition-opacity"
+            >
+              <Globe size={18} />
+              Install extension
+            </a>
+            <a
+              href="#features"
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border text-text-secondary font-medium hover:text-text hover:border-cyan-400/50 hover:bg-bg-card/50 transition-colors"
+            >
+              See features
+            </a>
+          </div>
+        </section>
+
+        <!-- Hero screenshot inside a browser-window frame -->
+        <section class="mt-16 max-md:mt-12">
+          <div class="rounded-xl border border-border bg-bg-secondary/60 overflow-hidden shadow-2xl shadow-black/40">
+            <div class="flex items-center gap-2 px-4 py-3 border-b border-border/70 bg-bg-card/40">
+              <span class="size-3 rounded-full bg-red-400/70"></span>
+              <span class="size-3 rounded-full bg-yellow-400/70"></span>
+              <span class="size-3 rounded-full bg-green-400/70"></span>
+              <span class="ml-3 flex-1 max-w-xs font-mono text-xs text-text-muted bg-bg/60 border border-border/50 rounded-md px-3 py-1 truncate">
+                New Tab
+              </span>
+            </div>
+            <img
+              src="/bookmarkflow/board.webp"
+              alt="Bookmark Flow board with folder cards and connected subfolders on a dark canvas"
+              width="1760"
+              height="858"
+              loading="eager"
+              class="w-full block"
+            />
+          </div>
+        </section>
+
+        <!-- Features -->
+        <section id="features" class="scroll-mt-24 mt-24 max-md:mt-16">
+          <h2 class="font-mono text-xs uppercase tracking-wider text-cyan-400 mb-8 text-center">What it does</h2>
+          <div class="grid grid-cols-2 max-md:grid-cols-1 gap-4">
+            {features.map(feature => (
+              <div class="rounded-xl border border-border/50 bg-bg-secondary/60 p-6 hover:border-cyan-400/40 hover:bg-bg-secondary/80 transition-colors">
+                <div class="inline-flex items-center justify-center size-10 rounded-lg bg-cyan-400/10 text-cyan-400 mb-4">
+                  <feature.icon size={20} />
+                </div>
+                <h3 class="text-base font-bold text-text mb-1.5">{feature.title}</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">{feature.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Search showcase -->
+        <section class="mt-24 max-md:mt-16 grid lg:grid-cols-[1fr_1.15fr] gap-10 items-center">
+          <div>
+            <div class="inline-flex items-center justify-center size-10 rounded-lg bg-cyan-400/10 text-cyan-400 mb-4">
+              <Command size={20} />
+            </div>
+            <h2 class="text-2xl font-bold text-text mb-3">Find anything in two keystrokes</h2>
+            <p class="text-text-secondary leading-relaxed">
+              Press <kbd class="font-mono text-xs px-1.5 py-0.5 rounded border border-border bg-bg-card text-text-secondary">Ctrl</kbd>
+              <span class="text-text-muted mx-0.5">+</span>
+              <kbd class="font-mono text-xs px-1.5 py-0.5 rounded border border-border bg-bg-card text-text-secondary">K</kbd>
+              from anywhere on the board to open a command palette. Type a few letters,
+              and every matching bookmark and folder surfaces instantly, grouped by where it lives.
+            </p>
+          </div>
+          <div class="rounded-xl border border-border bg-bg-secondary/60 overflow-hidden shadow-xl shadow-black/30">
+            <img
+              src="/bookmarkflow/search.webp"
+              alt="Bookmark Flow command palette searching bookmarks"
+              width="1760"
+              height="858"
+              loading="lazy"
+              class="w-full block"
+            />
+          </div>
+        </section>
+
+        <!-- Install -->
+        <section id="install" class="scroll-mt-24 mt-24 max-md:mt-16">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl max-md:text-2xl font-bold text-text mb-3">Install Bookmark Flow</h2>
+            <p class="text-text-secondary max-w-xl mx-auto leading-relaxed">
+              Free and open to use. Pick your browser to add it. Store listings are on the
+              way, so the buttons go live soon.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-3 max-md:grid-cols-1 gap-4 max-w-3xl mx-auto">
+            {browsers.map(({ name, icon: Icon, color, href }) => (
+              <div class="flex flex-col items-center text-center rounded-xl border border-border/50 bg-bg-secondary/60 p-6">
+                <span style={`color:${color}`} class="mb-4">
+                  <Icon size={40} />
+                </span>
+                <span class="font-bold text-text mb-4">{name}</span>
+                {href
+                  ? (
+                      <a
+                        href={href}
+                        target="_blank"
+                        rel="noopener"
+                        class="inline-flex items-center justify-center w-full gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400 text-bg text-sm font-medium hover:opacity-90 transition-opacity"
+                      >
+                        <Globe size={15} />
+                        Install
+                      </a>
+                    )
+                  : (
+                      <span class="inline-flex items-center justify-center w-full gap-2 px-4 py-2 rounded-full border border-border text-text-muted text-sm font-medium cursor-default select-none">
+                        Soon
+                      </span>
+                    )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <!-- Privacy callout -->
+        <section class="mt-24 max-md:mt-16">
+          <div class="rounded-xl border border-border/50 bg-bg-secondary/40 p-8 max-md:p-6 text-center flex flex-col items-center">
+            <div class="inline-flex items-center justify-center size-12 rounded-xl bg-cyan-400/10 text-cyan-400 mb-5">
+              <ShieldCheck size={24} />
+            </div>
+            <h2 class="text-2xl font-bold text-text mb-3">Your data never leaves your browser</h2>
+            <p class="text-text-secondary leading-relaxed max-w-2xl">
+              Bookmark Flow has no account, no backend, and no tracking. Bookmarks and
+              preferences are stored locally on your device. The only outbound request is
+              to fetch site icons, and only the domain is shared for that.
+            </p>
+            <a
+              href="/bookmarkflow/privacy"
+              class="inline-flex items-center gap-2 mt-6 font-mono text-sm text-cyan-400 hover:underline underline-offset-4"
+            >
+              Read the full privacy policy
+            </a>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="border-t border-border/60 px-6 py-10 max-md:px-4">
+      <div class="mx-auto max-w-5xl flex flex-col items-center gap-5 text-center">
+        <a href="#top" class="flex items-center gap-2">
+          <img src="/bookmarkflow/icon.webp" alt="" width="24" height="24" class="size-6 rounded-md" />
+          <span class="font-bold text-text">Bookmark Flow</span>
+        </a>
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs text-text-muted">
+          <a href="#features" class="hover:text-cyan-400 transition-colors">Features</a>
+          <a href="#install" class="hover:text-cyan-400 transition-colors">Install</a>
+          <a href="/bookmarkflow/privacy" class="hover:text-cyan-400 transition-colors">Privacy</a>
+          <a href="/" class="hover:text-cyan-400 transition-colors">By Zeno Junior</a>
+        </nav>
+        <p class="font-mono text-xs text-text-muted">© 2026 Bookmark Flow</p>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  /* Anchor links jump beneath the fixed product header. */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

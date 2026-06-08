@@ -16,6 +16,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
     { params: { path: 'notes' }, props: { eyebrow: `${SITE} / notes`, title: 'Notes', description: 'Notes about web development, tools, and things I learn.' } },
     { params: { path: 'projects' }, props: { eyebrow: `${SITE} / projects`, title: 'Projects', description: 'Timeline of projects and professional experiences.' } },
     { params: { path: 'cv' }, props: { eyebrow: SITE, title: 'CV', description: config.role } },
+    { params: { path: 'bookmarkflow' }, props: { eyebrow: `${SITE} / bookmark flow`, title: 'Bookmark Flow', description: 'Turn your new tab into a visual board to organize bookmarks as draggable folder cards.' } },
+    { params: { path: 'bookmarkflow/privacy' }, props: { eyebrow: `${SITE} / bookmark flow`, title: 'Privacy Policy', description: 'No account, no server, no analytics. Your data stays on your device.' } },
     ...notes.map(note => ({
       params: { path: `notes/${note.id}` },
       props: { eyebrow: `${SITE} / notes`, title: note.data.title, description: note.data.description },
