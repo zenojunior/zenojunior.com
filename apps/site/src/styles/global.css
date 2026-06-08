@@ -142,6 +142,27 @@ body::before {
   background-color: var(--color-bg-secondary);
 }
 
+/* ── Bookmark Flow product pages (/bookmarkflow/*) ──
+   Swap the site's purple accent for the teal/cyan brand palette. Scoped to
+   the .bf body class so it never leaks into the main site. Recolors the prose
+   links/blockquotes, the text selection, and the background grid + glow. */
+.bf {
+  --color-accent: #22d3ee;
+  --color-accent-hover: #67e8f9;
+
+  background-image: radial-gradient(
+    rgba(34, 211, 238, 0.07) 1px,
+    transparent 1px
+  );
+}
+.bf::before {
+  background: radial-gradient(
+    60% 50% at 50% -10%,
+    rgba(34, 211, 238, 0.12),
+    transparent 70%
+  );
+}
+
 @media (max-width: 768px) {
   body {
     font-size: 16px;

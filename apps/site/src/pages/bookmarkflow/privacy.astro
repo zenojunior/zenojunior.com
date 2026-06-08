@@ -1,10 +1,8 @@
 ---
 import { Globe } from 'lucide-astro'
 import BaseHead from '../../components/BaseHead.astro'
-import { config } from '../../config'
-import { SITE_TITLE } from '../../consts'
 
-const title = `Privacy Policy - Bookmark Flow - ${SITE_TITLE}`
+const title = 'Privacy Policy - Bookmark Flow'
 const description = 'How the Bookmark Flow Chrome extension handles your data: no account, no server, no analytics.'
 const lastUpdated = 'June 8, 2026'
 ---
@@ -12,9 +10,9 @@ const lastUpdated = 'June 8, 2026'
 <!doctype html>
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} favicon="/bookmarkflow/icon.webp" />
   </head>
-  <body>
+  <body class="bf">
     <!-- Product header (intentionally separate from the main site nav) -->
     <header class="fixed top-0 inset-x-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur-md">
       <nav class="mx-auto max-w-6xl px-6 max-md:px-4 h-16 flex items-center justify-between">
@@ -128,7 +126,7 @@ const lastUpdated = 'June 8, 2026'
 
           <h2>Contact</h2>
           <p>
-            Questions about this policy can be sent to: <a href={`mailto:${config.email}`}>{config.email}</a>
+            Questions about this policy can be sent to: <a href="mailto:extension@zenojunior.com">extension@zenojunior.com</a>
           </p>
         </div>
       </article>
