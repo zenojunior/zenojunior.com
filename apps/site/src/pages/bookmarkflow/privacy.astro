@@ -1,0 +1,153 @@
+---
+import { Globe } from 'lucide-astro'
+import BaseHead from '../../components/BaseHead.astro'
+import { config } from '../../config'
+import { SITE_TITLE } from '../../consts'
+
+const title = `Privacy Policy - Bookmark Flow - ${SITE_TITLE}`
+const description = 'How the Bookmark Flow Chrome extension handles your data: no account, no server, no analytics.'
+const lastUpdated = 'June 8, 2026'
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <!-- Product header (intentionally separate from the main site nav) -->
+    <header class="fixed top-0 inset-x-0 z-50 border-b border-border/60 bg-bg/70 backdrop-blur-md">
+      <nav class="mx-auto max-w-6xl px-6 max-md:px-4 h-16 flex items-center justify-between">
+        <a href="/bookmarkflow" class="flex items-center gap-2.5">
+          <img src="/bookmarkflow/icon.webp" alt="" width="32" height="32" class="size-8 rounded-lg" />
+          <span class="font-bold text-text tracking-tight">
+            Bookmark <span class="bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">Flow</span>
+          </span>
+        </a>
+        <a
+          href="/bookmarkflow#install"
+          class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-gradient-to-r from-teal-400 to-cyan-400 text-bg text-sm font-medium shadow-lg shadow-cyan-500/20 hover:opacity-90 transition-opacity"
+        >
+          <Globe size={15} />
+          Install
+        </a>
+      </nav>
+    </header>
+
+    <main class="px-6 pt-32 pb-16 max-md:px-4 max-md:pt-28 max-md:pb-10 flex justify-center">
+      <article class="w-full max-w-(--width-content)">
+        <a href="/bookmarkflow" class="inline-flex items-center gap-1.5 font-mono text-xs text-text-muted hover:text-cyan-400 transition-colors mb-8">
+          &larr; Back to Bookmark Flow
+        </a>
+
+        <header class="mb-10">
+          <h1 class="text-3xl max-md:text-2xl font-bold text-text tracking-tight mb-2">Privacy Policy <span class="text-text-muted font-normal">·</span> Bookmark Flow</h1>
+          <p class="font-mono text-xs text-text-muted">Last updated: {lastUpdated}</p>
+        </header>
+
+        <div class="prose">
+          <p>
+            Bookmark Flow (&ldquo;the extension&rdquo;) is a browser extension that replaces the new tab
+            page with a visual board for organizing your existing bookmarks into folder
+            cards. This policy explains exactly what the extension does and does not do with
+            your data.
+          </p>
+
+          <blockquote>
+            <strong>Short version:</strong> Bookmark Flow has no account, no server, and no analytics. Your
+            data stays on your device. The only time any information leaves your browser is
+            to fetch website icons (see &ldquo;Favicons&rdquo; below).
+          </blockquote>
+
+          <h2>What we collect</h2>
+          <p>
+            <strong>Nothing is collected, transmitted, or stored by us.</strong> The developer operates no
+            backend, runs no analytics or tracking, and never receives any of your data.
+          </p>
+
+          <h2>Data the extension uses locally</h2>
+          <p>
+            To work, the extension reads and stores the following data <strong>only on your own
+            device</strong>, using the browser&rsquo;s local storage. None of it is ever sent to the
+            developer or any third party.
+          </p>
+          <ul>
+            <li>
+              <strong>Bookmarks.</strong> The extension reads your browser bookmarks (folders, titles, and
+              URLs) through the <code>bookmarks</code> permission in order to display them as cards on
+              the board. Bookmarks are processed locally and never transmitted.
+            </li>
+            <li>
+              <strong>Preferences and board state.</strong> Layout choices, folder positions on the
+              canvas, expanded/collapsed state, color theme, custom per-bookmark tooltip
+              notes, and custom icons are saved with the browser&rsquo;s <code>storage</code> API
+              (<code>chrome.storage.local</code>). This data stays on your device and is synced only by
+              your browser if you have browser sync enabled, and never reaches the developer.
+            </li>
+          </ul>
+
+          <h2>Favicons (third-party request)</h2>
+          <p>
+            To show each site&rsquo;s icon next to its bookmark, the extension first uses the
+            browser&rsquo;s built-in local favicon cache, so in most cases <strong>no network request is
+            made</strong>. When a local icon is not available (for example on browsers without that
+            feature, or for sites not in the cache), the extension requests the icon from
+            Google&rsquo;s public favicon service:
+          </p>
+          <p>
+            <code>https://www.google.com/s2/favicons?domain=&lt;site-domain&gt;</code>
+          </p>
+          <p>
+            In that case, the <strong>domain name</strong> of the bookmarked site (not the full URL, and
+            no personal data) is sent to Google solely to retrieve the icon image. This
+            request is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google&rsquo;s Privacy Policy</a>.
+          </p>
+
+          <h2>What we never do</h2>
+          <ul>
+            <li>We do not sell or transfer your data to third parties.</li>
+            <li>We do not use your data for any purpose unrelated to the extension&rsquo;s single purpose (organizing and opening your own bookmarks).</li>
+            <li>We do not use your data to determine creditworthiness or for lending purposes.</li>
+            <li>We do not track your browsing history, keystrokes, or activity.</li>
+            <li>We do not show ads.</li>
+          </ul>
+
+          <h2>Permissions and why they are needed</h2>
+          <ul>
+            <li><strong>bookmarks</strong>: to read your bookmark folders and links and render them on the board.</li>
+            <li><strong>storage</strong>: to save your preferences and board layout locally.</li>
+            <li><strong>favicon</strong>: to display site icons from the browser&rsquo;s local favicon cache.</li>
+            <li><strong>sidePanel</strong>: to open the same bookmark board in the browser&rsquo;s side panel.</li>
+          </ul>
+
+          <h2>Changes to this policy</h2>
+          <p>
+            If this policy changes, the updated version will be posted at this URL with a new
+            &ldquo;Last updated&rdquo; date.
+          </p>
+
+          <h2>Contact</h2>
+          <p>
+            Questions about this policy can be sent to: <a href={`mailto:${config.email}`}>{config.email}</a>
+          </p>
+        </div>
+      </article>
+    </main>
+
+    <footer class="border-t border-border/60 px-6 py-10 max-md:px-4">
+      <div class="mx-auto max-w-5xl flex flex-col items-center gap-5 text-center">
+        <a href="/bookmarkflow" class="flex items-center gap-2">
+          <img src="/bookmarkflow/icon.webp" alt="" width="24" height="24" class="size-6 rounded-md" />
+          <span class="font-bold text-text">Bookmark Flow</span>
+        </a>
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs text-text-muted">
+          <a href="/bookmarkflow#features" class="hover:text-cyan-400 transition-colors">Features</a>
+          <a href="/bookmarkflow#install" class="hover:text-cyan-400 transition-colors">Install</a>
+          <a href="/bookmarkflow/privacy" class="hover:text-cyan-400 transition-colors">Privacy</a>
+          <a href="/" class="hover:text-cyan-400 transition-colors">By Zeno Junior</a>
+        </nav>
+        <p class="font-mono text-xs text-text-muted">© 2026 Bookmark Flow</p>
+      </div>
+    </footer>
+  </body>
+</html>
