@@ -50,9 +50,10 @@ function formatDate(d: Date) {
             </div>
 
             <div class="flex flex-col gap-3">
-              {byYear.get(year)!.map(project => (
+              {byYear.get(year)!.map((project, i) => (
                 <div
                   class="reveal-card group relative rounded-xl border border-border/50 bg-bg-secondary/60 backdrop-blur-sm hover:border-accent/50 hover:bg-bg-secondary/80 transition-all duration-300 p-5"
+                  style={`--reveal-delay: ${i * 80}ms`}
                 >
                   <div class="flex items-center justify-between mb-2">
                     <h3 class="text-base font-bold text-text group-hover:text-accent transition-colors">
@@ -115,40 +116,56 @@ function formatDate(d: Date) {
       .js .reveal-year,
       .js .reveal-card {
         opacity: 0;
+        /* Per-property delays: opacity/transform carry the stagger, hover colors do not. */
+        transition:
+          opacity 0.5s ease-out var(--reveal-delay, 0ms),
+          transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+          border-color 0.3s ease,
+          background-color 0.3s ease;
+      }
+      .js .reveal-year {
+        transform: translateY(12px);
+      }
+      .js .reveal-card {
+        transform: translateY(16px);
+      }
+
+      .js [data-revealed] .reveal-year,
+      .js [data-revealed] .reveal-card {
+        opacity: 1;
+        transform: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .js .reveal-year,
+        .js .reveal-card {
+          transition: none;
+        }
       }
     </style>
 
-    <script>
-      import { animate, inView, stagger } from 'motion'
+    <!-- Inline + native IntersectionObserver: reveal never waits on a JS chunk download. -->
+    <script is:inline>
+      (() => {
+        const groups = document.querySelectorAll('[data-year-group]')
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (reduce || !('IntersectionObserver' in window)) {
+          groups.forEach(group => group.dataset.revealed = '1')
+          return
+        }
 
-      if (reduce) {
-        document.querySelectorAll<HTMLElement>('.reveal-year, .reveal-card').forEach((el) => {
-          el.style.opacity = '1'
-        })
-      }
-      else {
-        document.querySelectorAll<HTMLElement>('[data-year-group]').forEach((group) => {
-          inView(group, () => {
-            if (group.dataset.revealed)
-              return
-            group.dataset.revealed = '1'
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.dataset.revealed = '1'
+              io.unobserve(entry.target)
+            }
+          })
+        }, { threshold: 0.2 })
 
-            const marker = group.querySelector<HTMLElement>('.reveal-year')
-            const cards = group.querySelectorAll<HTMLElement>('.reveal-card')
-
-            if (marker)
-              animate(marker, { opacity: [0, 1], y: [12, 0] }, { duration: 0.5, ease: 'easeOut' })
-
-            animate(
-              cards,
-              { opacity: [0, 1], y: [16, 0] },
-              { duration: 0.5, delay: stagger(0.08), ease: [0.22, 1, 0.36, 1] },
-            )
-          }, { amount: 0.2 })
-        })
-      }
+        groups.forEach(group => io.observe(group))
+      })()
     </script>
   </body>
 </html>
