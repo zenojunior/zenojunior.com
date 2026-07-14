@@ -1,13 +1,17 @@
 ---
-title: 'CS Demo Analyzer'
+title: 'cs2d'
 description: 'The fastest free browser-based 2D replay analyzer for Counter-Strike 2 demos. Drop a .dem file and rewatch the match round by round, fully client-side.'
 period:
   start: '2026-06-16'
 tags: ['vue', 'typescript', 'rust', 'webassembly', 'tailwindcss', 'open-source']
-url: 'https://cs2.zenojunior.com'
-repo: 'https://github.com/zenojunior/cs-demo-analyzer'
-icon: '/projects/icons/cs-demo-analyzer.webp'
+url: 'https://cs2d.app'
+repo: 'https://github.com/zenojunior/cs2d'
+icon: '/projects/icons/cs2d.webp'
 ---
+
+<div class="relative mb-8" style="aspect-ratio: 504 / 399">
+  <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7478814445004320768?compact=1" class="absolute inset-0 h-full w-full rounded-lg" frameborder="0" allowfullscreen title="cs2d on LinkedIn"></iframe>
+</div>
 
 Counter-Strike 2 is a competitive multiplayer shooter by Valve, the latest entry in the Counter-Strike series and one of the most played games in the world, with hundreds of thousands of concurrent players at any given moment and a thriving professional scene. After every match the game can record a demo: a full replay of everything that happened, which is exactly what makes deep post-match analysis possible.
 
@@ -20,7 +24,7 @@ I just wanted a simple way to review the comms and positioning of our matches, s
 At its core is a round-by-round 2D replay of player movement, duels and timing, with a live scoreboard, killfeed and in-game chat, and auto-advance between rounds. The original player comms are replayed alongside the action, so you hear the calls exactly as they happened while you watch the round unfold.
 
 <figure>
-  <img src="/projects/cs-demo-analyzer/replay.webp" alt="2D replay of a CS2 demo on de_dust2 with player positions, scoreboard, killfeed and timeline" width="1280" height="800" />
+  <img src="/projects/cs2d/replay.webp" alt="2D replay of a CS2 demo on de_dust2 with player positions, scoreboard, killfeed and timeline" width="1280" height="800" />
   <figcaption class="text-sm text-text-muted text-center -mt-2 mb-8">The 2D replay: player movement, duels and timing on the radar, with scoreboard, killfeed and a scrubbable timeline.</figcaption>
 </figure>
 
@@ -29,12 +33,12 @@ At its core is a round-by-round 2D replay of player movement, duels and timing, 
 Beyond the replay, the analyzer turns a match into stats. Heatmaps for deaths, presence and utility can be filtered by side, player and round, with multi-floor support for maps like Nuke and Vertigo. There is a full breakdown of grenade trajectories for smokes, molotovs, HEs, flashes and decoys, plus flash effectiveness (who blinded whom and for how long) and HE / molotov damage dealt per player.
 
 <figure>
-  <img src="/projects/cs-demo-analyzer/heatmaps.webp" alt="Death heatmap overlaid on the de_dust2 radar, filterable by side, player and round" width="1280" height="800" />
+  <img src="/projects/cs2d/heatmaps.webp" alt="Death heatmap overlaid on the de_dust2 radar, filterable by side, player and round" width="1280" height="800" />
   <figcaption class="text-sm text-text-muted text-center -mt-2 mb-8">Heatmaps for kills, deaths and presence, filtered by side, player, round and round time.</figcaption>
 </figure>
 
 <figure>
-  <img src="/projects/cs-demo-analyzer/utilities.webp" alt="Grenade trajectories for smokes, molotovs, flashes and HEs drawn over the map" width="1280" height="800" />
+  <img src="/projects/cs2d/utilities.webp" alt="Grenade trajectories for smokes, molotovs, flashes and HEs drawn over the map" width="1280" height="800" />
   <figcaption class="text-sm text-text-muted text-center -mt-2 mb-8">Every grenade thrown in the match, with the option to jump straight into the replay from a throw.</figcaption>
 </figure>
 
@@ -43,7 +47,7 @@ Beyond the replay, the analyzer turns a match into stats. Heatmaps for deaths, p
 A per-round economy breakdown shows buy types, equipment value and money flow, so you can see where a team's eco broke down or which force-buy swung the half.
 
 <figure>
-  <img src="/projects/cs-demo-analyzer/economy.webp" alt="Economy breakdown comparing two teams by buy type, with a starting-money chart over the match" width="1280" height="800" />
+  <img src="/projects/cs2d/economy.webp" alt="Economy breakdown comparing two teams by buy type, with a starting-money chart over the match" width="1280" height="800" />
   <figcaption class="text-sm text-text-muted text-center -mt-2 mb-8">Round outcomes by economy type and starting money over the match, side by side for both teams.</figcaption>
 </figure>
 

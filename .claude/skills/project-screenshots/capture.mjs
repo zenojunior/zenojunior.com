@@ -45,9 +45,9 @@ function parseFrontmatter(raw) {
 }
 
 const targets = readdirSync(projectsDir)
-  .filter(f => f.endsWith('.md'))
+  .filter(f => f.endsWith('.md') || f.endsWith('.mdx'))
   .map((file) => {
-    const slug = file.replace(/\.md$/, '')
+    const slug = file.replace(/\.mdx?$/, '')
     const fm = parseFrontmatter(readFileSync(path.join(projectsDir, file), 'utf8'))
     return { slug, url: fm.url, title: fm.title ?? slug }
   })
