@@ -45,16 +45,9 @@ import '@repo/cv/styles'
   </body>
 </html>
 
-<style>
-	/* 3D perspective context for the parallax tilt applied to the paper via JS. */
-	.cv-wrapper {
-		perspective: 1600px;
-	}
-</style>
-
 <script>
   const wrapper = document.querySelector<HTMLElement>('.cv-wrapper')
-  const paper = wrapper?.querySelector<HTMLElement>('.cv-page')
+  const paper = wrapper?.querySelector<HTMLElement>('.cv-pages')
 
   if (paper) {
     const el = paper
@@ -68,52 +61,6 @@ import '@repo/cv/styles'
     }
     fitPaper()
     window.addEventListener('resize', fitPaper)
-
-    // ── Parallax tilt: only on devices with a precise pointer (skip touch/mobile)
-    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
-
-    if (fine && !reduce) {
-      const MAX = 3.5 // max tilt in degrees, kept subtle
-      const EASE = 0.06 // lower = smoother / slower follow
-      let targetX = 0
-      let targetY = 0
-      let curX = 0
-      let curY = 0
-      let raf = 0
-
-      el.style.willChange = 'transform'
-
-      function loop() {
-        curX += (targetX - curX) * EASE
-        curY += (targetY - curY) * EASE
-        el.style.transform = `rotateX(${curY.toFixed(3)}deg) rotateY(${curX.toFixed(3)}deg)`
-        if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001)
-          raf = requestAnimationFrame(loop)
-        else
-          raf = 0
-      }
-
-      function kick() {
-        if (!raf)
-          raf = requestAnimationFrame(loop)
-      }
-
-      window.addEventListener('pointermove', (e) => {
-        const nx = (e.clientX / window.innerWidth) * 2 - 1
-        const ny = (e.clientY / window.innerHeight) * 2 - 1
-        targetX = nx * MAX // rotateY follows horizontal movement
-        targetY = -ny * MAX // rotateX follows vertical movement (inverted)
-        kick()
-      })
-
-      // Ease back to flat when the cursor leaves the window.
-      document.addEventListener('pointerleave', () => {
-        targetX = 0
-        targetY = 0
-        kick()
-      })
-    }
   }
 </script>
 
@@ -134,17 +81,23 @@ import '@repo/cv/styles'
 			overflow: visible !important;
 			padding: 0 !important;
 		}
-		.cv-page {
-			width: 210mm !important;
-			min-height: 0 !important;
-			height: auto !important;
-			margin: 0 !important;
-			padding: 8mm 12mm !important;
-			box-shadow: none !important;
+		.cv-pages {
 			transform: none !important;
 			zoom: 1 !important;
-			page-break-after: avoid;
-			page-break-inside: avoid;
+		}
+		.cv-page {
+			width: 210mm !important;
+			/* Slightly under A4 so rounding never spills a line onto an extra
+			   page; tighter vertical padding keeps page 1's content inside. */
+			height: 296mm !important;
+			padding: 12mm 16mm !important;
+			overflow: hidden !important;
+			margin: 0 !important;
+			box-shadow: none !important;
+		}
+		.cv-page + .cv-page {
+			/* The canonical document starts page 2 lower on the sheet. */
+			padding-top: 28mm !important;
 		}
 		@page {
 			size: A4;
