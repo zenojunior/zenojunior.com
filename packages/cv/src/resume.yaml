@@ -1,61 +1,66 @@
-# title, email and links come from the root config.yaml (single source of truth).
+# email and links come from the root config.yaml (single source of truth).
+# Text mirrors the canonical Zeno_Junior_CV document. Keep them in sync.
 
-subtitle: "Senior Frontend Engineer | Developer Experience & AI-Driven Development"
+name: Zeno Sbardellotto Junior
+location: Porto Alegre, RS - Brazil
+phone: "+55 51 99703-1716"
 
-about: "Senior Frontend Engineer with {yearsOfExperience}+ years shipping Vue, React, and TypeScript apps, currently at SWORD Health on a Vue 3 clinical-portal used daily by 800+ therapists. Previously led a React Native rebuild that scaled to 1M+ users, and migrated a legacy jQuery Chrome extension to Vue.js. Specialized in Developer Experience and Design Systems, with recent focus on AI-assisted workflows."
-
-personal:
-    - name: Zeno Sbardellotto Junior
-    - location: Porto Alegre, RS - Brazil
+about: "Frontend Engineer with {yearsOfExperience}+ years of experience building scalable web and mobile applications across healthcare, e‑commerce, and SaaS. Holds a Bachelor's degree in Software Engineering and specializes in React, Vue.js, TypeScript, React Native and Architecture. Strong expertise in Developer Experience (DX), Design Systems, and owning the full software development lifecycle. Built a cross-platform mobile application from scratch that scaled to over 1M users and became one of Brazil's top 30 shopping apps within 12 months."
 
 skills:
     - group: Languages & Core
-      items: TypeScript • HTML • CSS • SCSS • Node.js • Bun
+      items: TypeScript | JavaScript | HTML | CSS | SCSS | Node.js | Bun | SQL | PostgreSQL | MongoDB
     - group: Frameworks & Libraries
-      items: Vue.js • Nuxt • React / React Native • Next.js • Astro • StencilJS • Pinia • TanStack Query • Socket.IO
+      items: Vue.js | Nuxt | React | React Native | Next.js | Astro | StencilJS | Web Components | Pinia | TanStack Query | Socket.IO | Vuetify
     - group: Styling & Design Systems
-      items: TailwindCSS • Shadcn • Storybook • Web Performance • i18n • PWA
+      items: TailwindCSS | Shadcn | Storybook | Design Tokens | Figma | Web Performance | i18n | PWA
     - group: Developer Experience & Tooling
-      items: Vite • Vitest • Vitepress • Monorepos • pnpm
+      items: Vite | Vitest | Playwright | VitePress | Monorepos | pnpm
+    - group: Integrations & Automation
+      items: OAuth 2.0 | Webhooks | n8n | Cron jobs | SSE | Redis
     - group: DevOps & Cloud
-      items: CI/CD • GitHub Actions • Docker • AWS • Firebase
+      items: CI/CD | GitHub Actions | Docker | Dokploy | Linux | AWS | Firebase | Cloudflare
+    - group: Observability & Analytics
+      items: Mixpanel | PostHog | Sentry
     - group: AI-Driven Development
-      items: Claude Code • LLM-assisted workflows
+      items: Claude Code | AI Agents | MCP (Model Context Protocol) | LLM-assisted workflows
 
 languages:
     - Portuguese (Native)
-    - English (Professional Working)
+    - English (Full Professional)
 
 experiences:
-    - title: Frontend Engineer
+    - title: Software Engineer (Frontend)
       company:
           name: SWORD Health
           slug: sword-health
       period:
           start: "2023-01-03"
-      remoteWork: true
+          end: "2026-06-30"
       items:
-          - "Develop and maintain clinical-portal, a Vue 3 app used daily by 800+ therapists (TypeScript, TailwindCSS, TanStack Query)."
-          - "Practice AI-assisted development daily: Claude Code for code reviews, TDD/unit test generation, and custom automation commands."
-          - "Led DX initiatives: standardized TanStack Query for server-state across the codebase and built internal docs with Vitepress."
-          - "Drove adoption of the internal Design System across legacy and new code, and automated the SVG icon pipeline."
-          - "Resolved Mixpanel quota outages that cut tracking mid-month, by consolidating duplicated events into a single flow."
+          - "Built and evolve a clinical platform, delivering scalable frontend solutions that support the daily workflows of 800+ healthcare professionals;"
+          - "Owned the full software development lifecycle, from technical design and architecture decisions to implementation, testing, code reviews, and production delivery;"
+          - "Stakeholder management across Product, Design, and Backend Engineering teams to deliver end-to-end product features and technical solutions;"
+          - "Led frontend architecture and developer experience (DX) initiatives by standardizing TanStack Query for server‑state management across the codebase and built internal docs with Vitepress;"
+          - "Leverage AI-assisted development (Claude Code) to accelerate feature delivery, automate engineering workflows, enhance code reviews, and strengthen test coverage through TDD-driven unit tests;"
+          - "Drove adoption of the company's Design System across both legacy and greenfield applications while automating the SVG icon pipeline;"
+          - "Improved product observability and analytics reliability by redesigning Mixpanel event tracking, consolidating duplicated events into a scalable tracking flow."
 
-    - title: Front-end Developer
+    - title: Front-end Engineer
       company:
           name: Cuponomia
           slug: cuponomia
       period:
           start: "2019-10-01"
           end: "2022-09-30"
-      remoteWork: true
       items:
-          - "Co-owned the frontend stack with one other engineer: a React Native app and a Vue.js Chrome extension for cashback automation."
-          - "Built a cross-platform mobile app from scratch with React Native and TypeScript, scaling to 1M+ users and the top 30 shopping apps in Brazil within 12 months."
-          - "Refactored a legacy Chrome extension into Vue.js, improving maintainability and unblocking new feature development."
-          - "Set up mobile CI/CD on Bitrise with Firebase and AWS integrations, accelerating releases from every 2 weeks to 2x per week."
+          - "Built and evolved customer-facing frontend products, developing mobile and browser experiences that supported millions of users across cashback and shopping journeys, improving platform scalability, and enhancing user experience;"
+          - "Co-owned the frontend architecture of a React Native mobile application and a Vue.js Chrome extension, driving technical decisions and feature delivery;"
+          - "Built a cross-platform mobile application from scratch using React Native and TypeScript, scaling to 1M+ users and becoming one of Brazil's top 30 shopping apps within 12 months;"
+          - "Modernized a legacy Chrome extension by migrating it to Vue.js, improving maintainability, accelerating feature development, and reducing technical debt;"
+          - "Implemented a mobile CI/CD pipeline with Bitrise, Firebase, and AWS, increasing release frequency 4x and improving delivery efficiency."
 
-    - title: Software Engineer
+    - title: Full-stack Engineer
       company:
           name: Itcode Soluções Web
           slug: itcode
@@ -63,10 +68,11 @@ experiences:
           start: "2018-09-01"
           end: "2019-10-31"
       items:
-          - "Shipped custom web apps for small business clients across frontend and backend, delivering features and integrations."
-          - "Built Node.js Discord automations for gaming community clients, covering moderation and engagement workflows."
+          - "Developed custom web applications for business clients, delivering end-to-end tailored solutions across frontend and backend;"
+          - "Partnered directly with clients to translate business requirements into scalable and maintainable web applications;"
+          - "Developed Node.js automation solutions for Discord communities, streamlining moderation workflows and increasing user engagement through custom bots."
 
-    - title: Front-end Developer (Intern » Junior)
+    - title: Junior Front-end Developer
       company:
           name: Visãoi Sistemas Web
           slug: visaoi
@@ -74,16 +80,12 @@ experiences:
           start: "2014-06-01"
           end: "2018-09-30"
       items:
-          - "Owned frontend delivery for iPrefeituras, a civic-tech SaaS platform serving Brazilian municipalities."
+          - "Owned frontend delivery for iPrefeituras, a civic-tech SaaS platform serving Brazilian municipalities;"
           - "Built and maintained production features used daily by city hall employees and citizens across multiple cities."
 
 notableProjects:
     - title: petsrs.com.br
-      period:
-          start: "2023-09-01"
-          end: "2024-09-30"
-      description: "Frontend for a civic-tech platform created during the 2023 RS floods to help families reunite with their pets. Scaled to hundreds of thousands of daily visits during the historic 2024 floods and was recognized by the Rio Grande do Sul state government."
-      stack: "Vuetify • Strapi CMS • n8n • Monday • Cloudflare"
+      description: "Created a civic-tech platform to help reunite families with their pets during the 2023 Rio Grande do Sul floods. The platform handled hundreds of thousands of daily visits during the 2024 floods and was recognized by the Rio Grande do Sul state government."
       link: "https://petsrs.com.br"
 
 formation:
@@ -91,6 +93,5 @@ formation:
       company:
           name: Universidade do Vale do Taquari - Univates
           slug: univates
-          logoStyle: "height: 35px; align-self: center;"
       period:
           end: "2023-12-01"

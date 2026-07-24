@@ -11,7 +11,8 @@ function formatDuration(start: Date, end: Date): string {
 }
 
 export function formatMonth(d: string): string {
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  // UTC keeps "2019-10-01" in October regardless of the build/browser timezone.
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
 }
 
 export function formatPeriod(period: Period) {

@@ -1,21 +1,25 @@
 export interface ResumeData {
   title: string;
-  subtitle: string;
+  location: string;
+  phone?: string;
   about: string;
-  personal: Record<string, string>[];
+  contacts: Contact[];
   skills: { group: string; items: string }[];
   languages: string[];
-  links: { label: string; url: string }[];
   experiences: Experience[];
   notableProjects?: NotableProject[];
   formation: Experience[];
 }
 
+export interface Contact {
+  label: string;
+  url?: string;
+  underline?: boolean;
+}
+
 export interface NotableProject {
   title: string;
-  period?: Period;
   description: string;
-  stack?: string;
   link?: string;
 }
 
@@ -37,12 +41,9 @@ export interface Experience {
   company: {
     name: string;
     slug: string;
-    logo?: boolean;
-    logoStyle?: string;
   };
   period: Period;
   description?: string;
   items?: string[];
-  remoteWork?: boolean;
   roles?: Role[];
 }

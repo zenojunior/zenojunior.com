@@ -12,26 +12,14 @@ const period = formatPeriod(exp.period);
 
 <div class="cv-experience">
   <div class="cv-experience-header">
-    <div>
-      <h4 class="cv-experience-title">{exp.title}</h4>
-      <p class="cv-experience-company">{exp.company.name}</p>
-    </div>
-    <div class="cv-experience-period">
+    <h3 class="cv-experience-title">{exp.title} | {exp.company.name}</h3>
+    <span class="cv-experience-period">
       {period.isOngoing ? (
         <span data-cv-live-range={period.startISO}>{period.range}</span>
       ) : (
-        <span>{period.range}</span>
+        period.range
       )}
-      {period.duration && (
-        <span class="cv-experience-duration">
-          {period.isOngoing ? (
-            <span data-cv-live-duration={period.startISO}>{period.duration}</span>
-          ) : (
-            period.duration
-          )}
-        </span>
-      )}
-    </div>
+    </span>
   </div>
   {exp.description && <p class="cv-experience-description">{exp.description}</p>}
   {exp.items && (
