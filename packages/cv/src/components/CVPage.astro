@@ -11,10 +11,15 @@ const { data } = Astro.props;
 // Wrap the "N+" in a span carrying the career start year, so the client script
 // keeps it live in the browser. Year is sourced from config.yaml, never hardcoded.
 const about = data.about.replace(/(\d+)\+/, `<span data-cv-live-years="${careerStartYear}">$1+</span>`);
+// The sheet split follows the content: an experience flagged with
+// `pageBreakBefore` and everything after it continues on the second sheet.
+const breakIndex = data.experiences.findIndex((exp) => exp.pageBreakBefore);
+const firstSheet = breakIndex > 0 ? data.experiences.slice(0, breakIndex) : data.experiences;
+const continued = breakIndex > 0 ? data.experiences.slice(breakIndex) : [];
 ---
 
-<!-- Two A4 sheets, split at the same point as the canonical PDF:
-     page 1 ends after Professional Experience, page 2 starts at Languages. -->
+<!-- Two A4 sheets. The split point comes from the content: experiences run
+     until the one flagged `pageBreakBefore`, which continues on sheet 2. -->
 <div class="cv-pages">
   <div class="cv-page">
     <header class="cv-header">
@@ -44,11 +49,21 @@ const about = data.about.replace(/(\d+)\+/, `<span data-cv-live-years="${careerS
 
     <section class="cv-section">
       <h2 class="cv-section-title">Professional Experience</h2>
-      {data.experiences.map((exp) => <CVExperience experience={exp} />)}
+      {firstSheet.map((exp) => <CVExperience experience={exp} />)}
     </section>
   </div>
 
-  <div class="cv-page">
+  <div class:list={['cv-page', { 'cv-page-continued': continued.length > 0 }]}>
+    {continued.length > 0 && (
+      <>
+        <section class="cv-section">
+          {continued.map((exp) => <CVExperience experience={exp} />)}
+        </section>
+
+        <hr class="cv-divider" />
+      </>
+    )}
+
     <section class="cv-section">
       <h2 class="cv-section-title">Languages</h2>
       <p class="cv-languages">{data.languages.join(' • ')}</p>

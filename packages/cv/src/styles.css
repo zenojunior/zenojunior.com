@@ -11,9 +11,14 @@
   height: 29.7cm;
 }
 
-/* The canonical document starts page 2 lower on the sheet. */
+/* The canonical document starts page 2 lower on the sheet, unless the
+   experience list continues there, in which case the sheet starts normally. */
 .cv-page + .cv-page {
   padding-top: 3.2cm;
+}
+
+.cv-page + .cv-page.cv-page-continued {
+  padding-top: 1.6cm;
 }
 
 .cv-page {
