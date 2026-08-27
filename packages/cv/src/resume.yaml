@@ -5,31 +5,45 @@ name: Zeno Sbardellotto Junior
 location: Porto Alegre, RS - Brazil
 phone: "+55 51 99703-1716"
 
-about: "Frontend Engineer with {yearsOfExperience}+ years of experience building scalable web and mobile applications across healthcare, e‑commerce, and SaaS. Holds a Bachelor's degree in Software Engineering and specializes in React, Vue.js, TypeScript, React Native and Architecture. Strong expertise in Developer Experience (DX), Design Systems, and owning the full software development lifecycle. Built a cross-platform mobile application from scratch that scaled to over 1M users and became one of Brazil's top 30 shopping apps within 12 months."
+about: "Frontend Engineer with {yearsOfExperience}+ years of experience building scalable web and mobile applications across healthcare, e‑commerce, and SaaS. Holds a Bachelor's degree in Software Engineering and specializes in React, Vue.js, TypeScript, React Native and Architecture. Strong expertise in Developer Experience (DX), Design Systems, and owning the full software development lifecycle. Built a cross-platform mobile application from scratch that scaled to over 1M users and became one of Brazil's top 30 shopping apps within 12 months. Co-founded a govtech delivering AI-powered citizen services to Brazilian municipalities."
 
 skills:
     - group: Languages & Core
       items: TypeScript | JavaScript | HTML | CSS | SCSS | Node.js | Bun | SQL | PostgreSQL | MongoDB
     - group: Frameworks & Libraries
-      items: Vue.js | Nuxt | React | React Native | Next.js | Astro | StencilJS | Web Components | Pinia | TanStack Query | Socket.IO | Vuetify
+      items: Vue.js | Nuxt | React | React Native | Next.js | Astro | Hono | Prisma | StencilJS | Web Components | Pinia | TanStack Query | Socket.IO | Vuetify
     - group: Styling & Design Systems
       items: TailwindCSS | Shadcn | Storybook | Design Tokens | Figma | Web Performance | i18n | PWA
     - group: Developer Experience & Tooling
       items: Vite | Vitest | Playwright | VitePress | Monorepos | pnpm
     - group: Integrations & Automation
-      items: OAuth 2.0 | Webhooks | n8n | Cron jobs | SSE | Redis
+      items: OAuth 2.0 | Webhooks | n8n | Kafka | Cron jobs | SSE | Redis
     - group: DevOps & Cloud
       items: CI/CD | GitHub Actions | Docker | Dokploy | Linux | AWS | Firebase | Cloudflare
     - group: Observability & Analytics
       items: Mixpanel | PostHog | Sentry
+    - group: AI Engineering
+      items: LLM Agents | Tool Calling | MCP (Model Context Protocol) | Vercel AI SDK | OpenRouter | Context Engineering | Token Cost Optimization | Guardrails | LLM Evals | Langfuse | OpenTelemetry
     - group: AI-Driven Development
-      items: Claude Code | AI Agents | MCP (Model Context Protocol) | LLM-assisted workflows
+      items: Claude Code | LLM-assisted workflows
 
 languages:
     - Portuguese (Native)
     - English (Full Professional)
 
 experiences:
+    - title: Co-founder
+      company:
+          name: Prefa Digital
+          slug: prefa-digital
+      period:
+          start: "2022-07-01"
+      items:
+          - "Built and led the engineering of an AI assistant for Brazilian municipalities, taking the product from concept to production across web, mobile and WhatsApp interfaces;"
+          - "Built and secured LLM-based agent workflows for a citizen-facing AI agent, establishing safeguards for hallucinations, prompt injection and unreliable outputs while enabling tool calling and output validation;"
+          - "Established engineering practices around observability, performance metrics, AI cost optimization, caching and production reliability;"
+          - "Designed the platform architecture for a scalable AI product, leveraging shared services, Next.js, TypeScript, PostgreSQL and containerized infrastructure to support multiple product surfaces."
+
     - title: Software Engineer (Frontend)
       company:
           name: SWORD Health
@@ -61,6 +75,7 @@ experiences:
           - "Implemented a mobile CI/CD pipeline with Bitrise, Firebase, and AWS, increasing release frequency 4x and improving delivery efficiency."
 
     - title: Full-stack Engineer
+      pageBreakBefore: true
       company:
           name: Itcode Soluções Web
           slug: itcode

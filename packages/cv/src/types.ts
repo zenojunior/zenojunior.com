@@ -38,6 +38,8 @@ export interface Role {
 
 export interface Experience {
   title: string;
+  /** Starts a new sheet at this entry, so the split follows the content. */
+  pageBreakBefore?: boolean;
   company: {
     name: string;
     slug: string;

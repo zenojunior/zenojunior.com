@@ -99,6 +99,10 @@ import '@repo/cv/styles'
 			/* The canonical document starts page 2 lower on the sheet. */
 			padding-top: 28mm !important;
 		}
+		.cv-page + .cv-page.cv-page-continued {
+			/* Experiences continue here, so the sheet starts at the normal margin. */
+			padding-top: 12mm !important;
+		}
 		@page {
 			size: A4;
 			margin: 0;
