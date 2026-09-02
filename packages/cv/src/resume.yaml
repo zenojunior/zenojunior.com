@@ -37,7 +37,7 @@ experiences:
           name: Prefa Digital
           slug: prefa-digital
       period:
-          start: "2022-07-01"
+          start: "2025-09-01"
       items:
           - "Built and led the engineering of an AI assistant for Brazilian municipalities, taking the product from concept to production across web, mobile and WhatsApp interfaces;"
           - "Built and secured LLM-based agent workflows for a citizen-facing AI agent, establishing safeguards for hallucinations, prompt injection and unreliable outputs while enabling tool calling and output validation;"
