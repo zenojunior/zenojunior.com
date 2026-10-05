@@ -4,6 +4,14 @@ import { FEATURES } from '../consts'
 import GithubIcon from './icons/GithubIcon.astro'
 import LinkedinIcon from './icons/LinkedinIcon.astro'
 
+// On the home page the hero already shows the avatar and the name, so the
+// nav's home item starts collapsed. Once the hero avatar reaches the pill the
+// photo flies up into it, and flies back down on the way up.
+interface Props {
+  avatarFollowsHero?: boolean
+}
+
+const { avatarFollowsHero = false } = Astro.props
 const pathname = Astro.url.pathname
 
 const links = [
@@ -18,18 +26,28 @@ function isActive(href: string) {
 ---
 
 <header class="fixed top-4 left-1/2 -translate-x-1/2 z-50">
-  <nav class="pill-nav relative flex items-center gap-0.5 rounded-full border border-border bg-bg-secondary/70 backdrop-blur-md p-1.5 shadow-lg shadow-black/20">
+  <nav class="pill-nav relative select-none flex items-center gap-0.5 rounded-full border border-border bg-bg-secondary/70 backdrop-blur-md p-1.5 shadow-lg shadow-black/20">
     <!-- Sliding highlight (positioned via JS) -->
     <span class="nav-highlight pointer-events-none absolute left-0 top-0 rounded-full bg-bg-card opacity-0 transition-all duration-300 ease-out"></span>
 
     {links.map(link => (
       <a
         href={link.href}
-        class:list={['nav-item relative z-10 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors', link.avatar ? 'flex items-center gap-1.5 pl-1.5 pr-3.5' : 'px-3.5']}
+        class:list={[
+          'nav-item relative z-10 py-1.5 rounded-full text-sm text-text-secondary hover:text-text transition-colors',
+          link.avatar ? 'flex items-center gap-1.5 pl-1.5 pr-3.5' : 'px-3.5',
+          link.avatar && avatarFollowsHero && 'nav-home',
+        ]}
         aria-current={isActive(link.href) ? 'page' : undefined}
       >
         {link.avatar && (
-          <img src="/avatar-mark.png" alt="" width="24" height="24" class="h-6 w-6 rounded-full object-cover" />
+          <img
+            src="/avatar-mark.png"
+            alt=""
+            width="24"
+            height="24"
+            class="nav-avatar h-6 w-6 shrink-0 rounded-full object-cover"
+          />
         )}
         {link.label}
       </a>
@@ -46,28 +64,220 @@ function isActive(href: string) {
   </nav>
 </header>
 
-<script>
-  const nav = document.querySelector<HTMLElement>('.pill-nav')
-  if (nav) {
-    const highlight = nav.querySelector<HTMLElement>('.nav-highlight')!
-    const items = [...nav.querySelectorAll<HTMLElement>('.nav-item')]
-    const active = items.find(el => el.getAttribute('aria-current') === 'page') ?? null
-
-    function moveTo(el: HTMLElement | null) {
-      if (!el) {
-        highlight.style.opacity = '0'
-        return
+{avatarFollowsHero && (
+  <noscript>
+    <style>
+      .nav-home {
+        width: auto !important;
+        padding-left: 0.375rem !important;
+        padding-right: 0.875rem !important;
+        opacity: 1 !important;
       }
-      highlight.style.opacity = '1'
-      highlight.style.width = `${el.offsetWidth}px`
-      highlight.style.height = `${el.offsetHeight}px`
-      highlight.style.transform = `translate(${el.offsetLeft}px, ${el.offsetTop}px)`
+    </style>
+  </noscript>
+)}
+
+<style>
+	/* Collapsed by default; JS drives width/padding/opacity straight from the
+	   scroll position, so the item opens exactly as fast as you scroll. */
+	.nav-home {
+		width: 0;
+		padding-left: 0;
+		padding-right: 0;
+		opacity: 0;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	/* The photo while it travels between the hero and the pill. Only ever
+	   visible mid-flight: at rest the real avatars are showing instead. */
+	:global(.avatar-flyer) {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 60;
+		display: none;
+		border-radius: 9999px;
+		overflow: hidden;
+		pointer-events: none;
+		transform-origin: top left;
+		will-change: transform;
+	}
+	:global(.avatar-flyer img) {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 9999px;
+		object-fit: cover;
+	}
+</style>
+
+<script>
+const nav = document.querySelector<HTMLElement>('.pill-nav')
+
+if (nav) {
+  const highlight = nav.querySelector<HTMLElement>('.nav-highlight')!
+  const items = [...nav.querySelectorAll<HTMLElement>('.nav-item')]
+  const active = items.find(el => el.getAttribute('aria-current') === 'page') ?? null
+
+  function moveTo(el: HTMLElement | null) {
+    if (!el) {
+      highlight.style.opacity = '0'
+      return
+    }
+    highlight.style.opacity = '1'
+    highlight.style.width = `${el.offsetWidth}px`
+    highlight.style.height = `${el.offsetHeight}px`
+    highlight.style.transform = `translate(${el.offsetLeft}px, ${el.offsetTop}px)`
+  }
+
+  moveTo(active)
+  items.forEach(item => item.addEventListener('mouseenter', () => moveTo(item)))
+  nav.addEventListener('mouseleave', () => moveTo(active))
+  window.addEventListener('resize', () => moveTo(active))
+  document.fonts?.ready.then(() => moveTo(active))
+
+  // Already home: the home item scrolls back to the top instead of reloading.
+  items.find(el => el.getAttribute('href') === '/')?.addEventListener('click', (event) => {
+    if (location.pathname !== '/' || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
+      return
+    event.preventDefault()
+    const smooth = !matchMedia('(prefers-reduced-motion: reduce)').matches
+    window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' })
+  })
+
+  const home = nav.querySelector<HTMLElement>('.nav-home')
+  const navAvatar = home?.querySelector<HTMLImageElement>('.nav-avatar')
+  const hero = document.querySelector<HTMLElement>('[data-hero-avatar]')
+
+  if (home && navAvatar && hero) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches
+    // Horizontal padding the item carries when open (pl-1.5 / pr-3.5).
+    const PAD_L = 6
+    const PAD_R = 14
+
+    // Two stacked photos: the hero's current frame, cross-fading into the
+    // nav's own mark as it arrives.
+    const flyer = document.createElement('div')
+    flyer.className = 'avatar-flyer'
+    const flyerFace = document.createElement('img')
+    const flyerMark = document.createElement('img')
+    flyerMark.src = navAvatar.src
+    flyer.append(flyerFace, flyerMark)
+    document.body.append(flyer)
+
+    const heroFace = () => hero.querySelector<HTMLImageElement>('img')
+
+    // Where the photo lands: measured with the item fully open, since that is
+    // where it ends up once the pill has finished growing.
+    let slot = { left: 0, top: 0, size: 24 }
+    let natural = 0
+    let runway = 120
+
+    function measure() {
+      // Measure with the open paddings in place, or the item would be sized
+      // for its collapsed box and clip its own contents.
+      home!.style.width = 'auto'
+      home!.style.paddingLeft = `${PAD_L}px`
+      home!.style.paddingRight = `${PAD_R}px`
+      home!.style.opacity = '1'
+      natural = home!.offsetWidth
+      const r = navAvatar!.getBoundingClientRect()
+      slot = { left: r.left, top: r.top, size: r.width }
+
+      // Distance the hero avatar sits above its slot with the page at the top.
+      const face = heroFace()
+      const rest = face
+        ? face.getBoundingClientRect().top + window.scrollY - slot.top
+        : 180
+      // Let the avatar ride along for a bit before the hand-off takes over.
+      runway = Math.min(140, Math.max(80, rest * 0.7))
     }
 
-    moveTo(active)
-    items.forEach(item => item.addEventListener('mouseenter', () => moveTo(item)))
-    nav.addEventListener('mouseleave', () => moveTo(active))
-    window.addEventListener('resize', () => moveTo(active))
-    document.fonts?.ready.then(() => moveTo(active))
+    const clamp = (n: number) => Math.min(1, Math.max(0, n))
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+    // Soft at both ends so the hand-off doesn't snap on or off.
+    const ease = (t: number) => t * t * (3 - 2 * t)
+
+    let last = -1
+
+    function render() {
+      const face = heroFace()
+      if (!face)
+        return
+
+      const r = face.getBoundingClientRect()
+      // Progress comes straight from where the hero avatar is relative to its
+      // landing slot, so it tracks the scroll exactly and reverses for free.
+      const p = reduce
+        ? (r.top - slot.top < runway / 2 ? 1 : 0)
+        : clamp(1 - (r.top - slot.top) / runway)
+
+      if (p === last)
+        return
+      last = p
+
+      // Pill opens in step with the flight.
+      home!.style.width = `${natural * p}px`
+      home!.style.paddingLeft = `${PAD_L * p}px`
+      home!.style.paddingRight = `${PAD_R * p}px`
+      home!.style.opacity = `${p}`
+      home!.style.pointerEvents = p > 0.9 ? '' : 'none'
+      moveTo(active)
+
+      // Exactly one avatar is ever visible: hero, flyer, or nav.
+      const flying = p > 0 && p < 1
+      hero!.style.opacity = flying || p === 1 ? '0' : ''
+      navAvatar!.style.opacity = p === 1 ? '' : '0'
+      flyer.style.display = flying ? 'block' : 'none'
+
+      if (!flying)
+        return
+
+      const e = ease(p)
+      const src = face.currentSrc || face.src
+      if (flyerFace.src !== src)
+        flyerFace.src = src
+
+      flyer.style.width = `${r.width}px`
+      flyer.style.height = `${r.height}px`
+      const x = lerp(r.left, slot.left, e)
+      const y = lerp(r.top, slot.top, e) - Math.sin(Math.PI * e) * 26
+      const scale = lerp(1, slot.size / r.width, e)
+      flyer.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`
+      flyerMark.style.opacity = `${clamp((p - 0.6) / 0.35)}`
+    }
+
+    let ticking = false
+    const onScroll = () => {
+      if (ticking)
+        return
+      ticking = true
+      requestAnimationFrame(() => {
+        ticking = false
+        render()
+      })
+    }
+
+    measure()
+    render()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', () => {
+      last = -1
+      measure()
+      render()
+    })
+    document.fonts?.ready.then(() => {
+      last = -1
+      measure()
+      render()
+    })
   }
+  else if (home) {
+    home.style.width = 'auto'
+    home.style.padding = ''
+    home.style.opacity = '1'
+  }
+}
 </script>
