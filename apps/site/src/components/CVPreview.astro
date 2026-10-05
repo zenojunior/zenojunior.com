@@ -1,0 +1,139 @@
+---
+import { resumeData } from '@repo/cv'
+
+// A wireframe of the CV's first sheet, drawn from the same data the real
+// document uses. Nothing is captured or exported: edit the resume and this
+// redraws itself on the next build.
+//
+// Text becomes bars. Line counts come from the actual string lengths, so the
+// rhythm of the page follows the content rather than a hardcoded sketch.
+const CHARS_PER_LINE = 95
+
+function lines(text: string, perLine = CHARS_PER_LINE) {
+  return Math.max(1, Math.ceil(text.length / perLine))
+}
+
+// Width of each wrapped line: full, except the last, which ends short.
+function lineWidths(text: string, perLine = CHARS_PER_LINE) {
+  const count = lines(text, perLine)
+  const remainder = text.length % perLine
+  const lastRatio = count === 1 ? 1 : Math.max(0.25, remainder / perLine)
+  return Array.from({ length: count }, (_, i) => (i === count - 1 ? lastRatio : 1))
+}
+
+const summary = lineWidths(resumeData.about)
+
+// Enough roles to fill the miniature sheet; the rest is cropped.
+const experiences = resumeData.experiences.slice(0, 4).map(exp => ({
+  bullets: (exp.items ?? []).slice(0, 6).map(item => lineWidths(item, 88)),
+}))
+---
+
+<div class="cv-sheet-mock" aria-hidden="true">
+  <!-- Header -->
+  <div class="mock-stack items-center">
+    <span class="bar bar-title" style="width: 38%"></span>
+    <span class="bar" style="width: 24%"></span>
+    <span class="bar" style="width: 72%"></span>
+  </div>
+
+  <span class="rule"></span>
+
+  <!-- Summary -->
+  <div class="mock-stack items-center">
+    <span class="bar bar-heading" style="width: 14%"></span>
+  </div>
+  <div class="mock-stack mt-2">
+    {summary.map(w => <span class="bar" style={`width: ${w * 100}%`}></span>)}
+  </div>
+
+  <span class="rule"></span>
+
+  <!-- Experience -->
+  <div class="mock-stack items-center">
+    <span class="bar bar-heading" style="width: 30%"></span>
+  </div>
+
+  {experiences.map(exp => (
+    <div class="mock-entry">
+      <div class="flex items-baseline justify-between gap-4">
+        <span class="bar bar-strong" style="width: 32%"></span>
+        <span class="bar" style="width: 16%"></span>
+      </div>
+      {exp.bullets.map(bullet => (
+        <div class="mock-bullet">
+          <span class="dot"></span>
+          <div class="mock-stack grow">
+            {bullet.map(w => <span class="bar" style={`width: ${w * 100}%`}></span>)}
+          </div>
+        </div>
+      ))}
+    </div>
+  ))}
+</div>
+
+<style>
+	/* Proportions mirror the A4 sheet: 794px wide, scaled by the container. */
+	.cv-sheet-mock {
+		container-type: inline-size;
+		padding: 7% 8% 0;
+		background: #f4f4f6;
+	}
+
+	.mock-stack {
+		display: flex;
+		flex-direction: column;
+		gap: 0.45cqw;
+	}
+
+	.bar {
+		display: block;
+		height: 1.1cqw;
+		border-radius: 0.55cqw;
+		background: #c9c9d2;
+	}
+	.bar-title {
+		height: 2.4cqw;
+		border-radius: 1.2cqw;
+		background: #2e2e38;
+	}
+	.bar-heading {
+		height: 1.5cqw;
+		border-radius: 0.75cqw;
+		background: #5d5d6b;
+	}
+	.bar-strong {
+		height: 1.4cqw;
+		border-radius: 0.7cqw;
+		background: #44444f;
+	}
+
+	.rule {
+		display: block;
+		height: 1px;
+		margin: 3.2cqw 0;
+		background: #d8d8df;
+	}
+
+	.mock-entry {
+		margin-top: 3cqw;
+		display: flex;
+		flex-direction: column;
+		gap: 1.1cqw;
+	}
+
+	.mock-bullet {
+		display: flex;
+		align-items: flex-start;
+		gap: 1.6cqw;
+		padding-left: 3cqw;
+	}
+	.dot {
+		flex: none;
+		width: 0.9cqw;
+		height: 0.9cqw;
+		margin-top: 0.3cqw;
+		border-radius: 9999px;
+		background: #b4b4c0;
+	}
+</style>

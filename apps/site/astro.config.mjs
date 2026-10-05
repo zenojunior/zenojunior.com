@@ -16,6 +16,11 @@ export default defineConfig({
   site: config.url,
   integrations: [mdx(), sitemap()],
 
+  redirects: {
+    // The project was renamed when deadlock.pro.br became dlbr.gg.
+    '/projects/deadlock-pro-br': '/projects/dlbr',
+  },
+
   markdown: {
     // Token colors only; the code block background is forced to the site theme in CSS.
     shikiConfig: { theme: 'catppuccin-mocha' },

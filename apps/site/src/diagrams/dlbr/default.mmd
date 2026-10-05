@@ -1,0 +1,26 @@
+flowchart TB
+  classDef plain fill:transparent,stroke:none,color:#f2f2f7
+
+  U["<img src='/icons/mermaid/user.svg' style='height:48px;width:auto;display:block;margin:0 auto 6px'/>Players"]
+  CF["<img src='/icons/mermaid/cloudflare.svg' style='height:28px;width:auto;display:block;margin:0 auto 6px'/>Cloudflare"]
+  APP["<img src='/icons/mermaid/astro.svg' style='height:42px;width:auto;display:block;margin:0 auto 6px'/>dlbr.gg<br/>site, admin panel &amp; API"]
+  DB["<img src='/icons/mermaid/postgresql.svg' style='height:42px;width:auto;display:block;margin:0 auto 6px'/>PostgreSQL"]
+  GAME["<div style='width:170px'><img src='/icons/mermaid/deadlock.svg' style='display:block'/></div>"]
+  DAPI["<img src='/icons/mermaid/deadlock-api.webp' style='height:42px;width:42px;object-fit:contain;display:block;margin:0 auto 6px'/>Deadlock API"]
+  BOT["<img src='/icons/mermaid/discord.svg' style='height:34px;width:auto;display:block;margin:0 auto 6px'/>Community bot"]
+  MIX["<img src='/icons/mermaid/discord.svg' style='height:34px;width:auto;display:block;margin:0 auto 6px'/>Mix bot"]
+
+  subgraph product [" "]
+    APP <--> DB
+    APP <-->|HTTPS| BOT
+    APP <-->|HTTPS| MIX
+  end
+
+  class U,CF,APP,DB,GAME,DAPI,BOT,MIX plain
+
+  U -.-> CF
+  CF --> product
+  GAME --> DAPI
+  DAPI -->|game data &amp; events| product
+
+  style product fill:transparent,stroke:#5b4b8a,stroke-width:1.5px,stroke-dasharray:6 4,rx:12,ry:12

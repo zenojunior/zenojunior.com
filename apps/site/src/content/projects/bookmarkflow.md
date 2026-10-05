@@ -3,7 +3,7 @@ title: 'Bookmark Flow'
 description: 'A browser extension that turns your new tab into a visual board to organize bookmarks as draggable folder cards.'
 period:
   start: '2026-06-15'
-tags: ['typescript', 'vue', 'browser-extension', 'chrome', 'product']
+tags: ['typescript', 'vue', 'browser-extension', 'chrome', 'firefox', 'product']
 url: 'https://zenojunior.com/bookmarkflow'
 icon: '/projects/icons/bookmarkflow.webp'
 source: 'private'
@@ -31,4 +31,4 @@ When you do know exactly what you are after, you do not even need the board. Ctr
 
 It reads the bookmarks you already have, with no import and no migration. You can replace icons, add notes and tooltips, and rename items on the board without touching the real bookmarks underneath. There is a side panel to reach the same board without leaving the page you are on, light and dark themes with accent colors, per-folder layouts, and the interface is fully translated to English, Portuguese, and Spanish. It is private by design: no account, no backend, no analytics. Everything stays on your device.
 
-I built it for myself and started using it every day. After a while the friends I showed it to asked me to make it public, so I did. Bookmark Flow is now [on the Chrome Web Store](https://chromewebstore.google.com/detail/bookmark-flow/hhgmpkajbebgnginafkmihhfdcegdjpe), with Edge and Firefox on the way. What started as a personal fix for my own frustration is now something I get to share.
+I built it for myself and started using it every day. After a while the friends I showed it to asked me to make it public, so I did. Bookmark Flow is now [on the Chrome Web Store](https://chromewebstore.google.com/detail/bookmark-flow/hhgmpkajbebgnginafkmihhfdcegdjpe) and [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/bookmark-flow/), with Edge on the way. What started as a personal fix for my own frustration is now something I get to share.

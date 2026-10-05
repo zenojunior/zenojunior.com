@@ -49,7 +49,7 @@ body {
   background-color: var(--color-bg);
   /* Subtle dot grid drawn purely in CSS, no external assets. */
   background-image: radial-gradient(
-    rgba(167, 139, 250, 0.07) 1px,
+    rgba(167, 139, 250, 0.20) 1px,
     transparent 1px
   );
   background-size: 22px 22px;
